@@ -1,8 +1,8 @@
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { PrismaClient } from '@prisma/client';
+
 
 export async function GET(req, {params}) {
-  const prisma = new PrismaClient();
   const id  = params.id
   try {
     const ticket = await prisma.ticket.findUnique({
