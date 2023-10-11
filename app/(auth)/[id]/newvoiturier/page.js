@@ -1,8 +1,8 @@
 "use client"
 
-import styles from "../../components/style";
+import styles from "../../../components/style";
 import Link from "next/link";
-import Input from "../../components/inputvalet";
+import Input from "../../../components/inputvalet";
 import { useEffect } from "react";
 
 
