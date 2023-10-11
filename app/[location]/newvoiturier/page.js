@@ -1,9 +1,18 @@
-import styles from "../components/style";
+"use client"
+
+import styles from "../../components/style";
 import Link from "next/link";
-import Input from "../components/inputvalet";
+import Input from "../../components/inputvalet";
+import { useEffect } from "react";
 
 
-const Register = () => {
+const Register = ({params}) => {
+
+  useEffect(() => {
+    console.log(params);
+  })
+
+
   return (
     <div className="w-full h-screen bg-black">
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
