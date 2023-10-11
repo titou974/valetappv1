@@ -5,7 +5,8 @@ import axios from 'axios';
 const getTicket = async (id) => {
   let ticketData = {};
   try {
-    const response = await axios.get(`/api/ticket/${id}`);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await axios.get(`${apiUrl}/api/ticket/${id}`);
     ticketData = response.data;
     console.log(ticketData);
   } catch (error) {
