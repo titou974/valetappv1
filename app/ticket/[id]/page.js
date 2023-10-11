@@ -12,7 +12,7 @@ const getTicket = async (id) => {
     console.error('Error fetching ticket data:', error);
   }
 
-  return ticketData
+  return ticketData;
 }
 
 const TicketShow = async ({ params }) => {
@@ -20,8 +20,8 @@ const TicketShow = async ({ params }) => {
   return (
     <div>
       <p>Votre ticket est généré</p>
+      <p className='text-black'>Bienvenue au {ticket.restaurant.name}</p>
       <p>{ticket.scannedAt}</p>
-      <p className='text-black'>{ticket.restaurant.name}</p>
     </div>
   )
 }
