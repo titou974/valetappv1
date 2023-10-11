@@ -9,7 +9,7 @@ const getUser = async (id) => {
     userData = response.data;
     console.log(userData);
   } catch (error) {
-    console.log('Error fetching user:', error);
+    console.log('Error fetching user:', error.message);
   }
   return userData;
 }
