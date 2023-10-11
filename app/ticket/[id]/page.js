@@ -5,7 +5,7 @@ import axios from 'axios';
 const getTicket = async (id) => {
   let ticketData = {};
   try {
-    const response = await axios.get(`http://localhost:3000/api/ticket/${id}`);
+    const response = await axios.get(`/api/ticket/${id}`);
     ticketData = response.data;
     console.log(ticketData);
   } catch (error) {
