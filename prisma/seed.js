@@ -43,42 +43,35 @@ const prisma = new PrismaClient();
 
 
 async function main() {
-  // Créer 10 utilisateurs
-  const usersCreate = await Promise.all(
-      users.map((user, i) =>
-          prisma.user.create({
-              data: {
-                  role: user.role,
-                  name: user.name,
-                  phoneNumber: user.phoneNumber,
-              },
-          })
-      )
-  );
+  const usersCreate = []
+  for (const user of users) {
+    const newUser = await prisma.user.create({
+      data: user,
+    });
+    usersCreate.push(newUser);
+  }
 
   // Créer 10 restaurants
-  const restaurantsCreate = await Promise.all(
-      restaurants.map((restaurant, i) =>
-          prisma.restaurant.create({
-              data: {
-                  name: restaurant.name,
-              },
-          })
-      )
-  );
+  const restaurantsCreate = []
+  for (const restaurant of restaurants) {
+    const newRestaurant = await prisma.restaurant.create({
+      data: restaurant,
+    });
+    restaurantsCreate.push(newRestaurant);
+  }
 
   // Créer 10 tickets
-  const ticketsCreate = await Promise.all(
-      tickets.map((ticket, i) =>
-          prisma.ticket.create({
-              data: {
-                  userId: ticket.userId,
-                  restaurantId: ticket.restaurantId,
-                  scannedAt: new Date(),
-              },
-          })
-      )
-  );
+  const ticketsCreate = []
+  for (const ticket of tickets) {
+    const newTicket = await prisma.ticket.create({
+      data: ticket,
+    });
+    ticketsCreate.push(newTicket);
+  }
+
+  console.log('Users:', usersCreate);
+  console.log('Restaurants:', restaurantsCreate);
+  console.log('Tickets:', ticketsCreate);
 
   console.log('Users:', usersCreate);
   console.log('Restaurants:', restaurantsCreate);
