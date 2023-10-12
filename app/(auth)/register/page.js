@@ -9,21 +9,34 @@ import { useRouter } from "next/navigation";
 
 
 const Register = () => {
-  const [name, setName] = useState("")
-  const [phoneNumber, setPhoneNumber] = useState("")
-  
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneAlert, setPhoneAlert] = useState(false);
+  const [phoneNumberExist, setPhoneNumberExist] = useState(false);
+  const [fillTextAlert, setFillTextAlert] = useState(false);
+  const [password, setPassword] = useState("");
+
   const router = useRouter();
   console.log(name, phoneNumber)
   const handleRegister = async e => {
     e.preventDefault();
+    setFillTextAlert(false);
+    setPhoneNumberExist(false);
     try {
       const response = await axios.post("/api/voiturier", {
         name: name,
         phoneNumber: phoneNumber,
+        password: password
       });
       console.log(response);
       const data = await response.data;
-      router.push(`/voiturier/${data.userId}`)
+      if (data.userId === null && data.message ===  "Un voiturier avec ce numéro existe déjà.") {
+        setPhoneNumberExist(true);
+      } else if (data.userId === null && data.message ===  "Invalid data received.") {
+        setFillTextAlert(true);
+      } else if (data.userId) {
+        router.push(`/voiturier/${data.userId}`)
+      }
     } catch(error) {
       console.log("creation of Voiturier failed", error.message)
     }
@@ -39,7 +52,23 @@ const Register = () => {
         </div>
         <div className="w-full">
           <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
-          <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} />
+          <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
+          <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
+          {phoneAlert && (
+            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+              <p>Le numéro de téléphone n'est pas valide</p>
+            </div>
+          )}
+          {phoneNumberExist && (
+            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+              <p>Un voiturier possède déjà ce numéro de téléphone. Connectez-vous.</p>
+            </div>
+          )}
+          {fillTextAlert && (
+            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+              <p>Remplissez tous les champs.</p>
+            </div>
+          )}
         </div>
         <div className="mb-10">
           <button onClick={handleRegister} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors">
