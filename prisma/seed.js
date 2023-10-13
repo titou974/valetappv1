@@ -61,21 +61,19 @@ async function main() {
   }
 
   // Créer 10 tickets
-  const ticketsCreate = []
-  for (const ticket of tickets) {
-    const newTicket = await prisma.ticket.create({
-      data: ticket,
-    });
-    ticketsCreate.push(newTicket);
-  }
+  // const ticketsCreate = []
+  // for (const ticket of tickets) {
+  //   const newTicket = await prisma.ticket.create({
+  //     data: ticket,
+  //   });
+  //   ticketsCreate.push(newTicket);
+  // }
 
   console.log('Users:', usersCreate);
   console.log('Restaurants:', restaurantsCreate);
-  console.log('Tickets:', ticketsCreate);
 
   console.log('Users:', usersCreate);
   console.log('Restaurants:', restaurantsCreate);
-  console.log('Tickets:', ticketsCreate);
 }
 
 main ()

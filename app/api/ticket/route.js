@@ -13,10 +13,11 @@ export async function POST(req) {
     const newTicket = await prisma.ticket.create({
       data: {
         userId: newUser.id,
-        restaurantId: Number(restaurant),
+        restaurantId: restaurant,
         scannedAt: new Date(),
       }
     })
+    console.log(newTicket),
     console.log("done", newTicket.id)
     return NextResponse.json({ ticketId: newTicket.id });
   } catch (error) {
