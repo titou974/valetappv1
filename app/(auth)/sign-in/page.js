@@ -3,12 +3,24 @@
 import styles from "../../components/style";
 import Link from "next/link";
 import Input from "../../components/inputvalet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
 
+const getSite = async (id) => {
+  let siteData = {};
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await axios.get(`${apiUrl}/api/site/${id}`)
+    console.log(response);
+    siteData = response.data;
+  } catch (error) {
+    console.log('Error fetching user:', error.message);
+  }
+  return siteData;
+}
 
 const LogIn = () => {
 
@@ -20,8 +32,29 @@ const LogIn = () => {
   const [phoneNumberExist, setPhoneNumberExist] = useState(false);
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [password, setPassword] = useState("");
+  const [siteExists, setSiteExists] = useState(false);
+  const [siteData, setSiteData] = useState(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    const checkSite = async () => {
+      const siteData = await getSite(site);
+
+      if (!siteData || Object.keys(siteData).length === 0) {
+        setSiteExists(false);
+      } else {
+        setSiteExists(true);
+        setSiteData(siteData);
+      }
+    };
+
+    if (site) {
+      checkSite();
+    }
+
+  }, [site])
+
 
   const handleLogIn = async e => {
     e.preventDefault();
@@ -54,29 +87,43 @@ const LogIn = () => {
   return (
     <div className="w-full h-screen bg-black">
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
-        <div>
-          <h3 className={styles.subText}>Bonjour</h3>
-          <h2 className={styles.headText}>Prêt, à travailler ? </h2>
-        </div>
-        <div className="w-full">
+          {
+            siteExists ? (
+              <div>
+                <h3 className={styles.subText}>Vous êtes au</h3>
+                <h2 className={styles.headText}>{siteData.name}</h2>
+              </div>
+            ) : (
+              <div>
+                <h3 className={styles.subText}>Bonjour</h3>
+                <h2 className={styles.headText}>Prêt, à travailler ?</h2>
+              </div>
+            )
+          }
+        <div className="w-full relative">
           <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
           <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
           {phoneAlert && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Le numéro de téléphone n&apos;est pas valide</p>
             </div>
           )}
           {phoneNumberExist && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Un voiturier possède déjà ce numéro de téléphone.</p>
             </div>
           )}
           {fillTextAlert && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Remplissez tous les champs.</p>
             </div>
           )}
-          <Link href="register" className="bg-white w-1/2 xs:w-1/3 py-[12px] text-center rounded-full font-semibold hover:bg-primary transition-colors flex justify-center items-center gap-2">
+          {!siteExists && (
+            <div className="text-white my-10">
+              <p>Sélectionner un site</p>
+            </div>
+          )}
+          <Link href={`register?site=${site}`} className="bg-white w-1/2 xs:w-1/3 py-[12px] text-center rounded-full font-semibold hover:bg-primary transition-colors flex justify-center items-center gap-2">
             <p>S&apos;enregistrer</p>
             <div className="w-[20px]">
               <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
