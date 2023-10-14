@@ -8,12 +8,28 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
+import SelectInput from "@/app/components/selectinput";
+
+
 
 const getSite = async (id) => {
   let siteData = {};
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
+    console.log(response);
+    siteData = response.data;
+  } catch (error) {
+    console.log('Error fetching user:', error.message);
+  }
+  return siteData;
+}
+
+const getSites = async () => {
+  let siteData = {};
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await axios.get(`${apiUrl}/api/site`)
     console.log(response);
     siteData = response.data;
   } catch (error) {
@@ -29,20 +45,32 @@ const LogIn = () => {
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneAlert, setPhoneAlert] = useState(false);
-  const [phoneNumberExist, setPhoneNumberExist] = useState(false);
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [password, setPassword] = useState("");
   const [siteExists, setSiteExists] = useState(false);
   const [siteData, setSiteData] = useState(null);
+  const [siteDb, setSiteDb] = useState(null);
+  const [wrongPassword, setWrongPassword] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
+
+    const getSitesName = async () => {
+      const siteData = await getSites();
+      if (!siteData || Object.keys(siteData).length === 0) {
+        console.log("aucun sites trouver")
+      } else {
+        setSiteDb(siteData);
+      }
+    };
+
     const checkSite = async () => {
       const siteData = await getSite(site);
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
+        getSitesName();
       } else {
         setSiteExists(true);
         setSiteData(siteData);
@@ -51,18 +79,20 @@ const LogIn = () => {
 
     if (site) {
       checkSite();
+    } else {
+      getSitesName();
     }
 
-  }, [site])
+  }, [site, siteExists])
 
 
   const handleLogIn = async e => {
     e.preventDefault();
     setFillTextAlert(false);
-    setPhoneNumberExist(false);
-
+    setWrongPassword(false);
+    setFillTextAlert(false);
     // Basic client-side validation
-    if(!phoneNumber || !password) {
+    if(!phoneNumber || !password || !siteData) {
       setFillTextAlert(true);
       return;
     }
@@ -70,17 +100,23 @@ const LogIn = () => {
     const data = await signIn('credentials', {
       phoneNumber,
       password,
-      site: site,
+      site: siteData.id,
       redirect: false,  // Avoids automatic redirect
     });
     console.log(data)
 
     if (!data?.ok) {
       console.log("Sign-in API call failed:", data.error);
+      setWrongPassword(true);
     } else {
       router.push("/dashboard")
     }
   }
+
+  useEffect(() => {
+    console.log(siteData?.id)
+  })
+
 
 
 
@@ -100,30 +136,28 @@ const LogIn = () => {
               </div>
             )
           }
-        <div className="w-full relative">
+        <div className="w-full relative flex flex-col justify-center gap-10">
           <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
-          <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
+          <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
           {phoneAlert && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Le numéro de téléphone n&apos;est pas valide</p>
             </div>
           )}
-          {phoneNumberExist && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
-              <p>Un voiturier possède déjà ce numéro de téléphone.</p>
-            </div>
-          )}
           {fillTextAlert && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Remplissez tous les champs.</p>
             </div>
           )}
-          {!siteExists && (
-            <div className="text-white my-10">
-              <p>Sélectionner un site</p>
+          {wrongPassword && (
+            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+              <p>Le mot de passe n&apos;est pas correct</p>
             </div>
           )}
-          <Link href={`register?site=${site}`} className="bg-white w-1/2 xs:w-1/3 py-[12px] text-center rounded-full font-semibold hover:bg-primary transition-colors flex justify-center items-center gap-2">
+          {!siteExists && (
+            <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
+          )}
+          <Link href={`register?site=${siteData?.id}`} className="bg-white w-1/2 xs:w-1/3 py-[12px] text-center rounded-full font-semibold hover:bg-primary transition-colors flex justify-center items-center gap-2">
             <p>S&apos;enregistrer</p>
             <div className="w-[20px]">
               <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

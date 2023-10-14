@@ -22,7 +22,6 @@
 }
 
 .customField .placeholder {
-  padding: 0 5px;
   position: absolute;
   left: 25px;
   top: calc(50% + 10px);

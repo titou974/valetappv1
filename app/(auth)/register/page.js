@@ -8,6 +8,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
+import SelectInput from "@/app/components/selectinput";
+
 
 
 const getSite = async (id) => {
@@ -15,13 +17,25 @@ const getSite = async (id) => {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log('Error fetching user:', error.message);
   }
   return siteData;
 }
+
+const getSites = async () => {
+  let siteData = {};
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await axios.get(`${apiUrl}/api/site`)
+    console.log(response);
+    siteData = response.data;
+  } catch (error) {
+    console.log('Error fetching user:', error.message);
+  }
+  return siteData;
+};
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -33,29 +47,41 @@ const Register = () => {
 
   const [siteExists, setSiteExists] = useState(false);
   const [siteData, setSiteData] = useState(null);
+  const [siteDb, setSiteDb] = useState(null);
   const searchParams = useSearchParams();
   const site = searchParams.get("site");
   const router = useRouter();
-  console.log("id du site", site)
 
   useEffect(() => {
+
+    const getSitesName = async () => {
+      const siteData = await getSites();
+      if (!siteData || Object.keys(siteData).length === 0) {
+        console.log("aucun sites trouver")
+      } else {
+        setSiteDb(siteData);
+      }
+    };
+
     const checkSite = async () => {
       const siteData = await getSite(site);
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
+        getSitesName();
       } else {
         setSiteExists(true);
         setSiteData(siteData);
-        console.log("yes")
       }
     };
-
+    
     if (site) {
       checkSite();
+    } else {
+      getSitesName();
     }
 
-  }, [site])
+  }, [site, siteExists])
 
   const handleRegister = async e => {
     e.preventDefault();
@@ -67,25 +93,18 @@ const Register = () => {
         phoneNumber: phoneNumber,
         password: password,
       });
-      console.log(response);
       const data = await response.data;
       if (data.userId === null && data.message ===  "Un voiturier avec ce numéro existe déjà.") {
         setPhoneNumberExist(true);
       } else if (data.userId === null && data.message ===  "Invalid data received.") {
         setFillTextAlert(true);
       } else if (data.userId) {
-          if(!phoneNumber || !password) {
-            setFillTextAlert(true);
-            return;
-          }
           const data = await signIn('credentials', {
             phoneNumber,
             password,
-            site: site,
+            site: siteData.id,
             redirect: false,
           });
-          console.log(data)
-
           if (!data?.ok) {
             console.log("Sign-in API call failed:", data.error);
             router.push("/sign-in");
@@ -98,6 +117,12 @@ const Register = () => {
     }
   }
 
+  useEffect(() => {
+    console.log(siteData?.id);
+
+  })
+
+
 
   return (
     <div className="w-full h-screen bg-black">
@@ -106,27 +131,25 @@ const Register = () => {
           <h3 className={styles.subText}>Remplissez</h3>
           <h2 className={styles.headText}>vos Informations</h2>
         </div>
-        <div className="w-full">
+        <div className="w-full relative flex flex-col justify-center gap-10">
           <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
           <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
           <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
           {!siteExists && (
-            <div className="text-white">
-              <p>Sélectionner un restaurant</p>
-            </div>
+            <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
           )}
-          {phoneAlert && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+          {!fillTextAlert && phoneAlert && (
+            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Le numéro de téléphone n&apos;est pas valide</p>
             </div>
           )}
           {phoneNumberExist && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Un voiturier possède déjà ce numéro de téléphone.</p>
             </div>
           )}
           {fillTextAlert && (
-            <div className="bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md">
+            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
               <p>Remplissez tous les champs.</p>
             </div>
           )}
