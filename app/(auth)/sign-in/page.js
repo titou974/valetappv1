@@ -53,6 +53,7 @@ const LogIn = () => {
   const [siteDb, setSiteDb] = useState(null);
   const [wrongPassword, setWrongPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingDiv, setLoadingDiv] = useState(true);
 
   const router = useRouter();
 
@@ -61,8 +62,10 @@ const LogIn = () => {
     const getSitesName = async () => {
       const siteData = await getSites();
       if (!siteData || Object.keys(siteData).length === 0) {
+        setLoadingDiv(false);
         console.log("aucun sites trouver")
       } else {
+        setLoadingDiv(false);
         setSiteDb(siteData);
       }
     };
@@ -72,9 +75,11 @@ const LogIn = () => {
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
+        setLoadingDiv(false);
         getSitesName();
       } else {
         setSiteExists(true);
+        setLoadingDiv(false);
         setSiteData(siteData);
       }
     };
@@ -128,22 +133,52 @@ const LogIn = () => {
   return (
     <div className="w-full h-screen bg-black">
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
-          {
-            siteExists ? (
-              <div>
-                <h3 className={styles.subText}>Vous êtes au</h3>
-                <h2 className={styles.headText}>{siteData.name}</h2>
-              </div>
-            ) : (
-              <div>
-                <h3 className={styles.subText}>Bonjour</h3>
-                <h2 className={styles.headText}>Prêt, à travailler ?</h2>
-              </div>
-            )
-          }
+        {loadingDiv ? (
+          <div>
+            <div className="animate-pulse bg-gray-400/50 rounded-md mb-3" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
+              <h3 className={`${styles.subText} invisible`}>Bonjour</h3>
+            </div>
+            <div className="animate-pulse bg-gray-400/50 rounded-md" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}>
+              <h2 className={`${styles.headText} invisible `}>Prêt, à travailler ?</h2>
+            </div>
+          </div>
+        )
+        : (
+          <>
+            {
+              siteExists ? (
+                <div>
+                  <h3 className={styles.subText}>Vous êtes au</h3>
+                  <h2 className={styles.headText}>{siteData.name}</h2>
+                </div>
+              ) : (
+                <div>
+                  <h3 className={styles.subText}>Bonjour</h3>
+                  <h2 className={styles.headText}>Prêt, à travailler ?</h2>
+                </div>
+              )
+            }
+          </>
+        )}
         <div className="w-full relative flex flex-col justify-center gap-10">
-          <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
-          <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
+          {loadingDiv ? (
+            <>
+              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
+                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+              </div>
+              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}}>
+                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
+              <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
+              {!siteExists && (
+                <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
+              )}
+            </>
+          )}
           {phoneAlert && (
             <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Le numéro de téléphone n&apos;est pas valide</p>
@@ -158,9 +193,6 @@ const LogIn = () => {
             <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Le mot de passe n&apos;est pas correct</p>
             </div>
-          )}
-          {!siteExists && (
-            <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
           )}
         </div>
         <div className="flex flex-col justify-between gap-5">

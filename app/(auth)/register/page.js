@@ -46,6 +46,7 @@ const Register = () => {
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingDiv, setLoadingDiv] = useState(true);
 
   const [siteExists, setSiteExists] = useState(false);
   const [siteData, setSiteData] = useState(null);
@@ -60,8 +61,10 @@ const Register = () => {
       const siteData = await getSites();
       if (!siteData || Object.keys(siteData).length === 0) {
         console.log("aucun sites trouver")
+        setLoadingDiv(false);
       } else {
         setSiteDb(siteData);
+        setLoadingDiv(false);
       }
     };
 
@@ -71,9 +74,11 @@ const Register = () => {
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
         getSitesName();
+        setLoadingDiv(false);
       } else {
         setSiteExists(true);
         setSiteData(siteData);
+        setLoadingDiv(false);
       }
     };
 
@@ -141,11 +146,27 @@ const Register = () => {
           <h2 className={styles.headText}>vos Informations</h2>
         </div>
         <div className="w-full relative flex flex-col justify-center gap-10">
-          <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
-          <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
-          <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
-          {!siteExists && (
-            <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
+          {loadingDiv ? (
+            <>
+              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
+                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+              </div>
+              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}>
+                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+              </div>
+              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
+                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+              </div>
+            </>
+            ) : (
+            <>
+              <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
+              <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
+              <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
+              {!siteExists && (
+                <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
+              )}
+            </>
           )}
           {!fillTextAlert && phoneAlert && (
             <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
