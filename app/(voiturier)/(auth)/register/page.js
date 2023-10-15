@@ -1,8 +1,8 @@
 "use client"
 
-import styles from "../../components/style";
+import styles from "@/app/components/style";
 import Link from "next/link";
-import Input from "../../components/inputvalet";
+import Input from "@/app/components/inputvalet";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -201,6 +201,9 @@ const Register = () => {
               </svg>
             </div>
           </Link>
+        </div>
+        <div className="text-center">
+          <p className="text-white">Nestor App 🇫🇷</p>
         </div>
       </div>
       <LoadingModal isOpen={loading}  setIsOpen={(e) => setLoading(e)} title="Création de votre espace" />

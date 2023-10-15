@@ -2,8 +2,8 @@ import { authOptions } from '@/lib/auth';
 import axios from 'axios';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
-import styles from '../components/style';
-import UserAccountNav from '../components/useraccountnav';
+import styles from '@/app/components/style';
+import UserAccountNav from '@/app/components/useraccountnav';
 
 // const getUser = async (id) => {
 //   let userData = {};
@@ -36,9 +36,13 @@ const VoiturierShow = async () => {
           </div>
         )}
         <div>
+          <h3 className='text-[40px] text-center py-2'>01 : 54 : 23</h3>
+          <p className='text-center py-2 italic'>Vous avez commencé à 14h02</p>
+        </div>
+        <div>
         {
           session?.user ? (
-            <div className='mb-10'>
+            <div className=''>
               <UserAccountNav />
             </div>
           ) : (
@@ -54,6 +58,9 @@ const VoiturierShow = async () => {
             </Link>
           )
         }
+        </div>
+        <div className="text-center">
+          <p className="text-white">Nestor App 🇫🇷</p>
         </div>
       </div>
     </div>

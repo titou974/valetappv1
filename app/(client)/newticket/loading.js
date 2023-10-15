@@ -1,4 +1,4 @@
-import styles from "../../components/style";
+import styles from "@/app/components/style";
 
 const Loading = () => {
 

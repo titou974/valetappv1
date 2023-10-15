@@ -38,6 +38,9 @@ const Loading = () => {
           </div>
         </button>
       </div>
+      <div className="text-center">
+          <p className="text-white">Nestor App 🇫🇷</p>
+      </div>
     </div>
   </div>
   )

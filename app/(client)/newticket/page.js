@@ -1,8 +1,8 @@
 "use client"
 
-import styles from "../../components/style";
+import styles from "@/app/components/style";
 import Link from "next/link";
-import Input from "../../components/inputvalet";
+import Input from "@/app/components/inputvalet";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
