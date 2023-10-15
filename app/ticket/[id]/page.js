@@ -1,5 +1,3 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
 import axios from 'axios';
 
 const getTicket = async (id) => {
@@ -17,12 +15,13 @@ const getTicket = async (id) => {
 }
 
 const TicketShow = async ({ params }) => {
-  const ticket = await getTicket(params.id)
+  const ticket = await getTicket(params.id);
+  console.log(ticket);
   return (
-    <div>
+    <div className='bg-secondary h-screen w-full'>
       <p>Votre ticket est généré</p>
       <p className='text-black'>Bienvenue au {ticket.restaurant.name}</p>
-      <p>{ticket.scannedAt}</p>
+      <p className='text-black'>{ticket.scannedAt}</p>
     </div>
   )
 }

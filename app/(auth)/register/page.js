@@ -74,7 +74,7 @@ const Register = () => {
         setSiteData(siteData);
       }
     };
-    
+
     if (site) {
       checkSite();
     } else {
@@ -154,15 +154,23 @@ const Register = () => {
             </div>
           )}
         </div>
-        <div className="mb-10">
+        <div className="flex flex-col justify-between gap-5">
           <button onClick={handleRegister} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors">
-            <p className="text-black font-semibold text-[32px]">Commencer</p>
+            <p className="text-black font-semibold text-[26px]">Créer votre compte</p>
             <div className="w-[26px]">
               <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </div>
           </button>
+          <Link href={`sign-in${siteData === null ? "" : `?site=${siteData?.id}`}`} className="mx-auto w-2/3 py-[12px] rounded-full font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 text-primary hover:text-black">
+            <p>Se Connecter</p>
+            <div className="w-[20px]">
+              <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+              </svg>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
