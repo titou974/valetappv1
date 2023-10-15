@@ -2,64 +2,6 @@ import styles from "../../components/style";
 
 const Loading = () => {
 
-  const searchParams = useSearchParams();
-  const site = searchParams.get("site");
-  const [siteExists, setSiteExists] = useState(false);
-  const [siteData, setSiteData] = useState(null);
-  const [siteDb, setSiteDb] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    console.log(siteData);
-    const getSitesName = async () => {
-      const siteData = await getSites();
-      if (!siteData || Object.keys(siteData).length === 0) {
-        console.log("aucun sites trouver")
-      } else {
-        setSiteDb(siteData);
-      }
-    };
-
-    const checkSite = async () => {
-      const siteData = await getSite(site);
-
-      if (!siteData || Object.keys(siteData).length === 0) {
-        setSiteExists(false);
-        getSitesName();
-      } else {
-        setSiteExists(true);
-        setSiteData(siteData);
-      }
-    };
-
-    if (site) {
-      checkSite();
-    } else {
-      getSitesName();
-    }
-
-  }, [site, siteExists])
-
-  const handleRegister = async e => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const response = await axios.post("/api/ticket", {
-        role: "CLIENT",
-        restaurant: siteData.id
-      });
-      console.log(response);
-      const data = await response.data
-      if (data.ticketId) {
-        router.push(`/ticket/${data.ticketId}`)
-      }
-    } catch(error) {
-      console.log("creation of Ticket failed");
-      setIsLoading(false);
-    }
-  }
   return (
     <div className="w-full h-screen bg-secondary">
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
