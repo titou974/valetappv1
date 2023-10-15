@@ -15,6 +15,18 @@ export async function POST(req) {
       return NextResponse.json({ userId: null, message: "Invalid data received." });
     }
 
+    const validatePhoneNumber = (number) => {
+      const phoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/;
+      return phoneRegex.test(number);
+    };
+
+    const validNumber = validatePhoneNumber(phoneNumber);
+
+    if (!validNumber) {
+      console.log("Invalid phone number received.");
+      return NextResponse.json({ userId: null, message: "Invalid phone number received." });
+    }
+
     const sanitizedPhoneNumber = sanitizePhoneNumber(phoneNumber);
     console.log(sanitizedPhoneNumber);
 

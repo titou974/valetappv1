@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import SelectInput from "@/app/components/selectinput";
+import LoadingModal from "@/app/components/loadingmodal";
 
 const getSite = async (id) => {
   let siteData = {};
@@ -43,6 +44,7 @@ const Register = () => {
   const [siteExists, setSiteExists] = useState(false);
   const [siteData, setSiteData] = useState(null);
   const [siteDb, setSiteDb] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -79,6 +81,7 @@ const Register = () => {
 
   const handleRegister = async e => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post("/api/ticket", {
         role: "CLIENT",
@@ -90,7 +93,8 @@ const Register = () => {
         router.push(`/ticket/${data.ticketId}`)
       }
     } catch(error) {
-      console.log("creation of Ticket failed")
+      console.log("creation of Ticket failed");
+      setIsLoading(false);
     }
   }
   return (
@@ -125,6 +129,7 @@ const Register = () => {
           </button>
         </div>
       </div>
+      <LoadingModal isOpen={isLoading} setIsOpen={(e) => setIsLoading(e)} title="Création de votre ticket" />
     </div>
   )
 }

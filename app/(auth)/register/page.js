@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
 import SelectInput from "@/app/components/selectinput";
+import LoadingModal from "@/app/components/loadingmodal";
 
 
 
@@ -44,6 +45,7 @@ const Register = () => {
   const [phoneNumberExist, setPhoneNumberExist] = useState(false);
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [siteExists, setSiteExists] = useState(false);
   const [siteData, setSiteData] = useState(null);
@@ -85,6 +87,7 @@ const Register = () => {
 
   const handleRegister = async e => {
     e.preventDefault();
+    setLoading(true);
     setFillTextAlert(false);
     setPhoneNumberExist(false);
     try {
@@ -96,8 +99,13 @@ const Register = () => {
       const data = await response.data;
       if (data.userId === null && data.message ===  "Un voiturier avec ce numéro existe déjà.") {
         setPhoneNumberExist(true);
+        setLoading(false)
       } else if (data.userId === null && data.message ===  "Invalid data received.") {
         setFillTextAlert(true);
+        setLoading(false)
+      } else if (data.userId === null && data.message ===  "Invalid phone number received.") {
+        setLoading(false);
+        return null;
       } else if (data.userId) {
           const data = await signIn('credentials', {
             phoneNumber,
@@ -113,7 +121,8 @@ const Register = () => {
           }
       }
     } catch(error) {
-      console.log("creation of Voiturier failed", error.message)
+      console.log("creation of Voiturier failed", error.message);
+      setLoading(false);
     }
   }
 
@@ -139,17 +148,17 @@ const Register = () => {
             <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
           )}
           {!fillTextAlert && phoneAlert && (
-            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Le numéro de téléphone n&apos;est pas valide</p>
             </div>
           )}
           {phoneNumberExist && (
-            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Un voiturier possède déjà ce numéro de téléphone.</p>
             </div>
           )}
           {fillTextAlert && (
-            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Remplissez tous les champs.</p>
             </div>
           )}
@@ -173,6 +182,7 @@ const Register = () => {
           </Link>
         </div>
       </div>
+      <LoadingModal isOpen={loading}  setIsOpen={(e) => setLoading(e)} title="Création de votre espace" />
     </div>
   )
 }

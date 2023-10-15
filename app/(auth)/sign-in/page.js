@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
 import SelectInput from "@/app/components/selectinput";
+import LoadingModal from "@/app/components/loadingmodal";
 
 
 
@@ -51,6 +52,7 @@ const LogIn = () => {
   const [siteData, setSiteData] = useState(null);
   const [siteDb, setSiteDb] = useState(null);
   const [wrongPassword, setWrongPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -91,9 +93,11 @@ const LogIn = () => {
     setFillTextAlert(false);
     setWrongPassword(false);
     setFillTextAlert(false);
+    setLoading(true);
     // Basic client-side validation
     if(!phoneNumber || !password || !siteData) {
       setFillTextAlert(true);
+      setLoading(false);
       return;
     }
 
@@ -108,6 +112,7 @@ const LogIn = () => {
     if (!data?.ok) {
       console.log("Sign-in API call failed:", data.error);
       setWrongPassword(true);
+      setLoading(false);
     } else {
       router.push("/dashboard")
     }
@@ -140,17 +145,17 @@ const LogIn = () => {
           <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
           <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
           {phoneAlert && (
-            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Le numéro de téléphone n&apos;est pas valide</p>
             </div>
           )}
           {fillTextAlert && (
-            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Remplissez tous les champs.</p>
             </div>
           )}
           {wrongPassword && (
-            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-60px]">
+            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
               <p>Le mot de passe n&apos;est pas correct</p>
             </div>
           )}
@@ -177,6 +182,7 @@ const LogIn = () => {
           </Link>
         </div>
       </div>
+      <LoadingModal isOpen={loading} setIsOpen={(e) => setLoading(e)} title="Connexion à votre espace" />
     </div>
   )
 }
