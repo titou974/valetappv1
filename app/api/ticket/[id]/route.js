@@ -12,7 +12,5 @@ export async function GET(req, {params}) {
     return NextResponse.json(ticket);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
-  }
+  } 
 }

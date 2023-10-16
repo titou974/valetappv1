@@ -1,15 +1,33 @@
 'use client';
 import { signOut } from "next-auth/react";
+import LoadingModal from "@/app/components/loadingmodal";
+import { useState } from "react";
+import axios from "axios";
 
-const UserAccountNav = () => {
+const UserAccountNav = ({sessionId}) => {
+  const [loading, setLoading] = useState(false);
+    const handleSignOut = async e => {
+      e.preventDefault();
+      setLoading(true);
+      try {
+        const response = await axios.patch(`/api/session/${sessionId}`, {
+          endAt: new Date(),
+        });
+        console.log("voilà la réponse du patch", response);
+      } catch(error) {
+        console.log('patch session failed')
+      } finally {
+        signOut({
+          redirect: true,
+          callbackUrl: `${window.location.origin}/sign-in`
+        })
+      }
+    };
+
+
   return (
     <>
-      <button onClick=
-      {() => signOut({
-        redirect: true,
-        callbackUrl: `${window.location.origin}/sign-in`
-      })}
-        className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors bottom-28">
+      <button onClick={handleSignOut} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors bottom-28">
         <p className="text-black font-semibold text-[32px]">J&apos;ai Terminé</p>
         <div className="w-[26px] text-black">
           <svg width="38" height="39" viewBox="0 0 38 39" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +36,7 @@ const UserAccountNav = () => {
           <path d="M7.5959 26.6392C7.24368 26.6392 6.89146 26.5094 6.61339 26.2313L0.403199 20.0211C-0.1344 19.4836 -0.1344 18.5937 0.403199 18.0561L6.61339 11.8459C7.15099 11.3083 8.04081 11.3083 8.57841 11.8459C9.11601 12.3835 9.11601 13.2733 8.57841 13.8109L3.35072 19.0386L8.57841 24.2663C9.11601 24.8039 9.11601 25.6937 8.57841 26.2313C8.31888 26.5094 7.94812 26.6392 7.5959 26.6392Z" fill="black"/>
           </svg>
         </div>
+        <LoadingModal isOpen={loading} setIsOpen={(e) => setLoading(e)} title="Fin de votre session" />
       </button>
     </>
   )

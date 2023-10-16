@@ -147,20 +147,61 @@ const LogIn = () => {
           <>
             {
               siteExists ? (
-                <div>
-                  <h3 className={styles.subText}>Vous êtes au</h3>
-                  <h2 className={styles.headText}>{siteData.name}</h2>
-                </div>
+                !phoneAlert && !fillTextAlert && !wrongPassword ? (
+                  <div>
+                    <h3 className={styles.subText}>Vous êtes au</h3>
+                    <h2 className={styles.headText}>{siteData.name}</h2>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    {phoneAlert && (
+                      <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
+                        <p>Le numéro de téléphone n&apos;est pas valide</p>
+                      </div>
+                    )}
+                    {fillTextAlert && (
+                      <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
+                        <p>Remplissez tous les champs.</p>
+                      </div>
+                    )}
+                    {wrongPassword && (
+                      <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
+                        <p>Le mot de passe n&apos;est pas correct</p>
+                      </div>
+                    )}
+                    </div>
+                )
               ) : (
-                <div>
-                  <h3 className={styles.subText}>Bonjour</h3>
-                  <h2 className={styles.headText}>Prêt, à travailler ?</h2>
-                </div>
+                !phoneAlert && !fillTextAlert && !wrongPassword ? (
+                  <div>
+                    <h3 className={styles.subText}>Bonjour</h3>
+                    <h2 className={styles.headText}>Prêt, à travailler ?</h2>
+                  </div>
+
+                ) : (
+                  <div>
+                    {phoneAlert && (
+                      <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
+                        <p>Le numéro de téléphone n&apos;est pas valide</p>
+                      </div>
+                    )}
+                    {fillTextAlert && (
+                      <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
+                        <p>Remplissez tous les champs.</p>
+                      </div>
+                    )}
+                    {wrongPassword && (
+                      <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
+                        <p>Le mot de passe n&apos;est pas correct</p>
+                      </div>
+                    )}
+                  </div>
+                )
               )
             }
           </>
         )}
-        <div className="w-full relative flex flex-col justify-center gap-10">
+        <div className="w-full flex flex-col justify-center gap-10">
           {loadingDiv ? (
             <>
               <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
@@ -178,21 +219,6 @@ const LogIn = () => {
                 <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
               )}
             </>
-          )}
-          {phoneAlert && (
-            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-              <p>Le numéro de téléphone n&apos;est pas valide</p>
-            </div>
-          )}
-          {fillTextAlert && (
-            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-              <p>Remplissez tous les champs.</p>
-            </div>
-          )}
-          {wrongPassword && (
-            <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-              <p>Le mot de passe n&apos;est pas correct</p>
-            </div>
           )}
         </div>
         <div className="flex flex-col justify-between gap-5">

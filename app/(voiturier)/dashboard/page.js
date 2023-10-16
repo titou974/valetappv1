@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import styles from '@/app/components/style';
 import UserAccountNav from '@/app/components/useraccountnav';
+import TimeCounter from '@/app/components/timecounter';
 
 // const getUser = async (id) => {
 //   let userData = {};
@@ -21,6 +22,8 @@ import UserAccountNav from '@/app/components/useraccountnav';
 const VoiturierShow = async () => {
   const session = await getServerSession(authOptions);
   console.log(session);
+  const startingHour = new Date(session.user.startingHourSession)
+  const startingHourFormat = startingHour.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h');
   return (
     <div className='bg-black h-screen w-full text-white'>
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
@@ -35,15 +38,20 @@ const VoiturierShow = async () => {
             <h2 className={`${styles.headText}`}>Connectez-vous</h2>
           </div>
         )}
-        <div>
-          <h3 className='text-[40px] text-center py-2'>01 : 54 : 23</h3>
-          <p className='text-center py-2 italic'>Vous avez commencé à 14h02</p>
-        </div>
+        {session?.user && (
+          <div className={styles.subText}>
+            <h3 className='text-[40px] text-center py-4 font-semibold'><TimeCounter startingHour={startingHour}/></h3>
+            <div>
+              <p className='text-center py-2'>Vous avez commencé à {startingHourFormat}</p>
+              <p className='text-center py-2'>Vous êtes au <span className='italic'>{session.user.siteName}</span></p>
+            </div>
+          </div>
+        )}
         <div>
         {
           session?.user ? (
-            <div className=''>
-              <UserAccountNav />
+            <div>
+              <UserAccountNav sessionId={session.user.sessionId} />
             </div>
           ) : (
             <Link href="/sign-in">
