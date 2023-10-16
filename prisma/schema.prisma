@@ -55,5 +55,5 @@ model Session {
   createdAt    DateTime   @default(now())
   endAt        DateTime?
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 }

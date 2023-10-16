@@ -6,24 +6,11 @@ import styles from '@/app/components/style';
 import UserAccountNav from '@/app/components/useraccountnav';
 import TimeCounter from '@/app/components/timecounter';
 
-// const getUser = async (id) => {
-//   let userData = {};
-//   try {
-//     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-//     const response = await axios.get(`${apiUrl}/api/voiturier/${id}`)
-//     userData = response.data;
-//     console.log(userData);
-//   } catch (error) {
-//     console.log('Error fetching user:', error.message);
-//   }
-//   return userData;
-// }
-
 const VoiturierShow = async () => {
   const session = await getServerSession(authOptions);
   console.log(session);
   const startingHour = new Date(session.user.startingHourSession)
-  const startingHourFormat = startingHour.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h');
+  const startingHourFormat = startingHour.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h')
   return (
     <div className='bg-black h-screen w-full text-white'>
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>

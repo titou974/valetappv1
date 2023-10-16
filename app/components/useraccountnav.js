@@ -19,7 +19,7 @@ const UserAccountNav = ({sessionId}) => {
       } finally {
         signOut({
           redirect: true,
-          callbackUrl: `${window.location.origin}/sign-in`
+          callbackUrl: `${window.location.origin}/done?session=${sessionId}`
         })
       }
     };
