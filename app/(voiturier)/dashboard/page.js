@@ -5,6 +5,7 @@ import Link from 'next/link';
 import styles from '@/app/components/style';
 import UserAccountNav from '@/app/components/useraccountnav';
 import TimeCounter from '@/app/components/timecounter';
+import StartingHour from '@/app/components/startinghour';
 
 
 const Dashboard = async () => {
@@ -41,7 +42,7 @@ const Dashboard = async () => {
   } else {
     console.log(session);
     const startingHour = new Date(session.user.startingHourSession)
-    const startingHourFormat = startingHour.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h')
+    console.log(startingHour);
     return (
       <div className='bg-black h-screen w-full text-white'>
         <div className={`${styles.padding} flex flex-col justify-between h-full`}>
@@ -52,7 +53,7 @@ const Dashboard = async () => {
             <div className={styles.subText}>
               <h3 className='text-[40px] text-center py-4 font-semibold'><TimeCounter startingHour={startingHour}/></h3>
               <div>
-                <p className='text-center py-2'>Vous avez commencé à {startingHourFormat}</p>
+                <StartingHour startingHour={session.user.startingHourSession} />
                 <p className='text-center py-2'>Vous êtes au <span className='italic'>{session.user.siteName}</span></p>
               </div>
             </div>
