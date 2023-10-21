@@ -138,7 +138,7 @@ const LogIn = () => {
             <div className="animate-pulse bg-gray-400/50 rounded-md mb-3" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
               <h3 className={`${styles.subText} invisible`}>Bonjour</h3>
             </div>
-            <div className="animate-pulse bg-gray-400/50 rounded-md" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}>
+            <div className="animate-pulse bg-gray-400/50 rounded-md" cc>
               <h2 className={`${styles.headText} invisible `}>Prêt, à travailler ?</h2>
             </div>
           </div>
