@@ -46,6 +46,7 @@ model Restaurant {
   updatedAt DateTime @updatedAt
   tickets   Ticket[]
   sessions  Session[]
+  ticketPrice String?
 }
 
 model Session {

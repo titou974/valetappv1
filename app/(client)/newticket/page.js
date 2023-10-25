@@ -95,7 +95,7 @@ const Register = () => {
       console.log(response);
       const data = await response.data
       if (data.ticketId) {
-        router.push(`/ticket/${data.ticketId}`)
+        router.push(`/ticket?ticket=${data.ticketId}`)
       }
     } catch(error) {
       console.log("creation of Ticket failed");

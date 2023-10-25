@@ -14,16 +14,16 @@ const users = [
 ];
 
 const restaurants = [
-  { name: 'The Tasty Spoon' },
-  { name: 'Spicy Dreams' },
-  { name: 'Ocean Bites' },
-  { name: 'Gourmet Galaxy' },
-  { name: 'Urban Flavors' },
-  { name: 'Hearty Homestyle' },
-  { name: 'Savory Symphony' },
-  { name: 'Mystical Morsels' },
-  { name: 'Rustic Radiance' },
-  { name: 'Epicurean Echoes' }
+  { name: 'The Tasty Spoon', ticketPrice: "16" },
+  { name: 'Spicy Dreams', ticketPrice: "10" },
+  { name: 'Ocean Bites', ticketPrice: "17" },
+  { name: 'Gourmet Galaxy', ticketPrice: "12" },
+  { name: 'Urban Flavors', ticketPrice: "25" },
+  { name: 'Hearty Homestyle', ticketPrice: "34" },
+  { name: 'Savory Symphony', ticketPrice: "14" },
+  { name: 'Mystical Morsels', ticketPrice: "18" },
+  { name: 'Rustic Radiance', ticketPrice: "20.5" },
+  { name: 'Epicurean Echoes', ticketPrice: "17.4" }
 ];
 
 const tickets = [
@@ -43,6 +43,12 @@ const prisma = new PrismaClient();
 
 
 async function main() {
+
+  await prisma.ticket.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.restaurant.deleteMany();
+  await prisma.session.deleteMany();
+
   const usersCreate = []
   for (const user of users) {
     const newUser = await prisma.user.create({
