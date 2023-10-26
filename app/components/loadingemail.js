@@ -4,11 +4,12 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import styles from './style';
 import InputTicket from './inputticket';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
-const EmailModal = ({isOpen, setIsOpen}) => {
+const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice}) => {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(true);
@@ -21,7 +22,7 @@ const EmailModal = ({isOpen, setIsOpen}) => {
 
   const handleSubmit = async (e) => {
     if (!validateEmail(email)) {
-      setEmailError(true);  // Set alert state to true if phone number is invalid
+      setEmailError(true);
       toast.error('Email Invalide', {
         position: "top-center",
         autoClose: 5000,
@@ -34,7 +35,18 @@ const EmailModal = ({isOpen, setIsOpen}) => {
         });
       return null;
     } else {
-      setEmailError(false);  // Set alert state to false if phone number is valid
+      setEmailError(false);
+      try {
+        const response = await post("/api/sendticket", {
+          email: email,
+          siteName: siteName,
+          scannedAt: scannedAt,
+          ticketPrice: ticketPrice,
+        });
+        console.log("reponse de l'api email", response);
+      } catch (error) {
+        console.log("erreur de mail", error.message);
+      }
     }
   }
 

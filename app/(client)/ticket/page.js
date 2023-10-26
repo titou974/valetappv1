@@ -123,7 +123,7 @@ const TicketShow = () => {
             <p className="text-black">Nestor App 🇫🇷</p>
           </div>
       </div>
-      <EmailModal isOpen={emailModal} setIsOpen={(e) => setEmailModal(e)} />
+      <EmailModal isOpen={emailModal} setIsOpen={(e) => setEmailModal(e)} siteName={ticketInfo?.restaurant.name} scannedAt={ticketInfo?.scannedAt} ticketPrice={ticketInfo?.restaurant.ticketPrice} />
     </div>
   )
 }
