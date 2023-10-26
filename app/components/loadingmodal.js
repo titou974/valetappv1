@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 function LoadingModal({title, isOpen, setIsOpen}) {
 
   function closeModal() {
-    setIsOpen(true)
+    setIsOpen(false)
   }
 
   function openModal() {

@@ -8,7 +8,7 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { cguContent } from '@/constants';
-
+import EmailModal from '@/app/components/loadingemail';
 
 
 
@@ -33,6 +33,8 @@ const TicketShow = () => {
 
   const [collapse, setCollapse] = useState(false);
   const [ticketInfo, setTicketInfo] = useState(null);
+  const [emailModal, setEmailModal] = useState(false);
+  const [loadingDiv, setLoadingDiv] = useState(true);
 
   const searchParams = useSearchParams();
   const ticketId = searchParams.get("ticket");
@@ -44,6 +46,7 @@ const TicketShow = () => {
     const getTicketInfo = async () => {
       const ticket = await getTicket(ticketId);
       setTicketInfo(ticket);
+      setLoadingDiv(false);
     }
     if (ticketId) {
       getTicketInfo()
@@ -58,20 +61,20 @@ const TicketShow = () => {
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
         <div className="">
           <p className={styles.subTextBlack}>Bienvenue au</p>
-          <p className={styles.headTextBlack}>{ticketInfo?.restaurant.name}</p>
+          <p className={styles.headTextBlack}>{loadingDiv ?  <span className="animate-pulse bg-gray-400/50 rounded-md h-[50px]" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">Gourmet Galaxy</span></span> : ticketInfo?.restaurant.name}</p>
         </div>
           <div className={style.digitalTicket}>
             <div className='flex items-center gap-4 rounded-md  px-8'>
               <p className={`${styles.headText} pb-2`}>Votre Ticket</p>
               <div className='border border-2 px-1 mb-[12px]'>
-                <p className='font-semibold'>{ticketInfo?.restaurant.ticketPrice} €</p>
+                <p className='font-semibold'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">16 €</span></span>  : `${ticketInfo?.restaurant.ticketPrice} €`}</p>
               </div>
             </div>
             <div className='border-[1px] mb-5 px-8'>
             </div>
             <div className='text-base py-2 px-8'>
-              <p className='py-1'>{formatDateToFrench(ticketInfo?.scannedAt)}</p>
-              <p className='py-1'>au <span className='italic font-semibold'>{ticketInfo?.restaurant.name}</span></p>
+              <p className='py-1'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">crée à 01h35 le 26/10/2023</span></span> : formatDateToFrench(ticketInfo?.scannedAt)}</p>
+              <p className='py-1'><span className='italic font-semibold'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">au Gourmet Galaxy</span></span> : `au ${ticketInfo?.restaurant.name}`}</span></p>
             </div>
             <div className='justify-between flex py-5 items-center'>
               <div className=''>
@@ -106,7 +109,7 @@ const TicketShow = () => {
             </span>
           </div>
           <div>
-          <button className={`bg-tertiary w-11/12 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors text-white hover:text-black shadow-xl stroke-white hover:stroke-black fixed bottom-[120px] left-1/2 transform -translate-x-1/2 `}>
+          <button onClick={(e) => setEmailModal(true)} className={`bg-tertiary w-11/12 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors text-white hover:text-black shadow-xl stroke-white hover:stroke-black fixed bottom-[120px] left-1/2 transform -translate-x-1/2 `}>
             <p className="font-semibold text-[23px]">Recevoir par email</p>
             <div className="w-[26px]">
               <svg width="29" height="25" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,8 +122,8 @@ const TicketShow = () => {
           <div className="text-center">
             <p className="text-black">Nestor App 🇫🇷</p>
           </div>
-      {/* <LoadingModal isOpen={loading} setIsOpen={(e) => setLoading(e)} title="Fin de votre session" /> */}
       </div>
+      <EmailModal isOpen={emailModal} setIsOpen={(e) => setEmailModal(e)} />
     </div>
   )
 }
