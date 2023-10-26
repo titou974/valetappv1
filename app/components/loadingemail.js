@@ -37,7 +37,7 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice}) => {
     } else {
       setEmailError(false);
       try {
-        const response = await post("/api/sendticket", {
+        const response = await axios.post("/api/sendticket", {
           email: email,
           siteName: siteName,
           scannedAt: scannedAt,
