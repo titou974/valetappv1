@@ -109,7 +109,7 @@ const TicketShow = () => {
             </span>
           </div>
           <div>
-          <button onClick={(e) => setEmailModal(true)} className={`bg-tertiary w-11/12 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors text-white hover:text-black shadow-xl stroke-white hover:stroke-black fixed bottom-[120px] left-1/2 transform -translate-x-1/2 `}>
+          <button onClick={(e) => setEmailModal(true)} className={`bg-tertiary w-11/12 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors text-white hover:text-black shadow-xl stroke-white hover:stroke-black fixed bottom-[80px] left-1/2 transform -translate-x-1/2 `}>
             <p className="font-semibold text-[23px]">Recevoir par email</p>
             <div className="w-[26px]">
               <svg width="29" height="25" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">
