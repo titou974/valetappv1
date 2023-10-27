@@ -6,21 +6,28 @@ import styles from '@/app/components/style';
 import UserAccountNav from '@/app/components/useraccountnav';
 import TimeCounter from '@/app/components/timecounter';
 import StartingHour from '@/app/components/startinghour';
+import { PlayCircleIcon } from '@heroicons/react/20/solid';
+import style from "../../startbutton.module.css"
 
 
 const Dashboard = async () => {
 
   const session = await getServerSession(authOptions);
 
+  const startSession = (e) => {
+    e.preventDefault();
+    return null
+  }
+
 
   if (!session) {
     return (
         <div className='bg-black h-screen w-full text-white'>
           <div className={`${styles.padding} flex flex-col justify-between h-full`}>
-              <div>
-                <h2 className={`${styles.subText}`}>Pour débuter,</h2>
-                <h2 className={`${styles.headText}`}>Connectez-vous</h2>
-              </div>
+            <div>
+              <h2 className={`${styles.subText}`}>Pour débuter,</h2>
+              <h2 className={`${styles.headText}`}>Connectez-vous</h2>
+            </div>
             <div>
                 <Link href="/sign-in">
                   <button className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors mb-10">
@@ -52,6 +59,10 @@ const Dashboard = async () => {
             </div>
             <div className={styles.subText}>
               <h3 className='text-[40px] text-center py-4 font-semibold'><TimeCounter startingHour={startingHour}/></h3>
+              <button className={style.startButton}>
+                <p>Démarrer la session</p>
+                <PlayCircleIcon />
+              </button>
               <div>
                 <StartingHour startingHour={session.user.startingHourSession} />
                 <p className='text-center py-2'>Vous êtes au <span className='italic'>{session.user.siteName}</span></p>
