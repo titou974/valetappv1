@@ -63,11 +63,11 @@ const TicketShow = () => {
           <p className={styles.subTextBlack}>Bienvenue au</p>
           <p className={styles.headTextBlack}>{loadingDiv ?  <span className="animate-pulse bg-gray-400/50 rounded-md h-[50px]" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">Gourmet Galaxy</span></span> : ticketInfo?.restaurant.name}</p>
         </div>
-          <div className={style.digitalTicket}>
-            <div className='flex items-center gap-4 rounded-md  px-8'>
+          <div className={`${style.digitalTicket} ${collapse ? "mt-28" : ""}`}>
+            <div className='flex items-center gap-4 rounded-md px-8'>
               <p className={`${styles.headText} pb-2`}>Votre Ticket</p>
-              <div className='border border-2 px-1 mb-[12px]'>
-                <p className='font-semibold'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">16 €</span></span>  : `${ticketInfo?.restaurant.ticketPrice} €`}</p>
+              <div className='border border-2 px-1 mb-[10px] rounded-md'>
+                <p className='font-semibold text-[20px]'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">16 €</span></span>  : `${ticketInfo?.restaurant.ticketPrice} €`}</p>
               </div>
             </div>
             <div className='border-[1px] mb-5 px-8'>
@@ -109,7 +109,7 @@ const TicketShow = () => {
             </span>
           </div>
           <div>
-          <button onClick={(e) => setEmailModal(true)} className={`bg-tertiary w-11/12 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors text-white hover:text-black shadow-xl stroke-white hover:stroke-black fixed bottom-[80px] left-1/2 transform -translate-x-1/2 `}>
+          <button onClick={(e) => setEmailModal(true)} className={`bg-tertiary w-11/12 py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-colors text-white hover:text-black shadow-xl stroke-white hover:stroke-black fixed bottom-[45px] left-1/2 transform -translate-x-1/2 `}>
             <p className="font-semibold text-[23px]">Recevoir par email</p>
             <div className="w-[26px]">
               <svg width="29" height="25" viewBox="0 0 29 25" fill="none" xmlns="http://www.w3.org/2000/svg">

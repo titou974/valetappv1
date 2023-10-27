@@ -20,9 +20,7 @@ const EmailTemplate = ({ siteName, scannedAt, ticketPrice }) => {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', paddingLeft: '32px', paddingRight: '32px' }}>
               <p style={{ paddingBottom: '8px', fontWeight: '600', color: 'white', fontSize: '30px', paddingBottom: '8px'}}>Votre Ticket</p>
-              <div style={{ border: '2px solid', paddingLeft: '0.25rem', paddingRight: '0.25rem', borderRadius: '0.375rem', maxHeight: '30px', maxWidth: '50px'  }}>
-                <p style={{ fontWeight: '600', marginBlockStart: '0', marginBlockEnd: '0' }}>{ticketPrice} €</p>
-              </div>
+              <p style={{ fontWeight: '600', marginBlockStart: '0', marginBlockEnd: '0', fontSize: "20px" }}>{ticketPrice} €</p>
             </div>
             <div style={{ borderBottom: '1px solid', marginBottom: '20px', paddingLeft: '32px', paddingRight: '32px'}}>
             </div>
