@@ -37,7 +37,7 @@ const SessionDone = () => {
       } else {
         setSessionExist(true);
         setSessionData(session);
-        setSessionTime(formatTimeDifference(session.createdAt, session.endAt))
+        setSessionTime(formatTimeDifference(session.startedAt, session.endAt));
         setLoadingDiv(false);
       }
     }

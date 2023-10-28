@@ -14,7 +14,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
 
   const [startedHour, setStartedHour] = useState(null);
   const [sessionStarted, setSessionStarted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const startSession = async (e) => {
     setLoading(true);
@@ -36,6 +36,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
 
   useEffect(() => {
     const getSessionData = async () => {
+      setLoading(true);
       let sessionData = {};
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -48,30 +49,52 @@ const DashboardLogged = ({siteName, sessionId}) => {
       if (sessionData) {
         if (sessionData.startedAt) {
           setSessionStarted(true);
-          setStartedHour(sessionData.startedAt)
+          setStartedHour(sessionData.startedAt);
+          setLoading(false);
         }
+        setLoading(false);
       };
+      setLoading(false);
     }
 
-    getSessionData()
-
-  }, [])
+    getSessionData();
+    setLoading(false);
+  }, [loading])
 
 
   return (
     <>
       <div className={styles.subText}>
-        <h3 className='text-[40px] text-center py-4 font-semibold'><TimeCounter startingHour={startedHour} sessionStarted={sessionStarted} /></h3>
-        {sessionStarted ? (
-          <div>
-            <StartingHour startingHour={startedHour} />
-            <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
+        {loading ? (
+          <div className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto h-fit mb-5" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
+            <h3 className="invisible text-[40px] text-center py-4 font-semibold">
+              <TimeCounter startingHour={startedHour} sessionStarted={sessionStarted} setLoading={(e) => setLoading(e)} />
+            </h3>
           </div>
         ) : (
-          <button onClick={(e) => startSession(e)} className={style.startButton}>
-            <p>Démarrer la session</p>
-            <PlayCircleIcon />
-          </button>
+          <h3 className='text-[40px] text-center py-4 font-semibold'>
+            <TimeCounter startingHour={startedHour} sessionStarted={sessionStarted} setLoading={(e) => setLoading(e)} />
+          </h3>
+        )}
+        {loading ? (
+            <div className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}>
+              <span className="invisible">
+                <StartingHour startingHour={startedHour} />
+                <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
+              </span>
+            </div>
+          ) : (
+          sessionStarted ? (
+            <div>
+              <StartingHour startingHour={startedHour} />
+              <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
+            </div>
+          ) : (
+            <button onClick={(e) => startSession(e)} className={style.startButton}>
+              <p>Démarrer la session</p>
+              <PlayCircleIcon />
+            </button>
+          )
         )}
       </div>
       <div>
