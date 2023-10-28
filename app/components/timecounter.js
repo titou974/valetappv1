@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
 
 
-const TimeCounter = ({ startingHour }) => {
+const TimeCounter = ({ startingHour, sessionStarted }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
@@ -24,8 +24,11 @@ const TimeCounter = ({ startingHour }) => {
     const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
     const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
     const seconds = String(totalSeconds % 60).padStart(2, '0');
-
-    return `${hours} : ${minutes} : ${seconds}`;
+    if (sessionStarted) {
+      return `${hours} : ${minutes} : ${seconds}`;
+    } else {
+      return `00 : 00 : 00`;
+    }
   };
 
   return (

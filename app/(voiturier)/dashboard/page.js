@@ -7,7 +7,8 @@ import UserAccountNav from '@/app/components/useraccountnav';
 import TimeCounter from '@/app/components/timecounter';
 import StartingHour from '@/app/components/startinghour';
 import { PlayCircleIcon } from '@heroicons/react/20/solid';
-import style from "../../startbutton.module.css"
+import style from "../../startbutton.module.css";
+import DashboardLogged from '@/app/components/dashboard';
 
 
 const Dashboard = async () => {
@@ -53,26 +54,11 @@ const Dashboard = async () => {
     return (
       <div className='bg-black h-screen w-full text-white'>
         <div className={`${styles.padding} flex flex-col justify-between h-full`}>
-            <div>
-              <h2 className={`${styles.subText}`}>Bon courage,</h2>
-              <h2 className={`${styles.headText}`}>{session.user.name} 🚗</h2>
-            </div>
-            <div className={styles.subText}>
-              <h3 className='text-[40px] text-center py-4 font-semibold'><TimeCounter startingHour={startingHour}/></h3>
-              <button className={style.startButton}>
-                <p>Démarrer la session</p>
-                <PlayCircleIcon />
-              </button>
-              <div>
-                <StartingHour startingHour={session.user.startingHourSession} />
-                <p className='text-center py-2'>Vous êtes au <span className='italic'>{session.user.siteName}</span></p>
-              </div>
-            </div>
           <div>
-          <div>
-            <UserAccountNav sessionId={session.user.sessionId} />
+            <h2 className={`${styles.subText}`}>Bon courage,</h2>
+            <h2 className={`${styles.headText}`}>{session.user.name} 🚗</h2>
           </div>
-          </div>
+          <DashboardLogged siteName={session.user.siteName} sessionId={session.user.sessionId} />
           <div className="text-center">
             <p className="text-white">Nestor App 🇫🇷</p>
           </div>
