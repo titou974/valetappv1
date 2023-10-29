@@ -14,7 +14,9 @@ export default function RootLayout({ children }) {
     <html lang="fr">
       <body className={montserrat.className}>
         <Provider>
-          {children}
+          <div className={montserrat.className}>
+            {children}
+          </div>
         </Provider>
       </body>
     </html>
