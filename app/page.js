@@ -1,14 +1,20 @@
+"use client"
 import Image from 'next/image';
 import styles from './components/style';
 import QrCode from "@/app/components/qrcodesvg";
 import Link from 'next/link';
 import { QrCodeIcon } from '@heroicons/react/20/solid';
 import { Roboto_Mono } from 'next/font/google';
+import TypewriterComponent from "typewriter-effect";
+import { useRef } from 'react';
 
 
 const roboto_mono = Roboto_Mono({ subsets: ['latin'] })
 
 const Home = () => {
+
+  const introductionTexts = ["Bonjour, je suis Nestor, votre assistant voiturier.", "Scannez le QR code proposé par votre voiturier pour créer votre ticket."]
+  const typewriterRef = useRef(null);
   return (
     <main className="w-full bg-tertiary h-screen relative">
       <div className={`${styles.padding} flex flex-col justify-center h-full gap-8`}>
@@ -17,9 +23,25 @@ const Home = () => {
           <h2 className={styles.headText}>Nestor</h2>
         </div> */}
         <div className={`mx-auto relative ${roboto_mono.className}`}>
-          <div className='absolute top-4'>
-            <div className='relative bg-[#1b2e35] py-5 px-5 rounded-full w-11/12 shadow-xl border-white border-[2px]'>
-              <p className='text-white'>Bonjour, je suis Nestor, votre assistant voiturier.</p>
+          <div className='absolute top-1 right-5'>
+            <div className='relative bg-[#1b2e35] py-5 px-5 rounded-full w-[330px] min-w-[330px] h-[120px] shadow-xl border-white border-[2px] text-white'>
+              <TypewriterComponent
+                onInit={(typewriter) => {
+                typewriter.changeDelay(50)
+                .changeDeleteSpeed(10)
+                .typeString(`${introductionTexts[0]}`)
+                .pauseFor(5000)
+                .deleteAll(1)
+                .typeString(`<strong>${introductionTexts[1]}</strong>`)
+                .pauseFor(10000)
+                .deleteAll(1)
+                .start();
+                }}
+                options={{
+                  delay: 100,
+                  loop: true
+                }}
+              />
               <svg width="37" height="48" viewBox="0 0 37 48" fill="none" xmlns="http://www.w3.org/2000/svg" className='absolute bottom-[-43px] right-[120px]'>
               <mask id="path-1-inside-1_86_73" fill="white">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1C1.52231 23.8587 16.5703 42.6127 36.431 47.7336C29.8149 38.4613 25.873 26.7957 25.873 14.1232C25.873 9.5995 26.3753 5.20406 27.3223 1H0Z"/>
