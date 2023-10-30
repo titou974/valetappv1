@@ -13,11 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body className={montserrat.className}>
-        <Provider>
-          <div className={montserrat.className}>
-            {children}
-          </div>
-        </Provider>
+        {children}
       </body>
     </html>
   )

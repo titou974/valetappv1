@@ -3,18 +3,35 @@ import styles from './components/style';
 import QrCode from "@/app/components/qrcodesvg";
 import Link from 'next/link';
 import { QrCodeIcon } from '@heroicons/react/20/solid';
+import { Roboto_Mono } from 'next/font/google';
 
 
+const roboto_mono = Roboto_Mono({ subsets: ['latin'] })
 
 const Home = () => {
   return (
     <main className="w-full bg-tertiary h-screen relative">
-      <div className={`${styles.padding} flex flex-col justify-center h-full gap-10`}>
+      <div className={`${styles.padding} flex flex-col justify-center h-full gap-8`}>
         {/* <div>
           <h3 className={styles.subText}>Je suis votre assistant,</h3>
           <h2 className={styles.headText}>Nestor</h2>
         </div> */}
-        <div className='mx-auto'>
+        <div className={`mx-auto relative ${roboto_mono.className}`}>
+          <div className='absolute top-4'>
+            <div className='relative bg-[#1b2e35] py-5 px-5 rounded-full w-11/12 shadow-xl border-white border-[2px]'>
+              <p className='text-white'>Bonjour, je suis Nestor, votre assistant voiturier.</p>
+              <svg width="37" height="48" viewBox="0 0 37 48" fill="none" xmlns="http://www.w3.org/2000/svg" className='absolute bottom-[-43px] right-[120px]'>
+              <mask id="path-1-inside-1_86_73" fill="white">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1C1.52231 23.8587 16.5703 42.6127 36.431 47.7336C29.8149 38.4613 25.873 26.7957 25.873 14.1232C25.873 9.5995 26.3753 5.20406 27.3223 1H0Z"/>
+              </mask>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1C1.52231 23.8587 16.5703 42.6127 36.431 47.7336C29.8149 38.4613 25.873 26.7957 25.873 14.1232C25.873 9.5995 26.3753 5.20406 27.3223 1H0Z" fill="#1B2E35"/>
+              <path d="M36.431 47.7336L35.9316 49.6702L41.2478 51.0409L38.059 46.5719L36.431 47.7336ZM0 1V-1H-2.13762L-1.99558 1.1329L0 1ZM27.3223 1L29.2734 1.43949L29.8229 -1H27.3223V1ZM36.9303 45.7969C17.9875 40.9127 3.46639 22.9525 1.99558 0.867102L-1.99558 1.1329C-0.421777 24.7649 15.1531 44.3127 35.9316 49.6702L36.9303 45.7969ZM23.873 14.1232C23.873 27.2124 27.9451 39.2841 34.8029 48.8952L38.059 46.5719C31.6848 37.6386 27.873 26.379 27.873 14.1232H23.873ZM25.3712 0.560508C24.3918 4.90837 23.873 9.4512 23.873 14.1232H27.873C27.873 9.7478 28.3588 5.49975 29.2734 1.43949L25.3712 0.560508ZM27.3223 -1H0V3H27.3223V-1Z" fill="white" mask="url(#path-1-inside-1_86_73)"/>
+              <rect width="31" height="5" fill="#1B2E35"/>
+              </svg>
+
+            </div>
+          </div>
+
           <Image src="/nestor.png" width={400} height={400} alt="Nestor during his job" />
         </div>
         <div href="/" className="w-full flex flex-col items-center gap-20 text-white">
@@ -25,15 +42,15 @@ const Home = () => {
           <p className='text-[20px]'>Ou</p> */}
           <div className='w-full flex flex-col gap-5'>
             <div className='text-center mx-auto w-full flex justify-center items-center'>
-              <p className={`text-center font-bold mr-5 text-[26px]`}>Scanner le QR Code</p>
-              <div className='w-[50px]'>
+              <p className={`text-center font-bold mr-4 text-[26px]`}>Scanner le QR Code</p>
+              <div className='w-[40px]'>
                 <QrCodeIcon  />
               </div>
             </div>
             <div className='text-center text-base font-bold'>
               <p>ou</p>
             </div>
-            <Link href='newticket' className="bg-white w-10/12 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors text-tertiary hover:bg-gray-200 mx-auto shadow-lg">
+            <Link href='newticket' className="bg-white w-full py-3 rounded-full flex items-center justify-center gap-2 transition-colors text-tertiary hover:bg-gray-200 mx-auto shadow-lg">
               <p className="font-semibold text-[26px]">Créer votre ticket</p>
               <div className="w-[26px]">
                 <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

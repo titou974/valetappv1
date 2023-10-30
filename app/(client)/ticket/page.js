@@ -63,7 +63,7 @@ const TicketShow = () => {
           <p className={styles.subTextBlack}>Bienvenue au</p>
           <p className={styles.headTextBlack}>{loadingDiv ?  <span className="animate-pulse bg-gray-400/50 rounded-md h-[50px]" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">Gourmet Galaxy</span></span> : ticketInfo?.restaurant.name}</p>
         </div>
-          <div className={`${style.digitalTicket} ${collapse ? "mt-28" : ""}`}>
+          <div className={`${style.digitalTicket} ${collapse ? "mt-28" : ""} overflow-hidden`}>
             <div className='flex items-center gap-4 rounded-md px-8'>
               <p className={`${styles.headText} pb-2`}>Votre Ticket</p>
               <div className='border border-2 px-1 mb-[10px] rounded-md'>
@@ -98,12 +98,12 @@ const TicketShow = () => {
                 <ChevronDownIcon class={`${collapse ? "transform rotate-180" : ""} h-6 w-6 text-white mx-auto transition-all`} />
               </button>
             </div>
-            <span className={`long-text ${collapse ? "expanded" : ""} px-8`}>
-              <p className='pb-5'>CONDITIONS GÉNÉRALES D’UTILISATION DE NESTOR APP</p>
+            <span className={`long-text ${collapse ? "expanded" : ""} px-8 max-w-1/2`}>
+              <p className='pb-5'>CONDITIONS GÉNÉRALES D&rsquo;UTILISATION DE NESTOR APP</p>
               {cguContent.map((part, index) => (
                 <div key={index} className='pb-5'>
                   <h3 className='font-semibold'>{part.subtitle}</h3>
-                  <p>{part.text}</p>
+                  <p className=''>{part.text}</p>
                 </div>
               ))}
             </span>
