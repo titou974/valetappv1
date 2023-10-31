@@ -56,7 +56,7 @@ export const cguContent = [
   },
   {
     subtitle: "5. Responsabilités",
-    text: "NestorAppCorp s'engage à prendre le plus grand soin des véhicules qui lui sont confiés. Toutefois, en cas de dommages ou de vol non imputables à NestorAppCorp, la responsabilité de cette dernière ne saurait être engagée."
+    text: "NestorAppCorp s'engage à prendre le plus grand soin des véhicules qui lui sont confiés. Toutefois, en cas de dommages ou de vol non imputables à NestorAppCorp, la responsabilité de cette dernière ne saurait être engagée. La société se dégage de toute responsabilité en cas de : vol de tout objet à l’intérieur du véhicule; pour les véhicules laissés à sa charge après fermeture de l'établissement; pour tout dommage occasionné à un véhicule du fait de son dysfonctionnement et de son mauvais état; en cas de vol ou détérioration du véhicule par violence du fait d'un tiers; et en cas de braquage du véhicule. Aucune réclamation ne sera acceptée une fois le véhicule rendu."
   },
   {
     subtitle: "6. Tickets digitaux",

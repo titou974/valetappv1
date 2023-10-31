@@ -142,7 +142,7 @@ const Register = () => {
                 </div>
               ) : (
                 <div>
-                  <p>Votre voiture vas être prise en charge...</p>
+                  <p className="text-center">Votre voiture vas être prise en charge...</p>
                 </div>
               )
             }

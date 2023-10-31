@@ -6,7 +6,7 @@ import styles from "./style";
 
 const EmailTemplate = ({ siteName, scannedAt, ticketPrice }) => {
   return (
-      <div style={{ backgroundColor: '#E7E7E7' }}>
+
         <Container>
           <p style={{color: 'black'}}>Merci d&#39;avoir utilisé Nestor, l&#39;application française des voituriers 🇫🇷</p>
           <div style={{
@@ -18,9 +18,9 @@ const EmailTemplate = ({ siteName, scannedAt, ticketPrice }) => {
               position: 'relative',
               marginTop: '2em'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', paddingLeft: '32px', paddingRight: '32px' }}>
-              <p style={{ paddingBottom: '8px', fontWeight: '600', color: 'white', fontSize: '30px', paddingBottom: '8px'}}>Votre Ticket</p>
-              <p style={{ fontWeight: '600', marginBlockStart: '0', marginBlockEnd: '0', fontSize: "20px" }}>{ticketPrice} €</p>
+            <div style={{ paddingLeft: '32px', paddingRight: '32px' }}>
+              <p style={{ paddingBottom: '8px', fontWeight: '600', color: 'white', fontSize: '30px', marginTop: "2px", marginBottom: "2px"}}>Votre Ticket</p>
+              <p style={{ fontWeight: '600', fontSize: "20px", paddingBottom: '8px', marginTop: "2px", marginBottom: "2px" }}>{ticketPrice} €</p>
             </div>
             <div style={{ borderBottom: '1px solid', marginBottom: '20px', paddingLeft: '32px', paddingRight: '32px'}}>
             </div>
@@ -29,17 +29,17 @@ const EmailTemplate = ({ siteName, scannedAt, ticketPrice }) => {
               <p style={{ paddingTop: '4px', paddingBottom: '4px' }}><span style={{ fontStyle: 'italic', fontWeight: '600' }}>au {siteName}</span></p>
             </div>
           </div>
-            <span style={{ paddingLeft: '32px', paddingRight: '32px', color: 'black' }}>
-              <p style={{ paddingBottom: '20px' }}>CONDITIONS GÉNÉRALES D’UTILISATION DE NESTOR APP</p>
-              {cguContent.map((part, index) => (
-                <div key={index} style={{ paddingBottom: '20px' }}>
-                  <h3 style={{ fontWeight: '600' }}>{part.subtitle}</h3>
-                  <p>{part.text}</p>
-                </div>
-              ))}
-            </span>
+          <span style={{ paddingLeft: '32px', paddingRight: '32px', color: 'black' }}>
+            <p style={{ paddingBottom: '20px' }}>CONDITIONS GÉNÉRALES D’UTILISATION DE NESTOR APP</p>
+            {cguContent.map((part, index) => (
+              <div key={index} style={{ paddingBottom: '20px' }}>
+                <h3 style={{ fontWeight: '600' }}>{part.subtitle}</h3>
+                <p>{part.text}</p>
+              </div>
+            ))}
+          </span>
         </Container>
-      </div>
+
   )
 }
 
