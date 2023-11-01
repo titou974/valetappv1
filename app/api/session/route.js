@@ -4,5 +4,6 @@ import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
   const session = await getServerSession(authOptions);
+  console.log(session);
   return NextResponse.json({ authenticated: session })
 }

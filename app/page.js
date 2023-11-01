@@ -7,11 +7,44 @@ import { QrCodeIcon } from '@heroicons/react/20/solid';
 import { Roboto_Mono } from 'next/font/google';
 import TypewriterComponent from "typewriter-effect";
 import { useRef } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
+import { useRouter } from "next/navigation";
 
 
 const roboto_mono = Roboto_Mono({ subsets: ['latin'] })
 
+const getSession = async () => {
+  let siteData = {};
+  try {
+    const response = await axios.get(`/api/session`);
+    console.log(response);
+    siteData = response.data;
+  } catch (error) {
+    console.log("Error Session:", error.message)
+  }
+  return siteData;
+}
+
 const Home = () => {
+
+  const [authenticated, setAuthenticated] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const getSessionData = async () => {
+      const sessionData = await getSession();
+      if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
+        console.log("pas de session");
+        setAuthenticated(false);
+      } else {
+        setAuthenticated(true);
+        router.push("/dashboard");
+      }
+    }
+    getSessionData();
+  }, [])
 
   const introductionTexts = ["Bonjour, je suis Nestor, votre assistant voiturier.", "Scannez le QR code proposé par votre voiturier pour créer votre ticket."]
   const typewriterRef = useRef(null);

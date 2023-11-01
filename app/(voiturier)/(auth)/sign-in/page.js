@@ -39,6 +39,18 @@ const getSites = async () => {
   return siteData;
 }
 
+const getSession = async () => {
+  let siteData = {};
+  try {
+    const response = await axios.get(`/api/session`);
+    console.log(response);
+    siteData = response.data;
+  } catch (error) {
+    console.log("Error Session:", error.message)
+  }
+  return siteData;
+}
+
 const LogIn = () => {
 
   const searchParams = useSearchParams();
@@ -54,11 +66,11 @@ const LogIn = () => {
   const [wrongPassword, setWrongPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingDiv, setLoadingDiv] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-
     const getSitesName = async () => {
       const siteData = await getSites();
       if (!siteData || Object.keys(siteData).length === 0) {
@@ -89,8 +101,21 @@ const LogIn = () => {
     } else {
       getSitesName();
     }
-
   }, [site, siteExists])
+
+  useEffect(() => {
+    const getSessionData = async () => {
+      const sessionData = await getSession();
+      if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
+        console.log("pas de session");
+        setAuthenticated(false);
+      } else {
+        setAuthenticated(true);
+        router.push("/dashboard");
+      }
+    }
+    getSessionData();
+  }, [])
 
 
   const handleLogIn = async e => {
@@ -122,13 +147,6 @@ const LogIn = () => {
       router.push("/dashboard")
     }
   }
-
-  useEffect(() => {
-    console.log(siteData?.id)
-  })
-
-
-
 
   return (
     <div className="w-full h-screen bg-black">

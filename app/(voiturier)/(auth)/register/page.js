@@ -38,6 +38,18 @@ const getSites = async () => {
   return siteData;
 };
 
+const getSession = async () => {
+  let siteData = {};
+  try {
+    const response = await axios.get(`/api/session`);
+    console.log(response);
+    siteData = response.data;
+  } catch (error) {
+    console.log("Error Session:", error.message)
+  }
+  return siteData;
+}
+
 const Register = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -54,6 +66,7 @@ const Register = () => {
   const searchParams = useSearchParams();
   const site = searchParams.get("site");
   const router = useRouter();
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
 
@@ -89,6 +102,20 @@ const Register = () => {
     }
 
   }, [site, siteExists])
+
+  useEffect(() => {
+    const getSessionData = async () => {
+      const sessionData = await getSession();
+      if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
+        console.log("pas de session");
+        setAuthenticated(false);
+      } else {
+        setAuthenticated(true);
+        router.push("/dashboard");
+      }
+    }
+    getSessionData();
+  }, [])
 
   const handleRegister = async e => {
     e.preventDefault();
