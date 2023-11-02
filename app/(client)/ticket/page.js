@@ -28,6 +28,7 @@ const getTicket = async (id) => {
   return ticketData;
 }
 
+
 // eslint-disable-next-line @next/next/no-async-client-component
 const TicketShow = () => {
 
@@ -67,9 +68,10 @@ const TicketShow = () => {
             <div className='flex items-center gap-4 rounded-md px-8'>
               <p className={`${styles.headText} pb-2`}>Votre Ticket</p>
               <div className='border border-2 px-1 mb-[10px] rounded-md'>
-                <p className='font-semibold text-[20px]'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">16 €</span></span>  : `${ticketInfo?.restaurant.ticketPrice} €`}</p>
+                <p className='font-semibold text-[20px]'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">#16</span></span>  : `#${ticketInfo?.ticketNumber}`}</p>
               </div>
             </div>
+            <p className='font-semibold text-[30px] px-8 pb-2'>{loadingDiv ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">16 €</span></span>  : `${ticketInfo?.restaurant.ticketPrice} €`}</p>
             <div className='border-[1px] mb-5 px-8'>
             </div>
             <div className='text-base py-2 px-8'>
@@ -123,7 +125,7 @@ const TicketShow = () => {
             <p className="text-black">Nestor App 🇫🇷</p>
           </div>
       </div>
-      <EmailModal isOpen={emailModal} setIsOpen={(e) => setEmailModal(e)} siteName={ticketInfo?.restaurant.name} scannedAt={ticketInfo?.scannedAt} ticketPrice={ticketInfo?.restaurant.ticketPrice} />
+      <EmailModal isOpen={emailModal} setIsOpen={(e) => setEmailModal(e)} siteName={ticketInfo?.restaurant.name} scannedAt={ticketInfo?.scannedAt} ticketPrice={ticketInfo?.restaurant.ticketPrice} userId={ticketInfo?.user.id} />
     </div>
   )
 }

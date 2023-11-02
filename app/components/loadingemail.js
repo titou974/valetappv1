@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
-const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice}) => {
+const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, userId}) => {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(true);
@@ -39,6 +39,14 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice}) => {
       return null;
     } else {
       setEmailError(false);
+      try {
+        const response = await axios.patch(`/api/user/${userId}`, {
+          email: email,
+        });
+        console.log(response);
+      } catch (error) {
+        console.log("sauvegarde de l'email fail", error)
+      }
       try {
         const response = await axios.post("/api/sendticket", {
           email: email,
