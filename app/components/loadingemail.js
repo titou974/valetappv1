@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
-const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, userId}) => {
+const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticketNumber, userId}) => {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(true);
@@ -52,6 +52,7 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, userId
           email: email,
           siteName: siteName,
           scannedAt: scannedAt,
+          ticketNumber: ticketNumber,
           ticketPrice: ticketPrice,
         });
         console.log("reponse de l'api email", response);

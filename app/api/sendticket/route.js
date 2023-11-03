@@ -8,14 +8,14 @@ const resend = new Resend(process.env.RESEND_KEY);
 
 export async function POST(req) {
   const json = await req.json();
-  const { email, siteName, scannedAt, ticketPrice } = json;
+  const { email, siteName, scannedAt, ticketPrice, ticketNumber } = json;
   console.log("json reçu pour le mail", json);
   try {
     const data = await resend.emails.send({
       from: "Nestor APP <nestorapp@cheapcheap.site>",
       to: [email],
       subject: "Votre ticket",
-      react: EmailTemplate({ siteName, scannedAt, ticketPrice})
+      react: EmailTemplate({ siteName, scannedAt, ticketPrice, ticketNumber})
     });
       console.log("data envoyé", data);
       return NextResponse.json(data)

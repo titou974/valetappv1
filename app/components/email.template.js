@@ -4,7 +4,7 @@ import formatDateToFrench from "@/lib/formatdate";
 import { cguContent } from "@/constants";
 import styles from "./style";
 
-const EmailTemplate = ({ siteName, scannedAt, ticketPrice }) => {
+const EmailTemplate = ({ siteName, scannedAt, ticketPrice, ticketNumber }) => {
   return (
 
         <Container>
@@ -21,6 +21,7 @@ const EmailTemplate = ({ siteName, scannedAt, ticketPrice }) => {
             <div style={{ paddingLeft: '32px', paddingRight: '32px' }}>
               <p style={{ paddingBottom: '8px', fontWeight: '600', color: 'white', fontSize: '30px', marginTop: "2px", marginBottom: "2px"}}>Votre Ticket</p>
               <p style={{ fontWeight: '600', fontSize: "20px", paddingBottom: '8px', marginTop: "2px", marginBottom: "2px" }}>{ticketPrice} €</p>
+              <p style={{ fontWeight: '600', paddingBottom: '8px', marginTop: "2px", marginBottom: "2px" }}>#{ticketNumber}</p>
             </div>
             <div style={{ borderBottom: '1px solid', marginBottom: '20px', paddingLeft: '32px', paddingRight: '32px'}}>
             </div>
