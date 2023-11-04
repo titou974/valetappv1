@@ -238,6 +238,11 @@ const LogIn = () => {
               )}
             </>
           )}
+          <div>
+            <Link href={`forget${siteData === null ? "" : `?site=${siteData?.id}`}`} className="text-primary hover:text-white transition-all ps-[20px]">
+              <p>Mot de passe oublié ?</p>
+            </Link>
+          </div>
         </div>
         <div className="flex flex-col justify-between gap-5">
           <button onClick={handleLogIn} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors">
