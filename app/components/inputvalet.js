@@ -23,7 +23,7 @@ const Input = ({placeholder, input, setInput, setPhoneAlert}) => {
 
   return (
     <div className="w-full">
-      <label className={style.customField}>
+      <label className={style.customFieldNewPassword}>
         <input value={input} onChange={handleInputChange} type={placeholder === "Numéro de Téléphone" ? "tel" : "text"} required></input>
         <span className={style.placeholder}>{placeholder}<span className="text-primary">*</span></span>
       </label>
