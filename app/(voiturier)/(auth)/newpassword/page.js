@@ -1,14 +1,11 @@
 "use client"
 
 import styles from "@/app/components/style";
-import Link from "next/link";
 import Input from "@/app/components/inputvalet";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { signIn } from 'next-auth/react';
-import SelectInput from "@/app/components/selectinput";
 import LoadingModal from "@/app/components/loadingmodal";
 
 const getSession = async () => {
@@ -143,24 +140,21 @@ const ResetPassword = () => {
     try {
       let userData;
       const response = await axios.patch(`/api/forget/${resetToken}`, {
-        phoneNumber: phoneNumber
+        password: password
       });
       userData = response.data
-      if (userData.message ===  "Invalid data received.") {
-        setFillTextAlert(true);
+      if (!userData) {
         setLoading(false);
+        console.log("hugo a une grosse bite")
         return null;
-      } else if (userData.token=== false) {
-        setPhoneAlert(true);
-        setLoading(false);
-        return null;
-      }  else {
-        setPhoneExist(true);
+      } else {
+        console.log(userData)
+        router.push(`/sign-in${site ? `?site=${site}` : ""}`)
         setLoading(false);
         return null;
       }
     } catch (error) {
-      console.log("reset of password failed");
+      console.log(error, "reset of password failed");
       setLoading(false);
     }
   }

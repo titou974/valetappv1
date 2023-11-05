@@ -31,7 +31,7 @@ const TimeCounter = ({ startingHour, sessionStarted, setLoading }) => {
       setLoading(false);
       return `${hours} : ${minutes} : ${seconds}`;
     } else {
-      setLoading(false);
+      setLoading(true);
       return `00 : 00 : 00`;
     }
   };

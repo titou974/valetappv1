@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { hash } from "bcrypt";
 import sanitizePhoneNumber from "@/app/components/sanitizephoneNumber";
 import jwt from "jsonwebtoken";
 

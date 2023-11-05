@@ -68,7 +68,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
         {loading ? (
           <div className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto h-fit mb-5" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
             <h3 className="invisible text-[40px] text-center py-4 font-semibold">
-              <TimeCounter startingHour={startedHour} sessionStarted={sessionStarted} setLoading={(e) => setLoading(e)} />
+              00 : 00 : 00
             </h3>
           </div>
         ) : (
