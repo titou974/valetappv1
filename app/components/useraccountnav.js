@@ -3,8 +3,10 @@ import { signOut } from "next-auth/react";
 import LoadingModal from "@/app/components/loadingmodal";
 import { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const UserAccountNav = ({sessionId}) => {
+const UserAccountNav = ({sessionId, sessionStarted}) => {
   const [loading, setLoading] = useState(false);
     const handleSignOut = async e => {
       e.preventDefault();

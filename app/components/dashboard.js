@@ -17,8 +17,8 @@ const DashboardLogged = ({siteName, sessionId}) => {
   const [loading, setLoading] = useState(true);
 
   const startSession = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     setStartedHour(new Date());
     setSessionStarted(true);
     try {
@@ -30,7 +30,9 @@ const DashboardLogged = ({siteName, sessionId}) => {
     } catch(error) {
       console.log('patch session failed', error.message)
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
     }
   }
 
@@ -50,16 +52,15 @@ const DashboardLogged = ({siteName, sessionId}) => {
         if (sessionData.startedAt) {
           setSessionStarted(true);
           setStartedHour(sessionData.startedAt);
-          setLoading(false);
         }
-        setLoading(false);
       };
-      setLoading(false);
     }
 
     getSessionData();
-    setLoading(false);
-  }, [loading])
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, [])
 
 
   return (
@@ -68,7 +69,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
         {loading ? (
           <div className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto h-fit mb-5" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
             <h3 className="invisible text-[40px] text-center py-4 font-semibold">
-              00 : 00 : 00
+              <TimeCounter startingHour={startedHour} sessionStarted={sessionStarted} setLoading={(e) => setLoading(e)} />
             </h3>
           </div>
         ) : (
@@ -77,11 +78,11 @@ const DashboardLogged = ({siteName, sessionId}) => {
           </h3>
         )}
         {loading ? (
-            <div className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}>
-              <span className="invisible">
-                <StartingHour startingHour={startedHour} />
-                <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
-              </span>
+            <div className="animate-pulse bg-gray-400/50 rounded-full w-fit mx-auto" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}>
+              <button onClick={(e) => startSession(e)} className={`${style.startButton} invisible`}>
+                <p>Démarrer la session</p>
+                <PlayCircleIcon />
+              </button>
             </div>
           ) : (
           sessionStarted ? (
