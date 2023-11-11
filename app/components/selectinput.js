@@ -5,7 +5,7 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 export default function SelectInput({input, setInput, db, placeholder}) {
 
   return (
-    <div className="w-full text-[20px]">
+    <div className="w-full text-base">
       <Listbox value={input} onChange={setInput}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default bg-white py-[12px] px-[20px] text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm rounded-full">

@@ -51,6 +51,19 @@ const getSession = async () => {
   return siteData;
 }
 
+const getCompanies = async () => {
+  let companyData = {};
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await axios.get(`${apiUrl}/api/company`);
+    console.log("this is the companies", response);
+    companyData = response.data;
+  } catch (error) {
+    console.log('Error fetching companies', error.message)
+  }
+  return companyData;
+}
+
 const LogIn = () => {
 
   const searchParams = useSearchParams();
@@ -68,17 +81,21 @@ const LogIn = () => {
   const [loadingDiv, setLoadingDiv] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
 
+  const [companySelected, setCompanySelected] = useState(null);
+  const [companiesDb, setCompaniesDb] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
+
     const getSitesName = async () => {
       const siteData = await getSites();
-      if (!siteData || Object.keys(siteData).length === 0) {
-        setLoadingDiv(false);
+      if (!siteData || Object.keys(siteData).length === 0 || siteData.error ) {
         console.log("aucun sites trouver")
-      } else {
         setLoadingDiv(false);
-        setSiteDb(siteData);
+      } else {
+        const filteredSites = siteData.filter(site => site.companyId === companySelected?.id);
+        setSiteDb(filteredSites);
+        setLoadingDiv(false);
       }
     };
 
@@ -88,20 +105,38 @@ const LogIn = () => {
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
         setLoadingDiv(false);
-        getSitesName();
       } else {
         setSiteExists(true);
-        setLoadingDiv(false);
         setSiteData(siteData);
+        setLoadingDiv(false);
       }
     };
 
-    if (site) {
-      checkSite();
-    } else {
-      getSitesName();
+    const getCompaniesName = async () => {
+      setLoadingDiv(true);
+      const companyData = await getCompanies();
+
+      if (!companyData || Object.keys(companyData).length === 0) {
+        setLoadingDiv(false);
+        console.log("pas d'entreprise trouvé, erreur")
+      } else {
+        setCompaniesDb(companyData);
+        setLoadingDiv(false);
+      }
     }
-  }, [site, siteExists])
+
+      if (site) {
+        checkSite();
+      } else {
+        if (companySelected?.id) {
+          getSitesName();
+        } else {
+          getCompaniesName();
+        }
+      }setSiteData(siteData);
+      setLoadingDiv(false);
+
+  }, [site, siteExists, companySelected?.id])
 
   useEffect(() => {
     const getSessionData = async () => {
@@ -233,8 +268,11 @@ const LogIn = () => {
             <>
               <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
               <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
-              {!siteExists && (
-                <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
+              {!siteExists && companiesDb && (
+                <SelectInput input={companySelected} setInput={(e) => setCompanySelected(e)} db={companiesDb} placeholder="Sélectionner votre entreprise" />
+              )}
+              {!siteExists && siteDb && (
+                <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} placeholder="Sélectionner un site"/>
               )}
             </>
           )}

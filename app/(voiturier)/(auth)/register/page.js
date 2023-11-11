@@ -77,7 +77,6 @@ const Register = () => {
   const [siteExists, setSiteExists] = useState(false);
   const [siteData, setSiteData] = useState(null);
   const [siteDb, setSiteDb] = useState(null);
-  const [siteDbCompany, setSiteDbCompany] = useState(null);
 
   const [companySelected, setCompanySelected] = useState(null);
   const [companiesDb, setCompaniesDb] = useState(null);
@@ -105,7 +104,6 @@ const Register = () => {
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
-        getCompanies;
         setLoadingDiv(false);
       } else {
         setSiteExists(true);
@@ -115,6 +113,7 @@ const Register = () => {
     };
 
     const getCompaniesName = async () => {
+      setLoadingDiv(true);
       const companyData = await getCompanies();
 
       if (!companyData || Object.keys(companyData).length === 0) {
