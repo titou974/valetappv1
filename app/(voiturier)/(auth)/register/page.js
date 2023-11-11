@@ -109,6 +109,8 @@ const Register = () => {
         setSiteExists(true);
         setSiteData(siteData);
         setLoadingDiv(false);
+        setCompanySelected({id: siteData.companyId})
+        console.log(siteData);
       }
     };
 
