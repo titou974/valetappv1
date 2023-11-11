@@ -6,11 +6,11 @@ import sanitizePhoneNumber from "@/app/components/sanitizephoneNumber";
 
 export async function POST(req) {
   try {
-    const { name, phoneNumber, password } = await req.json();
+    const { name, phoneNumber, password, companyId } = await req.json();
 
     console.log("Received:", { name, phoneNumber, password });
 
-    if (!name || !phoneNumber || !password) {
+    if (!name || !phoneNumber || !password || !companyId) {
       console.log("Invalid data received.");
       return NextResponse.json({ userId: null, message: "Invalid data received." });
     }
@@ -44,6 +44,7 @@ export async function POST(req) {
         phoneNumber: sanitizedPhoneNumber,
         name: name,
         password: hashedPassword,
+        companyId: companyId,
         role: "VALET",
       },
     });

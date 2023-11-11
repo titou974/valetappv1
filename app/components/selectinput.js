@@ -2,14 +2,14 @@ import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
-export default function SelectInput({input, setInput, db}) {
+export default function SelectInput({input, setInput, db, placeholder}) {
 
   return (
     <div className="w-full text-[20px]">
       <Listbox value={input} onChange={setInput}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default bg-white py-[12px] px-[20px] text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm rounded-full">
-            <span className="block truncate">{input?.name || "Sélectionner un Site"}<span>*</span></span>
+            <span className="block truncate">{input?.name || placeholder}<span>*</span></span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronUpDownIcon
                 className="h-5 w-5 text-gray-400"
@@ -23,7 +23,7 @@ export default function SelectInput({input, setInput, db}) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-[20px] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-[20px]">
+            <Listbox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-[20px] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-[20px]">
               {db?.map((site, siteIdx) => (
                 <Listbox.Option
                   key={siteIdx}

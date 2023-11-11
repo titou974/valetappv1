@@ -25,6 +25,19 @@ const getSite = async (id) => {
   return siteData;
 }
 
+const getCompanies = async () => {
+  let companyData = {};
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const response = await axios.get(`${apiUrl}/api/company`);
+    console.log("this is the companies", response);
+    companyData = response.data;
+  } catch (error) {
+    console.log('Error fetching companies', error.message)
+  }
+  return companyData;
+}
+
 const getSites = async () => {
   let siteData = {};
   try {
@@ -38,6 +51,7 @@ const getSites = async () => {
   return siteData;
 };
 
+
 const getSession = async () => {
   let siteData = {};
   try {
@@ -48,7 +62,7 @@ const getSession = async () => {
     console.log("Error Session:", error.message)
   }
   return siteData;
-}
+};
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -63,6 +77,10 @@ const Register = () => {
   const [siteExists, setSiteExists] = useState(false);
   const [siteData, setSiteData] = useState(null);
   const [siteDb, setSiteDb] = useState(null);
+  const [siteDbCompany, setSiteDbCompany] = useState(null);
+
+  const [companySelected, setCompanySelected] = useState(null);
+  const [companiesDb, setCompaniesDb] = useState(null);
   const searchParams = useSearchParams();
   const site = searchParams.get("site");
   const router = useRouter();
@@ -72,11 +90,12 @@ const Register = () => {
 
     const getSitesName = async () => {
       const siteData = await getSites();
-      if (!siteData || Object.keys(siteData).length === 0) {
+      if (!siteData || Object.keys(siteData).length === 0 || siteData.error ) {
         console.log("aucun sites trouver")
         setLoadingDiv(false);
       } else {
-        setSiteDb(siteData);
+        const filteredSites = siteData.filter(site => site.companyId === companySelected?.id);
+        setSiteDb(filteredSites);
         setLoadingDiv(false);
       }
     };
@@ -86,7 +105,7 @@ const Register = () => {
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
-        getSitesName();
+        getCompanies;
         setLoadingDiv(false);
       } else {
         setSiteExists(true);
@@ -95,13 +114,31 @@ const Register = () => {
       }
     };
 
-    if (site) {
-      checkSite();
-    } else {
-      getSitesName();
+    const getCompaniesName = async () => {
+      const companyData = await getCompanies();
+
+      if (!companyData || Object.keys(companyData).length === 0) {
+        setLoadingDiv(false);
+        console.log("pas d'entreprise trouvé, erreur")
+      } else {
+        setCompaniesDb(companyData);
+        setLoadingDiv(false);
+      }
     }
 
-  }, [site, siteExists])
+      if (site) {
+        checkSite();
+      } else {
+        if (companySelected?.id) {
+          getSitesName();
+        } else {
+          getCompaniesName();
+        }
+      }setSiteData(siteData);
+      setLoadingDiv(false);
+
+  }, [site, siteExists, companySelected?.id])
+
 
   useEffect(() => {
     const getSessionData = async () => {
@@ -122,11 +159,16 @@ const Register = () => {
     setLoading(true);
     setFillTextAlert(false);
     setPhoneNumberExist(false);
+    if (!companySelected.id && !siteData.id) {
+      return null;
+    }
     try {
       const response = await axios.post("/api/voiturier", {
         name: name,
         phoneNumber: phoneNumber,
         password: password,
+        companyId: companySelected.id
+
       });
       const data = await response.data;
       if (data.userId === null && data.message ===  "Un voiturier avec ce numéro existe déjà.") {
@@ -159,7 +201,7 @@ const Register = () => {
   }
 
   useEffect(() => {
-    console.log(siteData?.id);
+    console.log("id de la companie", companySelected?.id);
 
   })
 
@@ -190,8 +232,12 @@ const Register = () => {
               <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
               <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
               <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
-              {!siteExists && (
-                <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
+
+              {!siteExists && companiesDb && (
+                <SelectInput input={companySelected} setInput={(e) => setCompanySelected(e)} db={companiesDb} placeholder="Sélectionner votre entreprise" />
+              )}
+              {!siteExists && siteDb && (
+                <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} placeholder="Sélectionner un site"/>
               )}
             </>
           )}

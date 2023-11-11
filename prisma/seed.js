@@ -41,50 +41,53 @@ const tickets = [
 
 const prisma = new PrismaClient();
 
-
 async function main() {
-
   await prisma.ticket.deleteMany();
   await prisma.user.deleteMany();
   await prisma.restaurant.deleteMany();
   await prisma.session.deleteMany();
+  await prisma.company.deleteMany();
 
-  const usersCreate = []
-  for (const user of users) {
+  // Create companies
+  const companyA = await prisma.company.create({
+    data: { name: 'Company A' },
+  });
+  const companyB = await prisma.company.create({
+    data: { name: 'Company B' },
+  });
+
+  // Create users and associate all valet users with a company
+  const usersCreate = [];
+  for (const [index, user] of users.entries()) {
     const newUser = await prisma.user.create({
-      data: user,
+      data: {
+        ...user,
+        companyId: user.role === 'VALET' ? (index % 2 === 0 ? companyA.id : companyB.id) : null,
+      },
     });
     usersCreate.push(newUser);
   }
 
-  // Créer 10 restaurants
-  const restaurantsCreate = []
-  for (const restaurant of restaurants) {
+  // Create restaurants and associate them with companies
+  const restaurantsCreate = [];
+  for (const [index, restaurant] of restaurants.entries()) {
     const newRestaurant = await prisma.restaurant.create({
-      data: restaurant,
+      data: {
+        ...restaurant,
+        companyId: index % 2 === 0 ? companyA.id : companyB.id,
+      },
     });
     restaurantsCreate.push(newRestaurant);
   }
 
-  // Créer 10 tickets
-  // const ticketsCreate = []
-  // for (const ticket of tickets) {
-  //   const newTicket = await prisma.ticket.create({
-  //     data: ticket,
-  //   });
-  //   ticketsCreate.push(newTicket);
-  // }
-
-  console.log('Users:', usersCreate);
-  console.log('Restaurants:', restaurantsCreate);
-
+  // Output results
   console.log('Users:', usersCreate);
   console.log('Restaurants:', restaurantsCreate);
 }
 
-main ()
+main()
   .catch((e) => {
-    console.log("Error seeding:", e);
+    console.error("Error seeding:", e);
     process.exit(1);
   })
   .finally(async () => {
