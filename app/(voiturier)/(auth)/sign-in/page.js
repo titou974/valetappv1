@@ -106,7 +106,7 @@ const LogIn = () => {
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
-      } else {pp/sign-in
+      } else {
         setSiteExists(true);
         setSiteData(siteData);
         setLoadingDiv(false);
