@@ -88,6 +88,7 @@ const LogIn = () => {
   useEffect(() => {
 
     const getSitesName = async () => {
+      setLoadingDiv(true);
       const siteData = await getSites();
       if (!siteData || Object.keys(siteData).length === 0 || siteData.error ) {
         console.log("aucun sites trouver")
@@ -100,12 +101,12 @@ const LogIn = () => {
     };
 
     const checkSite = async () => {
+      setLoadingDiv(true);
       const siteData = await getSite(site);
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
-        setLoadingDiv(false);
-      } else {
+      } else {pp/sign-in
         setSiteExists(true);
         setSiteData(siteData);
         setLoadingDiv(false);
@@ -133,8 +134,7 @@ const LogIn = () => {
         } else {
           getCompaniesName();
         }
-      }setSiteData(siteData);
-      setLoadingDiv(false);
+      };
 
   }, [site, siteExists, companySelected?.id])
 
