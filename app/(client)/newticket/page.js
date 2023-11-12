@@ -138,7 +138,7 @@ const Register = () => {
             {
               !siteExists ? (
                 <div>
-                  <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} />
+                  <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} placeholder="Sélectionner le lieu" />
                 </div>
               ) : (
                 <div>
