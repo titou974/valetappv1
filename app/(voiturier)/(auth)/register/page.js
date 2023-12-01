@@ -255,7 +255,7 @@ const Register = () => {
                     <p>Remplissez tous les champs.</p>
                   </div>
                 )}
-             </>
+              </>
             ) : (
               <>
                 <div className='text-center text-white mx-auto w-full flex justify-center items-center'>
