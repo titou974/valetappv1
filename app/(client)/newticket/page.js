@@ -9,13 +9,13 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import SelectInput from "@/app/components/selectinput";
 import LoadingModal from "@/app/components/loadingmodal";
+import { QrCodeIcon } from "@heroicons/react/20/solid";
 
 const getSite = async (id) => {
   let siteData = {};
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log('Error fetching user:', error.message);
@@ -23,18 +23,18 @@ const getSite = async (id) => {
   return siteData;
 }
 
-const getSites = async () => {
-  let siteData = {};
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const response = await axios.get(`${apiUrl}/api/site`)
-    console.log(response);
-    siteData = response.data;
-  } catch (error) {
-    console.log('Error fetching user:', error.message);
-  }
-  return siteData;
-}
+// const getSites = async () => {
+//   let siteData = {};
+//   try {
+//     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+//     const response = await axios.get(`${apiUrl}/api/site`)
+//     console.log(response);
+//     siteData = response.data;
+//   } catch (error) {
+//     console.log('Error fetching user:', error.message);
+//   }
+//   return siteData;
+// }
 
 
 const Register = () => {
@@ -45,63 +45,57 @@ const Register = () => {
   const [siteData, setSiteData] = useState(null);
   const [siteDb, setSiteDb] = useState(null);
   const [loadingDiv, setLoadingDiv] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
   useEffect(() => {
-    console.log(siteData);
-    const getSitesName = async () => {
-      const siteData = await getSites();
-      if (!siteData || Object.keys(siteData).length === 0) {
-        console.log("aucun sites trouver");
-        setLoadingDiv(false);
-      } else {
-        setSiteDb(siteData);
-        setLoadingDiv(false);
-      }
-    };
-
-    const checkSite = async () => {
+    // const getSitesName = async () => {
+    //   const siteData = await getSites();
+    //   if (!siteData || Object.keys(siteData).length === 0) {
+    //     console.log("aucun sites trouver");
+    //     setLoadingDiv(false);
+    //   } else {
+    //     setSiteDb(siteData);
+    //     setLoadingDiv(false);
+    //   }
+    // };
+    const checkAndRegister = async () => {
       const siteData = await getSite(site);
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
-        getSitesName();
         setLoadingDiv(false);
+        setIsLoading(false);
       } else {
         setSiteExists(true);
         setSiteData(siteData);
-        setLoadingDiv(false);
+        handleRegister(siteData);
       }
     };
+    
+    checkAndRegister();
 
-    if (site) {
-      checkSite();
-    } else {
-      getSitesName();
-    }
+  }, [site])
 
-  }, [site, siteExists])
-
-  const handleRegister = async e => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      const response = await axios.post("/api/ticket", {
-        role: "CLIENT",
-        restaurant: siteData.id
-      });
-      console.log(response);
-      const data = await response.data
-      if (data.ticketId) {
-        router.push(`/ticket?ticket=${data.ticketId}`)
+    const handleRegister = async (siteData) => {
+    // e.preventDefault();
+      setIsLoading(true);
+      try {
+        const response = await axios.post("/api/ticket", {
+          role: "CLIENT",
+          restaurant: siteData.id
+        });
+        const data = await response.data
+        if (data.ticketId) {
+          router.push(`/ticket?ticket=${data.ticketId}`)
+        }
+      } catch(error) {
+        console.log("creation of Ticket failed");
+        setIsLoading(false);
       }
-    } catch(error) {
-      console.log("creation of Ticket failed");
-      setIsLoading(false);
     }
-  }
+
   return (
     <div className="w-full h-screen bg-secondary">
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
@@ -137,8 +131,16 @@ const Register = () => {
           <>
             {
               !siteExists ? (
-                <div>
-                  <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} placeholder="Sélectionner le lieu" />
+                <div className="w-full flex flex-col justify-center gap-10">
+                  <div className='text-center mx-auto w-full flex justify-center items-center'>
+                    <p className={`text-center font-bold mr-4 text-[26px]`}>Scanner le QR Code</p>
+                    <div className='text-tertiary w-[40px]'>
+                      <QrCodeIcon  />
+                    </div>
+                  </div>
+                  <div className="text-black text-base text-center">
+                    <p>pour vous connecter</p>
+                  </div>
                 </div>
               ) : (
                 <div>
@@ -159,7 +161,7 @@ const Register = () => {
             </div>
           </div>
         ) : (
-          <button onClick={handleRegister} className="bg-tertiary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors text-white hover:text-tertiary shadow-lg">
+          <button onClick={handleRegister} className={`bg-tertiary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors text-white hover:text-tertiary shadow-lg ${!siteExists && 'hidden'}`}>
             <p className="font-semibold text-[26px]">Créer votre ticket</p>
             <div className="w-[26px]">
               <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

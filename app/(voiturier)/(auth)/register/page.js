@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
 import SelectInput from "@/app/components/selectinput";
 import LoadingModal from "@/app/components/loadingmodal";
+import { QrCodeIcon } from "@heroicons/react/20/solid";
 
 
 
@@ -25,31 +26,31 @@ const getSite = async (id) => {
   return siteData;
 }
 
-const getCompanies = async () => {
-  let companyData = {};
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const response = await axios.get(`${apiUrl}/api/company`);
-    console.log("this is the companies", response);
-    companyData = response.data;
-  } catch (error) {
-    console.log('Error fetching companies', error.message)
-  }
-  return companyData;
-}
+// const getCompanies = async () => {
+//   let companyData = {};
+//   try {
+//     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+//     const response = await axios.get(`${apiUrl}/api/company`);
+//     console.log("this is the companies", response);
+//     companyData = response.data;
+//   } catch (error) {
+//     console.log('Error fetching companies', error.message)
+//   }
+//   return companyData;
+// }
 
-const getSites = async () => {
-  let siteData = {};
-  try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const response = await axios.get(`${apiUrl}/api/site`)
-    console.log(response);
-    siteData = response.data;
-  } catch (error) {
-    console.log('Error fetching user:', error.message);
-  }
-  return siteData;
-};
+// const getSites = async () => {
+//   let siteData = {};
+//   try {
+//     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+//     const response = await axios.get(`${apiUrl}/api/site`)
+//     console.log(response);
+//     siteData = response.data;
+//   } catch (error) {
+//     console.log('Error fetching user:', error.message);
+//   }
+//   return siteData;
+// };
 
 
 const getSession = async () => {
@@ -87,57 +88,59 @@ const Register = () => {
 
   useEffect(() => {
 
-    const getSitesName = async () => {
-      const siteData = await getSites();
-      if (!siteData || Object.keys(siteData).length === 0 || siteData.error ) {
-        console.log("aucun sites trouver")
-        setLoadingDiv(false);
-      } else {
-        const filteredSites = siteData.filter(site => site.companyId === companySelected?.id);
-        setSiteDb(filteredSites);
-        setLoadingDiv(false);
-      }
-    };
+    // const getSitesName = async () => {
+    //   const siteData = await getSites();
+    //   if (!siteData || Object.keys(siteData).length === 0 || siteData.error ) {
+    //     console.log("aucun sites trouver")
+    //     setLoadingDiv(false);
+    //   } else {
+    //     const filteredSites = siteData.filter(site => site.companyId === companySelected?.id);
+    //     setSiteDb(filteredSites);
+    //     setLoadingDiv(false);
+    //   }
+    // };
 
     const checkSite = async () => {
       const siteData = await getSite(site);
 
       if (!siteData || Object.keys(siteData).length === 0) {
         setSiteExists(false);
-        setLoadingDiv(false);
       } else {
         setSiteExists(true);
         setSiteData(siteData);
-        setLoadingDiv(false);
         setCompanySelected({id: siteData.companyId})
         console.log(siteData);
       }
     };
 
-    const getCompaniesName = async () => {
-      setLoadingDiv(true);
-      const companyData = await getCompanies();
+    // const getCompaniesName = async () => {
+    //   setLoadingDiv(true);
+    //   const companyData = await getCompanies();
 
-      if (!companyData || Object.keys(companyData).length === 0) {
+    //   if (!companyData || Object.keys(companyData).length === 0) {
+    //     setLoadingDiv(false);
+    //     console.log("pas d'entreprise trouvé, erreur")
+    //   } else {
+    //     setCompaniesDb(companyData);
+    //     setLoadingDiv(false);
+    //   }
+    // }
+
+    site ? checkSite() : setSiteExists(false);
+
+      // if (site) {
+      //   checkSite();
+      // } else {
+      //   if (companySelected?.id) {
+      //     getSitesName();
+      //   } else {
+      //     getCompaniesName();
+      //   }
+      // }setSiteData(siteData);
+      // setLoadingDiv(false);
+      setTimeout(() => {
         setLoadingDiv(false);
-        console.log("pas d'entreprise trouvé, erreur")
-      } else {
-        setCompaniesDb(companyData);
-        setLoadingDiv(false);
-      }
-    }
-
-      if (site) {
-        checkSite();
-      } else {
-        if (companySelected?.id) {
-          getSitesName();
-        } else {
-          getCompaniesName();
-        }
-      }setSiteData(siteData);
-      setLoadingDiv(false);
-
+      }, 1000);
   }, [site, siteExists, companySelected?.id])
 
 
@@ -154,6 +157,10 @@ const Register = () => {
     }
     getSessionData();
   }, [])
+
+  useEffect(() => {
+    console.log("le site existe", siteExists)
+  })
 
   const handleRegister = async e => {
     e.preventDefault();
@@ -228,54 +235,81 @@ const Register = () => {
                 <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
               </div>
             </>
+            ) : (siteExists ? (
+              <>
+                <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
+                <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
+                <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
+                {!fillTextAlert && phoneAlert && (
+                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
+                    <p>Le numéro de téléphone n&apos;est pas valide</p>
+                  </div>
+                )}
+                {phoneNumberExist && (
+                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
+                    <p>Un voiturier possède déjà ce numéro de téléphone.</p>
+                  </div>
+                )}
+                {fillTextAlert && (
+                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
+                    <p>Remplissez tous les champs.</p>
+                  </div>
+                )}
+              </>
             ) : (
-            <>
-              <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
-              <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
-              <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
-
-              {!siteExists && companiesDb && (
-                <SelectInput input={companySelected} setInput={(e) => setCompanySelected(e)} db={companiesDb} placeholder="Sélectionner votre entreprise" />
-              )}
-              {!siteExists && siteDb && (
-                <SelectInput input={siteData} setInput={(e) => setSiteData(e)} db={siteDb} placeholder="Sélectionner un site"/>
-              )}
-            </>
-          )}
-          {!fillTextAlert && phoneAlert && (
-            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-              <p>Le numéro de téléphone n&apos;est pas valide</p>
+              <>
+                <div className='text-center text-white mx-auto w-full flex justify-center items-center'>
+                  <p className={`text-center font-bold mr-4 text-[26px]`}>Scanner le QR Code</p>
+                  <div className='w-[40px]'>
+                    <QrCodeIcon  />
+                  </div>
+                </div>
+                <div className="text-white text-base text-center">
+                  <p>pour vous créer un compte</p>
+                </div>
+              </>
+            ))}
+        </div> 
+        {loadingDiv ? (
+          <div className={`flex flex-col justify-between gap-5`}>
+            <button onClick={handleRegister} style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}} className="animate-pulse bg-gray-400/50 rounded-full w-full py-3 flex items-center justify-center gap-2">
+              <p className="text-black font-semibold text-[26px] invisible">Créer votre compte</p>
+              <div className="w-[26px] invisible">
+                <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </div>
+            </button>
+            <div className="animate-pulse bg-gray-400/50 mx-auto w-2/3 py-[12px] rounded-full flex justify-center items-center gap-2" style={{ animationDelay: `${5 * 0.05}s`, animationDuration: "1s"}}>
+              <p className="invisible">Se Connecter</p>
+              <div className="w-[20px] invisible">
+                <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+              </div>
             </div>
-          )}
-          {phoneNumberExist && (
-            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-              <p>Un voiturier possède déjà ce numéro de téléphone.</p>
+          </div>
+          ) : (
+            <div className={`flex flex-col justify-between gap-5 ${!siteExists && "invisible"}`}>
+              <button onClick={handleRegister} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors">
+                <p className="text-black font-semibold text-[26px]">Créer votre compte</p>
+                <div className="w-[26px]">
+                  <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              </button>
+              <Link href={`sign-in${siteData === null ? "" : `?site=${siteData?.id}`}`} className="mx-auto w-2/3 py-[12px] rounded-full font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 text-primary hover:text-black">
+                <p>Se Connecter</p>
+                <div className="w-[20px]">
+                  <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                  </svg>
+                </div>
+              </Link>
             </div>
-          )}
-          {fillTextAlert && (
-            <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-              <p>Remplissez tous les champs.</p>
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col justify-between gap-5">
-          <button onClick={handleRegister} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors">
-            <p className="text-black font-semibold text-[26px]">Créer votre compte</p>
-            <div className="w-[26px]">
-              <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </div>
-          </button>
-          <Link href={`sign-in${siteData === null ? "" : `?site=${siteData?.id}`}`} className="mx-auto w-2/3 py-[12px] rounded-full font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 text-primary hover:text-black">
-            <p>Se Connecter</p>
-            <div className="w-[20px]">
-              <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-              </svg>
-            </div>
-          </Link>
-        </div>
+          )
+        }
         <div className="text-center">
           <p className="text-white">Nestor App 🇫🇷</p>
         </div>
