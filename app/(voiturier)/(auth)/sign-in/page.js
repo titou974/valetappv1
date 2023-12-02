@@ -252,7 +252,7 @@ const LogIn = () => {
             <>
               <div className='text-center text-white mx-auto w-full flex justify-center items-center'>
                 <p className={`text-center font-bold mr-4 text-[26px]`}>Scanner le QR Code</p>
-                <div className='w-[40px]'>
+                <div className='w-[40px] text-primary'>
                   <QrCodeIcon  />
                 </div>
               </div>
