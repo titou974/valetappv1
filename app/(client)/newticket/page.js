@@ -60,7 +60,15 @@ const Register = () => {
     //     setLoadingDiv(false);
     //   }
     // };
-    const checkAndRegister = async () => {
+    checkSite()
+    
+    if (siteExists) {
+      handleRegister(siteData);
+    }
+
+  }, [siteExists])
+
+    const checkSite = async () => {
       const siteData = await getSite(site);
 
       if (!siteData || Object.keys(siteData).length === 0) {
@@ -70,13 +78,8 @@ const Register = () => {
       } else {
         setSiteExists(true);
         setSiteData(siteData);
-        handleRegister(siteData);
       }
     };
-    
-    checkAndRegister();
-
-  }, [site])
 
     const handleRegister = async (siteData) => {
     // e.preventDefault();
@@ -161,7 +164,7 @@ const Register = () => {
             </div>
           </div>
         ) : (
-          <button onClick={handleRegister} className={`bg-tertiary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors text-white hover:text-tertiary shadow-lg ${!siteExists && 'hidden'}`}>
+          <button className={`bg-tertiary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors text-white hover:text-tertiary shadow-lg ${!siteExists && 'hidden'}`}>
             <p className="font-semibold text-[26px]">Créer votre ticket</p>
             <div className="w-[26px]">
               <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

@@ -15,6 +15,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
   const [startedHour, setStartedHour] = useState(null);
   const [sessionStarted, setSessionStarted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [restaurantId, setRestaurantId] = useState(null);
 
   const startSession = async (e) => {
     e.preventDefault();
@@ -36,6 +37,19 @@ const DashboardLogged = ({siteName, sessionId}) => {
     }
   }
 
+  const getTicketsOfSession = async () => {
+    console.log(restaurantId, startedHour);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await axios.get(`${apiUrl}/api/ticketsforvalet`,
+        { params: { restaurantId: restaurantId, startDate: startedHour } }
+      );
+      console.log("voila vos tickets", response.data);
+    } catch (error) {
+      console.log('Error fetching tickets:', error.message);
+    }
+  }
+
   useEffect(() => {
     const getSessionData = async () => {
       setLoading(true);
@@ -48,14 +62,12 @@ const DashboardLogged = ({siteName, sessionId}) => {
       } catch (error) {
         console.log('Error fetching user:', error.message);
       }
-      if (sessionData) {
-        if (sessionData.startedAt) {
-          setSessionStarted(true);
-          setStartedHour(sessionData.startedAt);
-        }
+      if (sessionData && sessionData.startedAt) {
+        setSessionStarted(true);
+        setStartedHour(sessionData.startedAt);
+        setRestaurantId(sessionData.restaurantId);
       };
     }
-
     getSessionData();
     setTimeout(() => {
       setLoading(false);
@@ -89,6 +101,10 @@ const DashboardLogged = ({siteName, sessionId}) => {
             <div>
               <StartingHour startingHour={startedHour} />
               <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
+              {/* <button onClick={() => getTicketsOfSession()} className={style.startButton}>
+                <p>Obtenir les tickets</p>
+                <PlayCircleIcon />
+              </button> */}
             </div>
           ) : (
             <button onClick={(e) => startSession(e)} className={style.startButton}>
