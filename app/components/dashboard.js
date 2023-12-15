@@ -16,6 +16,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
   const [sessionStarted, setSessionStarted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [restaurantId, setRestaurantId] = useState(null);
+  const [tickets, setTickets] = useState(null);
 
   const startSession = async (e) => {
     e.preventDefault();
@@ -28,6 +29,8 @@ const DashboardLogged = ({siteName, sessionId}) => {
       });
       console.log("voilà la réponse du patch", response);
       setStartedHour(response.data.startedAt)
+      setRestaurantId(response.data.restaurantId)
+      setSessionStarted(true);
     } catch(error) {
       console.log('patch session failed', error.message)
     } finally {
@@ -37,17 +40,32 @@ const DashboardLogged = ({siteName, sessionId}) => {
     }
   }
 
-  const getTicketsOfSession = async () => {
+  const getTicketsOfSession = async (e) => {
+    e.preventDefault();
     console.log(restaurantId, startedHour);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const response = await axios.get(`${apiUrl}/api/ticketsforvalet`,
         { params: { restaurantId: restaurantId, startDate: startedHour } }
       );
-      console.log("voila vos tickets", response.data);
+      setTickets(response.data.tickets);
+      console.log("voila vos tickets", response.data.tickets);
     } catch (error) {
       console.log('Error fetching tickets:', error.message);
     }
+  }
+
+  const updateTicketImmatriculation = async (ticketId, immatriculation) => {
+    setLoading(true);
+    try {
+      const response = await axios.patch(`/api/ticket/${ticketId}`, {
+        immatriculation: immatriculation,
+      });
+      console.log("la plaque d'immatriculation update !", response);
+    } catch(error) {
+      console.log('patch ticket failed', error.message)
+    } 
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -66,6 +84,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
         setSessionStarted(true);
         setStartedHour(sessionData.startedAt);
         setRestaurantId(sessionData.restaurantId);
+        console.log("id du restaurant", sessionData.restaurantId);
       };
     }
     getSessionData();
@@ -101,10 +120,21 @@ const DashboardLogged = ({siteName, sessionId}) => {
             <div>
               <StartingHour startingHour={startedHour} />
               <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
-              {/* <button onClick={() => getTicketsOfSession()} className={style.startButton}>
+              <button onClick={(e) => getTicketsOfSession(e)} className={style.startButton}>
                 <p>Obtenir les tickets</p>
                 <PlayCircleIcon />
-              </button> */}
+              </button>
+              {tickets && (
+                tickets.map((ticket, index) => (
+                  <div key={index} className="flex flex-col items-center text-white">
+                    <p className="text-center py-2">Ticket {ticket.ticketNumber}</p>
+                    <div className="flex flex-col items-center">
+                      <p className="text-center py-2">Immatriculation</p>
+                      <input type="text" className="border-2 border-gray-400 rounded-md w-40 text-center text-black" defaultValue={ticket.immatriculation} onBlur={(e) => updateTicketImmatriculation(ticket.id, e.target.value)} />
+                    </div>
+                  </div>
+                ))
+              )} 
             </div>
           ) : (
             <button onClick={(e) => startSession(e)} className={style.startButton}>

@@ -14,3 +14,17 @@ export async function GET(req, {params}) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function PATCH(request, { params }) {
+  const id = params.id;
+  const json = await request.json();
+  try {
+    const updatedTicket = await prisma.ticket.update({
+      where: { id: id },
+      data: json
+    })
+    return NextResponse.json("le ticket update", updatedTicket);
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
