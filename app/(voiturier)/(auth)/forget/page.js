@@ -91,7 +91,7 @@ const ForgetPassword = () => {
     setFillTextAlert(false);
     setFillTextAlert(false);
     setLoading(true);
-    // Basic client-side validation
+    
     if(!phoneNumber) {
       setFillTextAlert(true);
       setLoading(false);
