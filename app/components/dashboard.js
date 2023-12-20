@@ -16,7 +16,6 @@ const DashboardLogged = ({siteName, sessionId}) => {
   const [sessionStarted, setSessionStarted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [restaurantId, setRestaurantId] = useState(null);
-  const [tickets, setTickets] = useState(null);
 
   const startSession = async (e) => {
     e.preventDefault();
@@ -29,8 +28,6 @@ const DashboardLogged = ({siteName, sessionId}) => {
       });
       console.log("voilà la réponse du patch", response);
       setStartedHour(response.data.startedAt)
-      setRestaurantId(response.data.restaurantId)
-      setSessionStarted(true);
     } catch(error) {
       console.log('patch session failed', error.message)
     } finally {
@@ -40,16 +37,14 @@ const DashboardLogged = ({siteName, sessionId}) => {
     }
   }
 
-  const getTicketsOfSession = async (e) => {
-    e.preventDefault();
+  const getTicketsOfSession = async () => {
     console.log(restaurantId, startedHour);
     try {
       const apiUrl = `${window.location.protocol}//${window.location.host}`;
       const response = await axios.get(`${apiUrl}/api/ticketsforvalet`,
         { params: { restaurantId: restaurantId, startDate: startedHour } }
       );
-      setTickets(response.data.tickets);
-      console.log("voila vos tickets", response.data.tickets);
+      console.log("voila vos tickets", response.data);
     } catch (error) {
       console.log('Error fetching tickets:', error.message);
     }
@@ -84,7 +79,6 @@ const DashboardLogged = ({siteName, sessionId}) => {
         setSessionStarted(true);
         setStartedHour(sessionData.startedAt);
         setRestaurantId(sessionData.restaurantId);
-        console.log("id du restaurant", sessionData.restaurantId);
       };
     }
     getSessionData();
@@ -120,21 +114,6 @@ const DashboardLogged = ({siteName, sessionId}) => {
             <div>
               <StartingHour startingHour={startedHour} />
               <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
-              <button onClick={(e) => getTicketsOfSession(e)} className={style.startButton}>
-                <p>Obtenir les tickets</p>
-                <PlayCircleIcon />
-              </button>
-              {tickets && (
-                tickets.map((ticket, index) => (
-                  <div key={index} className="flex flex-col items-center text-white">
-                    <p className="text-center py-2">Ticket {ticket.ticketNumber}</p>
-                    <div className="flex flex-col items-center">
-                      <p className="text-center py-2">Immatriculation</p>
-                      <input type="text" className="border-2 border-gray-400 rounded-md w-40 text-center text-black" defaultValue={ticket.immatriculation} onBlur={(e) => updateTicketImmatriculation(ticket.id, e.target.value)} />
-                    </div>
-                  </div>
-                ))
-              )} 
             </div>
           ) : (
             <button onClick={(e) => startSession(e)} className={style.startButton}>
