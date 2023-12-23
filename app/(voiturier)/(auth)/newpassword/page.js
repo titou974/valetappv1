@@ -23,7 +23,7 @@ const getSession = async () => {
 const getSite = async (id) => {
   let siteData = {};
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
     console.log(response);
     siteData = response.data;
@@ -36,7 +36,7 @@ const getSite = async (id) => {
 const checkToken = async (token) => {
   let tokenData = {};
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/forget/${token}`)
     console.log("la verif du token", response)
     tokenData = response.data

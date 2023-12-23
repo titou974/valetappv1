@@ -10,7 +10,7 @@ import formatTimeDifference from "@/lib/formattimedifference";
 const getSession = async (id) => {
   let sessionData = {};
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/session/${id}`)
     sessionData = response.data;
     console.log(sessionData);

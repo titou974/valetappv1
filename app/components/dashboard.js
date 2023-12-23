@@ -40,7 +40,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
   const getTicketsOfSession = async () => {
     console.log(restaurantId, startedHour);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const apiUrl = `${window.location.protocol}//${window.location.host}`;
       const response = await axios.get(`${apiUrl}/api/ticketsforvalet`,
         { params: { restaurantId: restaurantId, startDate: startedHour } }
       );
@@ -55,7 +55,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
       setLoading(true);
       let sessionData = {};
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = `${window.location.protocol}//${window.location.host}`;
         const response = await axios.get(`${apiUrl}/api/session/${sessionId}`)
         sessionData = response.data;
         console.log(sessionData);

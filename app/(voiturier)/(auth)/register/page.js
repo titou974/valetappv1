@@ -17,7 +17,7 @@ import { QrCodeIcon } from "@heroicons/react/20/solid";
 const getSite = async (id) => {
   let siteData = {};
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
     siteData = response.data;
   } catch (error) {
@@ -25,33 +25,6 @@ const getSite = async (id) => {
   }
   return siteData;
 }
-
-// const getCompanies = async () => {
-//   let companyData = {};
-//   try {
-//     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-//     const response = await axios.get(`${apiUrl}/api/company`);
-//     console.log("this is the companies", response);
-//     companyData = response.data;
-//   } catch (error) {
-//     console.log('Error fetching companies', error.message)
-//   }
-//   return companyData;
-// }
-
-// const getSites = async () => {
-//   let siteData = {};
-//   try {
-//     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-//     const response = await axios.get(`${apiUrl}/api/site`)
-//     console.log(response);
-//     siteData = response.data;
-//   } catch (error) {
-//     console.log('Error fetching user:', error.message);
-//   }
-//   return siteData;
-// };
-
 
 const getSession = async () => {
   let siteData = {};
