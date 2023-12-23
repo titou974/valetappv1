@@ -1,6 +1,6 @@
 "use client"
 
-import { PlayCircleIcon } from "@heroicons/react/20/solid";
+import { PlayCircleIcon, ChevronDoubleDownIcon } from "@heroicons/react/20/solid";
 import StartingHour from "./startinghour";
 import TimeCounter from "./timecounter";
 import styles from "./style";
@@ -86,7 +86,13 @@ const DashboardLogged = ({siteName, sessionId}) => {
       setLoading(false);
     }, 2000);
   }, [])
-
+  
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
+  }
 
   return (
     <>
@@ -111,9 +117,36 @@ const DashboardLogged = ({siteName, sessionId}) => {
             </div>
           ) : (
           sessionStarted ? (
-            <div>
-              <StartingHour startingHour={startedHour} />
-              <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
+            <div className="flex flex-col justify-center items-center gap-16">
+              <div>
+                <StartingHour startingHour={startedHour} />
+                <p className='text-center py-2'>Vous êtes au <span className='italic'>{siteName}</span></p>
+              </div>
+              <button onClick={getTicketsOfSession} className={style.startButton}>
+                <p>Rafraichir</p>
+                <PlayCircleIcon />
+              </button>
+              <button className="w-16 h-16 linearBackground rounded-full animate-bounce flex items-center justify-center" onClick={(e) => scrollToBottom()}>
+                <ChevronDoubleDownIcon classsName="w-8 h-8 text-white" />
+              </button>
+              <div className="text-white text-4xl">
+                <p>coucou</p>
+              </div>
+              <div className="text-white text-4xl">
+                <p>coucou</p>
+              </div>
+              <div className="text-white text-4xl">
+                <p>coucou</p>
+              </div>
+              <div className="text-white text-4xl">
+                <p>coucou</p>
+              </div>
+              <div className="text-white text-4xl">
+                <p>coucou</p>
+              </div>
+              <div className="text-white text-4xl">
+                <p>coucou</p>
+              </div>
             </div>
           ) : (
             <button onClick={(e) => startSession(e)} className={style.startButton}>
@@ -123,7 +156,7 @@ const DashboardLogged = ({siteName, sessionId}) => {
           )
         )}
       </div>
-      <div>
+      <div className={`fixed ${styles.padding} bottom-0 w-full left-1 right-1 gradientDashboardBottom z-50 flex justify-center items-center`}>
         <UserAccountNav sessionId={sessionId} startedHour={startedHour} />
       </div>
     </>
