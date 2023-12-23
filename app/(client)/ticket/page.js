@@ -20,12 +20,24 @@ const getTicket = async (id) => {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/ticket/${id}`);
     ticketData = response.data;
-    console.log(ticketData);
   } catch (error) {
     console.error('Error fetching ticket data:', error);
   }
 
   return ticketData;
+}
+
+const getCompanyCgu = async (id) => {
+  let cguData;
+  try {
+    const apiUrl = `${window.location.protocol}//${window.location.host}`;
+    const response = await axios.get(`${apiUrl}/api/company/${id}`);
+    cguData = response.data.cgu;
+    console.log("cgu data", cguData)
+  } catch (error) {
+    console.error('Error fetching company data:', error);
+  }
+  return cguData;
 }
 
 
@@ -36,25 +48,47 @@ const TicketShow = () => {
   const [ticketInfo, setTicketInfo] = useState(null);
   const [emailModal, setEmailModal] = useState(false);
   const [loadingDiv, setLoadingDiv] = useState(true);
+  const [companyCgu, setCompanyCgu] = useState(null);
 
   const searchParams = useSearchParams();
   const ticketId = searchParams.get("ticket");
-
-  console.log(ticketId);
-  console.log(collapse)
+  const companyId = searchParams.get("c");
 
   useEffect(() => {
+
     const getTicketInfo = async () => {
       const ticket = await getTicket(ticketId);
-      setTicketInfo(ticket);
-      setLoadingDiv(false);
+      return ticket;
     }
-    if (ticketId) {
-      getTicketInfo()
+
+    const getCompanyCguInfo = async () => {
+      const cgu = await getCompanyCgu(companyId);
+      return cgu;
     }
-  }, [ticketId])
 
+    const loadData = async () => {
+      try {
+        const [ticket, cgu] = await Promise.all([
+          ticketId ? getTicketInfo() : Promise.resolve(null),
+          companyId ? getCompanyCguInfo() : Promise.resolve(null),
+        ]);
+        console.log("the data", ticket, cgu);
+        setTicketInfo(ticket);
+        setCompanyCgu(cgu);
+        setLoadingDiv(false);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    }
 
+    if (ticketId || companyId) {
+      loadData();
+    }
+  }, [ticketId, companyId])
+
+  useEffect(() => {
+    console.log("coucou", companyCgu)
+  })
 
 
   return (
@@ -102,12 +136,19 @@ const TicketShow = () => {
             </div>
             <span className={`long-text ${collapse ? "expanded" : ""} px-8 max-w-1/2`}>
               <p className='pb-5'>CONDITIONS GÉNÉRALES D&rsquo;UTILISATION DE NESTOR APP</p>
-              {cguContent.map((part, index) => (
+              {companyCgu ? (companyCgu.map((part, index) => (
                 <div key={index} className='pb-5'>
                   <h3 className='font-semibold'>{part.subtitle}</h3>
                   <p className=''>{part.text}</p>
                 </div>
-              ))}
+              ))) : (
+                cguContent.map((part, index) => (
+                  <div key={index} className='pb-5'>
+                    <h3 className='font-semibold'>{part.subtitle}</h3>
+                    <p className=''>{part.text}</p>
+                  </div>
+                ))
+              )}
             </span>
           </div>
           <div>

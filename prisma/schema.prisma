@@ -77,4 +77,5 @@ model Company {
   updatedAt   DateTime     @updatedAt
   restaurants Restaurant[]
   users       User[]
+  cgu         Json?   
 }

@@ -76,9 +76,13 @@ const Register = () => {
           restaurant: siteData.id
         });
         const data = await response.data
-        if (data.ticketId) {
+        if (data.ticketId && siteData.companyId) {
+          router.push(`/ticket?ticket=${data.ticketId}&c=${siteData.companyId}`)
+        } else if (data.ticketId && !siteData.companyId) {
           router.push(`/ticket?ticket=${data.ticketId}`)
-        }
+        } else (
+          console.log("no ticket id precised")
+        )
       } catch(error) {
         console.log("creation of Ticket failed");
         setIsLoading(false);
