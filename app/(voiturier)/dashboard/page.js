@@ -52,15 +52,20 @@ const Dashboard = async () => {
     const startingHour = new Date(session.user.startingHourSession)
     console.log(startingHour);
     return (
-      <div className='bg-black h-screen w-full text-white'>
-        <div className={`${styles.padding} flex flex-col justify-between h-full`}>
-          <div>
+      <div className='bg-black h-full w-full text-white'>
+        <div className={`${styles.padding} flex flex-col justify-center gap-20 h-full`}>
+          <div className={`fixed ${styles.padding} top-0 left-0`}>
             <h2 className={`${styles.subText}`}>Bon courage,</h2>
             <h2 className={`${styles.headText}`}>{session.user.name} 🚗</h2>
           </div>
-          <DashboardLogged siteName={session.user.siteName} sessionId={session.user.sessionId} />
-          <div className="text-center">
-            <p className="text-white">Nestor App 🇫🇷</p>
+          <div className='emptyDiv'>
+
+          </div>
+          <div>
+            <DashboardLogged siteName={session.user.siteName} sessionId={session.user.sessionId} />
+            {/* <div className="text-center fixed bottom-1 left-1 right-1">
+              <p className="text-white">Nestor App 🇫🇷</p>
+            </div> */}
           </div>
         </div>
       </div>
