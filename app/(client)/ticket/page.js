@@ -17,7 +17,7 @@ import EmailModal from '@/app/components/loadingemail';
 const getTicket = async (id) => {
   let ticketData = {};
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/ticket/${id}`);
     ticketData = response.data;
     console.log(ticketData);
