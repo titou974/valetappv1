@@ -37,3 +37,8 @@ body {
   background: rgb(0,0,0);
   background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 95%);
 }
+
+.ticketDashboardBackground {
+  background: rgb(65,65,65);
+  background: linear-gradient(135deg, rgba(65,65,65,1) 0%, rgba(54,54,54,0.72) 95%);
+}
