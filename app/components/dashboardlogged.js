@@ -24,6 +24,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   const [restaurantId, setRestaurantId] = useState(null);
   const [tickets, setTickets] = useState([]);
   const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const [ticketsWithoutImmat, setTicketsWithoutImmat] = useState(null);
 
   const ticketsScrollRef = useRef(null);
   const ticketsRef = useRef(null);
@@ -77,6 +78,12 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
       console.log("Error fetching tickets:", error.message);
     }
   };
+
+
+  useEffect(() => {
+    setTicketsWithoutImmat(tickets.filter(ticket => !ticket.immatriculation).length);
+  }, [tickets])
+
 
   const refreshTickets = async () => {
     setLoading(true);
@@ -222,15 +229,20 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
           )}
         </div>
         {sessionStarted && (
-          <div className="flex flex-col gap-8 h-full min-h-screen">
+          <div className="flex flex-col gap-8 h-full min-h-screen" ref={ticketsRef}>
+            {ticketsWithoutImmat > 0 ? (
+              <p>Vous avez {ticketsWithoutImmat} {ticketsWithoutImmat > 1 ? 'tickets' : 'ticket'} à compléter</p>
+            ) : (
+              <p>Tout vos tickets sont complétés</p>
+            )}
             <button
               className="rounded-full bg-green-500 text-white p-2 min-h-fit w-1/2 hover:bg-white hover:text-green-500 flex justify-center items-center gap-2 transition-all"
               onClick={(e) => refreshTickets()}
             >
-              Rafraichir
+              Rafraîchir
               <ArrowPathIcon className={`h-6 w-6 ${loading && 'animate-spin'}`} />
             </button>
-            <div className="text-white min-h-fit grid grid-cols-1 gap-4" ref={ticketsRef}>
+            <div className="text-white min-h-fit grid grid-cols-1 gap-4">
               {tickets &&
                 tickets
                   .slice()
@@ -243,6 +255,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
                         refreshTickets={refreshTickets}
                         loading={loading}
                         setLoading={(e) => setLoading(e)}
+                        index={index}
 
                       />
                     );
