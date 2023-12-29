@@ -1,10 +1,11 @@
-import { ClockIcon } from "@heroicons/react/20/solid";
+import { ClockIcon, PencilSquareIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import formatHour from "@/lib/formathour";
 import axios from "axios";
 
 const TicketDashboard = ({ticketData, refreshTickets, setLoading}) => {
-    const [immatriculation, setImmatriculation] = useState("");
+    const [immatriculation, setImmatriculation] = useState(ticketData.immatriculation);
+    const [editImmat, setEditImmat] = useState(false);
 
     const updateTicketImmatriculation = async (ticketId, immatriculation) => {
         setLoading(true);
@@ -23,21 +24,25 @@ const TicketDashboard = ({ticketData, refreshTickets, setLoading}) => {
 
     const handleImmatriculationBlur = (e) => {
         if (immatriculation) {
-            updateTicketImmatriculation(ticketData.id, immatriculation);  
+            updateTicketImmatriculation(ticketData.id, immatriculation);
+            setEditImmat(false);  
         }
     };
     return (
         <div className="ticketDashboardBackground p-4 rounded-md flex flex-col justify-between min-h-[150px] max-h-40">
             <div className="flex justify-between items-center">
                 <div className="relative w-fit">
-                    {ticketData.immatriculation ? (
-                        <div>
+                    {ticketData.immatriculation && !editImmat && (
+                        <div className="relative">
                             <p>{ticketData.immatriculation}</p>
+                            <button onClick={(e) => setEditImmat(true)} className="absolute top-[-10px] right-[-50px] bg-primary text-black rounded-full p-2 hover:bg-white transition-all"><PencilSquareIcon className="w-4 h-4"/></button>
                         </div>
-                    ) : (
+                    )}  
+                    {!ticketData.immatriculation || editImmat && (
                     <>
                         <input 
                             type="text" 
+                            value={immatriculation}
                             onChange={(e) => setImmatriculation(e.target.value.toUpperCase())}
                             onBlur={handleImmatriculationBlur}
                             className="rounded-md p-2 text-black uppercase w-fit text-[14px]" 

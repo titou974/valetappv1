@@ -26,6 +26,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   const [isFooterVisible, setIsFooterVisible] = useState(true);
 
   const ticketsScrollRef = useRef(null);
+  const ticketsRef = useRef(null);
 
   const cardVariants = {
     offscreen: {
@@ -142,11 +143,8 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
 }, [ticketsScrollRef]);
 
 
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
+  const scrollToTickets = () => {
+    ticketsRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -155,7 +153,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
         <h2 className={`${styles.subText}`}>Bon courage,</h2>
         <h2 className={`${styles.headText}`}>{userName} 🚗</h2>
       </div>
-      <div className={`flex flex-col ${styles.padding} justify-center h-full`}>
+      <div className={`flex flex-col ${styles.paddingX} justify-center h-full`}>
         <div className={`flex flex-col justify-center h-screen`}>
           {loading ? (
             <div
@@ -208,7 +206,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               </div>
               <button
                 className="w-12 h-12 linearBackground rounded-full animate-bounce flex items-center justify-center"
-                onClick={(e) => scrollToBottom()}
+                onClick={(e) => scrollToTickets()}
               >
                 <ChevronDoubleDownIcon className="w-6 h-6 text-white" />
               </button>
@@ -232,7 +230,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               Rafraichir
               <ArrowPathIcon className={`h-6 w-6 ${loading && 'animate-spin'}`} />
             </button>
-            <div className="text-white min-h-fit grid grid-cols-1 gap-4" >
+            <div className="text-white min-h-fit grid grid-cols-1 gap-4" ref={ticketsRef}>
               {tickets &&
                 tickets
                   .slice()
