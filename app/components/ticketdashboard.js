@@ -1,10 +1,10 @@
 import { ClockIcon, PencilSquareIcon } from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import formatHour from "@/lib/formathour";
 import axios from "axios";
 
-const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index}) => {
-    const [immatriculation, setImmatriculation] = useState(ticketData.immatriculation);
+const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index, tickets, setTickets}) => {
+    const [immatriculation, setImmatriculation] = useState(null);
     const [editImmat, setEditImmat] = useState(false);
 
     const updateTicketImmatriculation = async (ticketId, immatriculation) => {
@@ -14,14 +14,25 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
                 immatriculation: immatriculation,
             });
             console.log("la plaque d'immatriculation update !", response.data);
-            if (refreshTickets) {
-                await refreshTickets();
-            }
+            // if (refreshTickets) {
+            //     await refreshTickets();
+            // }
         } catch (error) {
             console.log("patch ticket failed", error.message);
         }
         setLoading(false);
     };
+
+    const updateTicketsArray = (ticketIndex, newImmat) => {
+        const newTickets = [...tickets].slice().sort((a, b) => new Date(b.scannedAt) - new Date(a.scannedAt));
+        newTickets[ticketIndex] = {
+        ...newTickets[ticketIndex],
+        immatriculation: newImmat
+        };
+        console.log("newTickets", newTickets, ticketIndex)
+        setTickets(newTickets);
+        setImmatriculation(newImmat);
+    }
 
     const handleImmatriculationBlur = (e) => {
         if (immatriculation) {
@@ -29,7 +40,13 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
             setEditImmat(false);  
         }
     };
-    console.log("l'immat", ticketData.immatriculation)
+
+    useEffect(() => {
+        if (!ticketData.immatriculation || ticketData.immatriculation === "") {
+            setEditImmat(true)
+        }
+    }, [ticketData.immatriculation])
+
     return (
         <>  
             {loading ? (
@@ -53,21 +70,21 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
                 <div className="ticketDashboardBackground p-4 rounded-md flex flex-col justify-between min-h-[150px] max-h-40">
                     <div className="flex justify-between items-center">
                         <div className="relative w-fit">
-                            {(ticketData.immatriculation && !editImmat) && (
+                            {!editImmat && (
                                 <div className="relative">
                                     <p>{ticketData.immatriculation}</p>
                                     <button onClick={(e) => setEditImmat(true)} className="absolute top-[-10px] right-[-50px] bg-primary text-black rounded-full p-2 hover:bg-white transition-all"><PencilSquareIcon className="w-4 h-4"/></button>
                                 </div>
                             )}  
-                            {(!ticketData.immatriculation || editImmat) && (
+                            {editImmat && (
                             <>
                                 <input 
                                     type="text" 
-                                    value={immatriculation}
-                                    onChange={(e) => setImmatriculation(e.target.value.toUpperCase())}
+                                    value={ticketData.immatriculation}
+                                    onChange={(e) => updateTicketsArray(index, e.target.value.toUpperCase())}
                                     onBlur={handleImmatriculationBlur}
                                     className="rounded-md p-2 text-black uppercase w-fit text-[14px]" 
-                                    placeholder="Immatriculation" 
+                                    placeholder="Immatriculation"
                                 />
                                 <div className="rounded-md absolute top-[-20px] right-[-10px] px-2 py-1 bg-[#272727] text-base shadow-lg flex justify-center gap-2 items-center">
                                     <p>À compléter</p>

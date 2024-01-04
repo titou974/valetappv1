@@ -29,21 +29,6 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   const ticketsScrollRef = useRef(null);
   const ticketsRef = useRef(null);
 
-  const cardVariants = {
-    offscreen: {
-      y: 300
-    },
-    onscreen: {
-      y: 50,
-      rotate: -10,
-      transition: {
-        type: "spring",
-        bounce: 0.4,
-        duration: 0.8
-      }
-    }
-  };
-
   const startSession = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -53,7 +38,6 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
       const response = await axios.patch(`/api/session/${sessionId}`, {
         startedAt: new Date(),
       });
-      console.log("voilà la réponse du patch", response);
       setStartedHour(response.data.startedAt);
       setRestaurantId(response.data.restaurantId);
     } catch (error) {
@@ -66,14 +50,12 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   };
 
   const getTicketsOfSession = async () => {
-    console.log(restaurantId, startedHour);
     try {
       const apiUrl = `${window.location.protocol}//${window.location.host}`;
       const response = await axios.get(`${apiUrl}/api/ticketsforvalet`,
         { params: { restaurantId: restaurantId, startDate: startedHour } }
       );
       setTickets(response.data.tickets);
-      console.log("voila vos tickets", response.data);
     } catch (error) {
       console.log("Error fetching tickets:", error.message);
     }
@@ -101,7 +83,6 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
         const apiUrl = `${window.location.protocol}//${window.location.host}`;
         const response = await axios.get(`${apiUrl}/api/session/${sessionId}`)
         sessionData = response.data;
-        console.log(sessionData);
       } catch (error) {
         console.log("Error fetching user:", error.message);
       }
@@ -256,7 +237,8 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
                         loading={loading}
                         setLoading={(e) => setLoading(e)}
                         index={index}
-
+                        tickets={tickets}
+                        setTickets={(e) => setTickets(e)}
                       />
                     );
               })}
