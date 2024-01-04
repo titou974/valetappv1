@@ -60,19 +60,6 @@ const Register = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-
-    // const getSitesName = async () => {
-    //   const siteData = await getSites();
-    //   if (!siteData || Object.keys(siteData).length === 0 || siteData.error ) {
-    //     console.log("aucun sites trouver")
-    //     setLoadingDiv(false);
-    //   } else {
-    //     const filteredSites = siteData.filter(site => site.companyId === companySelected?.id);
-    //     setSiteDb(filteredSites);
-    //     setLoadingDiv(false);
-    //   }
-    // };
-
     const checkSite = async () => {
       const siteData = await getSite(site);
 
@@ -86,31 +73,7 @@ const Register = () => {
       }
     };
 
-    // const getCompaniesName = async () => {
-    //   setLoadingDiv(true);
-    //   const companyData = await getCompanies();
-
-    //   if (!companyData || Object.keys(companyData).length === 0) {
-    //     setLoadingDiv(false);
-    //     console.log("pas d'entreprise trouvé, erreur")
-    //   } else {
-    //     setCompaniesDb(companyData);
-    //     setLoadingDiv(false);
-    //   }
-    // }
-
     site ? checkSite() : setSiteExists(false);
-
-      // if (site) {
-      //   checkSite();
-      // } else {
-      //   if (companySelected?.id) {
-      //     getSitesName();
-      //   } else {
-      //     getCompaniesName();
-      //   }
-      // }setSiteData(siteData);
-      // setLoadingDiv(false);
       setTimeout(() => {
         setLoadingDiv(false);
       }, 1000);
