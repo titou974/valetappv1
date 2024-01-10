@@ -13,9 +13,8 @@ import { useState, useEffect, useRef } from "react";
 import UserAccountNav from "./useraccountnav";
 import axios from "axios";
 import TicketDashboard from "./ticketdashboard";
-import { m } from "framer-motion";
 import { slideIn } from "@/lib/motion";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DashboardLogged = ({ siteName, sessionId, userName }) => {
   const [startedHour, setStartedHour] = useState(null);
@@ -105,6 +104,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   }, [sessionStarted]);
 
   useEffect(() => {
+  const ref = ticketsScrollRef.current
   const observer = new IntersectionObserver(
     (entries) => {
       const [entry] = entries;
@@ -124,8 +124,8 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
 
   // Clean up the observer
   return () => {
-    if (ticketsScrollRef.current) {
-      observer.unobserve(ticketsScrollRef.current);
+    if (ref) {
+      observer.unobserve(ref);
     }
   };
 }, [ticketsScrollRef]);
@@ -247,15 +247,15 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
         )}
         <AnimatePresence>
           {isFooterVisible && (
-            <m.div
+            <motion.div
               className={`fixed ${styles.padding} bottom-0 w-full left-1 right-1 gradientDashboardBottom z-50 flex justify-center items-center`}
-              viewport={{ root: ticketsScrollRef }}
-              initial={{ opacity: 1}}
+              initial={{ opacity: 0}}
               animate={{ opacity: 1}}
-              exit={{opacity: 0}}
+              exit={{ opacity: 0 }}
+              delay={{ delay: 0.25 }}
             >
               <UserAccountNav sessionId={sessionId} startedHour={startedHour} />
-            </m.div>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
