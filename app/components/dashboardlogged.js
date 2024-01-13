@@ -13,7 +13,7 @@ import { useState, useEffect, useRef } from "react";
 import UserAccountNav from "./useraccountnav";
 import axios from "axios";
 import TicketDashboard from "./ticketdashboard";
-import { slideIn } from "@/lib/motion";
+import { slideIn, textVariant } from "@/lib/motion";
 import { motion, AnimatePresence } from "framer-motion";
 
 const DashboardLogged = ({ siteName, sessionId, userName }) => {
@@ -24,8 +24,9 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   const [tickets, setTickets] = useState([]);
   const [isFooterVisible, setIsFooterVisible] = useState(true);
   const [ticketsWithoutImmat, setTicketsWithoutImmat] = useState(null);
+  const [showNavbarTickets, setShowNavbarTickets] = useState(false);
 
-  const ticketsScrollRef = useRef(null);
+  const footerRef = useRef(null);
   const ticketsRef = useRef(null);
 
   const startSession = async (e) => {
@@ -104,32 +105,57 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   }, [sessionStarted]);
 
   useEffect(() => {
-  const ref = ticketsScrollRef.current
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const [entry] = entries;
-      // Set footer visibility based on intersection
-      setIsFooterVisible(!entry.isIntersecting);
-    },
-    {
-      root: null, // viewport as the root
-      threshold: 1.0, // fully intersecting the target
+    const ref = footerRef.current
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        // Set footer visibility based on intersection
+        setIsFooterVisible(!entry.isIntersecting);
+      },
+      {
+        root: null, // viewport as the root
+        threshold: 1.0, // fully intersecting the target
+      }
+    );
+
+    // Start observing the tickets section
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
     }
-  );
 
-  // Start observing the tickets section
-  if (ticketsScrollRef.current) {
-    observer.observe(ticketsScrollRef.current);
-  }
+    // Clean up the observer
+    return () => {
+      if (ref) {
+        observer.unobserve(ref);
+      }
+    };
+}, [footerRef]);
 
-  // Clean up the observer
-  return () => {
-    if (ref) {
-      observer.unobserve(ref);
+
+  useEffect(() => {
+    const ticketsRefCurrent = ticketsRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        console.log("xouxou", entry.isIntersecting);
+        setShowNavbarTickets(entry.isIntersecting);
+      },
+      {
+        root: null,
+        threshold: 0.5, // Adjust threshold as needed
+      }
+    );
+
+    if (ticketsRef.current) {
+      observer.observe(ticketsRef.current);
     }
-  };
-}, [ticketsScrollRef]);
 
+    return () => {
+      if (ticketsRefCurrent) {
+        observer.unobserve(ticketsRefCurrent);
+      }
+    };
+  }, [ticketsRef]);
 
   const scrollToTickets = () => {
     ticketsRef.current.scrollIntoView({ behavior: "smooth" });
@@ -138,8 +164,18 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   return (
     <div className="bg-black h-full w-full text-white">
       <div className={`fixed top-0 gradientTop w-full ${styles.padding} z-50`}>
-        <h2 className={`${styles.subText}`}>Bon courage,</h2>
-        <h2 className={`${styles.headText}`}>{userName} 🚗</h2>
+        {!showNavbarTickets && (
+          <motion.div initial='hidden' animate='show' exit='hidden' variants={textVariant(0.25)}>
+            <h2 className={`${styles.subText}`}>Bon courage,</h2>
+            <h2 className={`${styles.headText}`}>{userName} 🚗</h2>
+          </motion.div>
+        )}
+        {showNavbarTickets && (
+          <motion.div initial='hidden' animate='show' exit='hidden' variants={textVariant(0.25)}>
+            <h2 className={`${styles.subText}`} initial='hidden' animate='show' exit='hidden' variants={textVariant(0.5)} >Vous avez</h2>
+            <h2 className={`${styles.headText}`}>{tickets.length} tickets</h2>
+          </motion.div>
+        )}
       </div>
       <div className={`flex flex-col ${styles.paddingX} justify-center h-full`}>
         <div className={`flex flex-col justify-center h-screen`}>
@@ -209,7 +245,6 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
             </button>
           )}
         </div>
-        {sessionStarted && (
           <div className="flex flex-col gap-8 h-full min-h-screen" ref={ticketsRef}>
             {ticketsWithoutImmat > 0 ? (
               <p>Vous avez {ticketsWithoutImmat} {ticketsWithoutImmat > 1 ? 'tickets' : 'ticket'} à compléter</p>
@@ -230,22 +265,21 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
                   .sort((a, b) => new Date(b.scannedAt) - new Date(a.scannedAt))
                   .map((ticket, index) => {
                     return (
-                      <TicketDashboard
-                        key={index}
-                        ticketData={ticket}
-                        refreshTickets={refreshTickets}
-                        loading={loading}
-                        setLoading={(e) => setLoading(e)}
-                        index={index}
-                        tickets={tickets}
-                        setTickets={(e) => setTickets(e)}
-                      />
+                      <motion.div key={index} initial="hidden" variants={slideIn('left', 'tween', index * 0.25, 0.5)} whileInView="show" viewport={{ once: true }} >
+                        <TicketDashboard
+                          ticketData={ticket}
+                          refreshTickets={refreshTickets}
+                          loading={loading}
+                          setLoading={(e) => setLoading(e)}
+                          index={index}
+                          tickets={tickets}
+                          setTickets={(e) => setTickets(e)}
+                        />
+                      </motion.div>
                     );
               })}
             </div>
           </div>
-        )}
-        <AnimatePresence>
           {isFooterVisible && (
             <motion.div
               className={`fixed ${styles.padding} bottom-0 w-full left-1 right-1 gradientDashboardBottom z-50 flex justify-center items-center`}
@@ -257,9 +291,8 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               <UserAccountNav sessionId={sessionId} startedHour={startedHour} />
             </motion.div>
           )}
-        </AnimatePresence>
       </div>
-      <div className="text-center py-4" ref={ticketsScrollRef}>
+      <div className="text-center py-4" ref={footerRef}>
         <p className="text-white">Nestor App 🇫🇷</p>
       </div>
     </div>
