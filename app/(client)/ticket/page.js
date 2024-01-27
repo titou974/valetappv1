@@ -131,7 +131,7 @@ const TicketShow = () => {
             <div className='mx-auto w-full text-center'>
               <button onClick={() => setCollapse(!collapse)}>
                 <p className='text-center pb-1'>{!collapse ? "Voir les conditions générales" : ""}</p>
-                <ChevronDownIcon class={`${collapse ? "transform rotate-180" : ""} h-6 w-6 text-white mx-auto transition-all`} />
+                <ChevronDownIcon className={`${collapse ? "transform rotate-180" : ""} h-6 w-6 text-white mx-auto transition-all`} />
               </button>
             </div>
             <span className={`long-text ${collapse ? "expanded" : ""} px-8 max-w-1/2`}>

@@ -158,7 +158,11 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
   }, [ticketsRef]);
 
   const scrollToTickets = () => {
-    ticketsRef.current.scrollIntoView({ behavior: "smooth" });
+    const id = 'profilePhoto';
+    const yOffset = -150; 
+    const y = ticketsRef.current.getBoundingClientRect().top + window.scrollY + yOffset;
+
+    window.scrollTo({top: y, behavior: 'smooth'});
   };
 
   return (
@@ -173,7 +177,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
         {showNavbarTickets && (
           <motion.div initial='hidden' animate='show' exit='hidden' variants={textVariant(0.25)}>
             <h2 className={`${styles.subText}`} initial='hidden' animate='show' exit='hidden' variants={textVariant(0.5)} >Vous avez</h2>
-            <h2 className={`${styles.headText}`}>{tickets.length} tickets</h2>
+            <h2 className={`${styles.headText}`}>{tickets.length} ticket{tickets.length > 1 && 's'}</h2>
           </motion.div>
         )}
       </div>
@@ -285,8 +289,6 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               className={`fixed ${styles.padding} bottom-0 w-full left-1 right-1 gradientDashboardBottom z-50 flex justify-center items-center`}
               initial={{ opacity: 0}}
               animate={{ opacity: 1}}
-              exit={{ opacity: 0 }}
-              delay={{ delay: 0.25 }}
             >
               <UserAccountNav sessionId={sessionId} startedHour={startedHour} />
             </motion.div>

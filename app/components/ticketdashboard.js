@@ -4,7 +4,7 @@ import formatHour from "@/lib/formathour";
 import axios from "axios";
 
 const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index, tickets, setTickets}) => {
-    const [immatriculation, setImmatriculation] = useState(null);
+    const [immatriculation, setImmatriculation] = useState('');
     const [editImmat, setEditImmat] = useState(false);
 
     const updateTicketImmatriculation = async (ticketId, immatriculation) => {
@@ -80,7 +80,7 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
                             <>
                                 <input 
                                     type="text" 
-                                    value={ticketData.immatriculation}
+                                    value={ticketData.immatriculation || ''}
                                     onChange={(e) => updateTicketsArray(index, e.target.value.toUpperCase())}
                                     onBlur={handleImmatriculationBlur}
                                     className="rounded-md p-2 text-black uppercase w-fit text-[14px]" 
@@ -88,7 +88,7 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
                                 />
                                 <div className="rounded-md absolute top-[-20px] right-[-10px] px-2 py-1 bg-[#272727] text-base shadow-lg flex justify-center gap-2 items-center">
                                     <p>À compléter</p>
-                                    <span class="animate-ping h-2 w-2 rounded-full bg-orange-400 opacity-75"></span>
+                                    <span className="animate-ping h-2 w-2 rounded-full bg-orange-400 opacity-75"></span>
                                 </div>
                             </>
                             )}
