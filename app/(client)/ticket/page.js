@@ -33,7 +33,6 @@ const getCompanyCgu = async (id) => {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/company/${id}`);
     cguData = response.data.cgu;
-    console.log("cgu data", cguData)
   } catch (error) {
     console.error('Error fetching company data:', error);
   }
@@ -85,11 +84,6 @@ const TicketShow = () => {
       loadData();
     }
   }, [ticketId, companyId])
-
-  useEffect(() => {
-    console.log("coucou", companyCgu)
-  })
-
 
   return (
     <div className={`bg-secondary w-full ${collapse ? "h-full" : "h-screen"}`}>

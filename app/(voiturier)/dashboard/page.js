@@ -25,12 +25,7 @@ const Dashboard = async () => {
   if (!session) {
     return <DashboardNotLogged />
   } else {
-    console.log(session);
-    const startingHour = new Date(session.user.startingHourSession)
-    console.log(startingHour);
-    return (
-      <DashboardLogged siteName={session.user.siteName} sessionId={session.user.sessionId} userName={session.user.name} />
-    )
+    return <DashboardLogged siteName={session.user.siteName} sessionId={session.user.sessionId} userName={session.user.name} />
   }
 }
 

@@ -79,10 +79,6 @@ const Register = () => {
       }
     }
 
-    useEffect(() => {
-      console.log("l'url", window.location.protocol, window.location.host)
-    })
-
   return (
     <div className="w-full h-screen bg-secondary">
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>

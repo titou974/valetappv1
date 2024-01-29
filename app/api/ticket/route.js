@@ -17,8 +17,6 @@ export async function POST(req) {
         scannedAt: new Date(),
       }
     })
-    console.log(newTicket),
-    console.log("done", newTicket.id)
     return NextResponse.json({ ticketId: newTicket.id });
   } catch (error) {
     return NextResponse.json({error: "Registration failed for client" })

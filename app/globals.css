@@ -43,7 +43,7 @@ body {
   background: rgb(0,0,0);
   background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(3,0,0,0.7551020408163265) 6%, rgba(6,1,1,1) 100%);
   pointer-events: none;
-  height: 30vh;
+  height: 20vh;
 
 }
 

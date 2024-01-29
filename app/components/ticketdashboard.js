@@ -13,10 +13,6 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
             const response = await axios.patch(`/api/ticket/${ticketId}`, {
                 immatriculation: immatriculation,
             });
-            console.log("la plaque d'immatriculation update !", response.data);
-            // if (refreshTickets) {
-            //     await refreshTickets();
-            // }
         } catch (error) {
             console.log("patch ticket failed", error.message);
         }
@@ -29,7 +25,6 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
         ...newTickets[ticketIndex],
         immatriculation: newImmat
         };
-        console.log("newTickets", newTickets, ticketIndex)
         setTickets(newTickets);
         setImmatriculation(newImmat);
     }

@@ -19,7 +19,6 @@ const getSession = async () => {
   let siteData = {};
   try {
     const response = await axios.get(`/api/session`);
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log("Error Session:", error.message)
@@ -36,7 +35,6 @@ const Home = () => {
     const getSessionData = async () => {
       const sessionData = await getSession();
       if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
-        console.log("pas de session");
         setAuthenticated(false);
       } else {
         setAuthenticated(true);

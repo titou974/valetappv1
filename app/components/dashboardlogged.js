@@ -137,7 +137,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        console.log("xouxou", entry.isIntersecting);
+
         setShowNavbarTickets(entry.isIntersecting);
       },
       {
@@ -182,7 +182,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
         )}
       </div>
       <div className={`flex flex-col ${styles.paddingX} justify-center h-full`}>
-        <div className={`flex flex-col justify-center h-screen`}>
+        <div className={`flex flex-col justify-center h-screen items-center gap-4`}>
           {loading ? (
             <div
               className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto h-fit mb-5"
@@ -191,7 +191,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
                 animationDuration: "1s",
               }}
             >
-              <h3 className="invisible text-[40px] text-center py-4 font-semibold">
+              <h3 className="invisible text-[40px] text-center font-semibold">
                 <TimeCounter
                   startingHour={startedHour}
                   sessionStarted={sessionStarted}
@@ -200,7 +200,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               </h3>
             </div>
           ) : (
-            <h3 className="text-[40px] text-center py-4 font-semibold">
+            <h3 className="text-[40px] text-center font-semibold">
               <TimeCounter
                 startingHour={startedHour}
                 sessionStarted={sessionStarted}
@@ -210,35 +210,26 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
           )}
           {loading ? (
             <div
-              className="animate-pulse bg-gray-400/50 rounded-full w-fit mx-auto"
+              className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto"
               style={{
                 animationDelay: `${2 * 0.05}s`,
                 animationDuration: "1s",
               }}
             >
-              <button
-                onClick={(e) => startSession(e)}
-                className={`${style.startButton} invisible`}
-              >
-                <p>Démarrer la session</p>
-                <PlayCircleIcon />
-              </button>
+              <div className="invisible">
+                <StartingHour startingHour={startedHour}/>
+                <p className="invisible">
+                  Vous êtes au <span className="italic">Gourmets Palace</span>
+                </p>
+              </div>
             </div>
           ) : sessionStarted ? (
-            <div className="flex flex-col justify-center items-center gap-16">
               <div>
                 <StartingHour startingHour={startedHour} />
                 <p className="text-center py-2">
                   Vous êtes au <span className="italic">{siteName}</span>
                 </p>
               </div>
-              <button
-                className="w-12 h-12 linearBackground rounded-full animate-bounce flex items-center justify-center"
-                onClick={(e) => scrollToTickets()}
-              >
-                <ChevronDoubleDownIcon className="w-6 h-6 text-white" />
-              </button>
-            </div>
           ) : (
             <button
               onClick={(e) => startSession(e)}
@@ -248,6 +239,28 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               <PlayCircleIcon />
             </button>
           )}
+          {loading ? (
+
+            <button
+              className="mt-2 w-12 h-12 linearBackground rounded-full flex items-center justify-center animate-pulse bg-gray-400/50"
+              style={{
+                animationDelay: `${1 * 0.05}s`,
+                animationDuration: "1s",
+              }}
+            >
+              <ChevronDoubleDownIcon className="w-6 h-6 text-white invisible" />
+            </button>
+            
+          ) : (
+            <button
+              className="mt-2 w-12 h-12 linearBackground rounded-full animate-bounce flex items-center justify-center"
+              onClick={(e) => scrollToTickets()}
+            >
+              <ChevronDoubleDownIcon className="w-6 h-6 text-white" />
+            </button>
+
+          )}
+
         </div>
           <div className="flex flex-col gap-8 h-full min-h-screen" ref={ticketsRef}>
             {ticketsWithoutImmat > 0 ? (

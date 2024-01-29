@@ -43,7 +43,6 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
         const response = await axios.patch(`/api/user/${userId}`, {
           email: email,
         });
-        console.log(response);
       } catch (error) {
         console.log("sauvegarde de l'email fail", error)
       }
@@ -55,7 +54,6 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
           ticketNumber: ticketNumber,
           ticketPrice: ticketPrice,
         });
-        console.log("reponse de l'api email", response);
         toast.success("Votre ticket est arrivé dans votre boite mail !", {
           position: "top-center",
           autoClose: 5000,
@@ -69,7 +67,7 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
           closeModal();
         setLoadingEmail(false);
       } catch (error) {
-        console.log("erreur de mail", error.message);7
+        console.log("erreur de mail", error.message);
         toast.error("Un bug à eu lieu lors de l'envoi de votre ticket...", {
           position: "top-center",
           autoClose: 5000,

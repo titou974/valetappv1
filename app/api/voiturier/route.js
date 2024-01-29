@@ -8,8 +8,6 @@ export async function POST(req) {
   try {
     const { name, phoneNumber, password, companyId } = await req.json();
 
-    console.log("Received:", { name, phoneNumber, password });
-
     if (!name || !phoneNumber || !password || !companyId) {
       console.log("Invalid data received.");
       return NextResponse.json({ userId: null, message: "Invalid data received." });
@@ -28,7 +26,6 @@ export async function POST(req) {
     }
 
     const sanitizedPhoneNumber = sanitizePhoneNumber(phoneNumber);
-    console.log(sanitizedPhoneNumber);
 
     const existingUserByPhoneNumber = await prisma.user.findFirst({
       where: { phoneNumber: sanitizedPhoneNumber },
@@ -49,7 +46,6 @@ export async function POST(req) {
       },
     });
 
-    console.log("User created:", newUser.id);
     return NextResponse.json({ userId: newUser.id });
 
   } catch (error) {

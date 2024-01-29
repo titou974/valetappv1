@@ -79,10 +79,6 @@ async function main() {
     });
     restaurantsCreate.push(newRestaurant);
   }
-
-  // Output results
-  console.log('Users:', usersCreate);
-  console.log('Restaurants:', restaurantsCreate);
 }
 
 main()

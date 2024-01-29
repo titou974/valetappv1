@@ -15,7 +15,6 @@ const UserAccountNav = ({sessionId, sessionStarted}) => {
         const response = await axios.patch(`/api/session/${sessionId}`, {
           endAt: new Date(),
         });
-        console.log("voilà la réponse du patch", response);
       } catch(error) {
         console.log('patch session failed')
       } finally {

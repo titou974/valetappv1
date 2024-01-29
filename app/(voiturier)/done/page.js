@@ -13,7 +13,6 @@ const getSession = async (id) => {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/session/${id}`)
     sessionData = response.data;
-    console.log(sessionData);
   } catch (error) {
     console.log('Error fetching user:', error.message);
   }

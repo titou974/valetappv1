@@ -15,7 +15,6 @@ const getSession = async () => {
   let siteData = {};
   try {
     const response = await axios.get(`/api/session`);
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log("Error Session:", error.message)
@@ -28,7 +27,6 @@ const getSite = async (id) => {
   try {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log('Error fetching user:', error.message);
@@ -116,7 +114,6 @@ const ForgetPassword = () => {
         setLoading(false);
         return null;
       } else {
-        console.log(userData)
         router.push(`/newpassword?${userData.token ? `${site ? `site=${site}&` : ""}t=${userData.token}` : ``}`)
       }
     } catch (error) {
