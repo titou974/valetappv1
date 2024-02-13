@@ -36,16 +36,6 @@ const Register = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // const getSitesName = async () => {
-    //   const siteData = await getSites();
-    //   if (!siteData || Object.keys(siteData).length === 0) {
-    //     console.log("aucun sites trouver");
-    //     setLoadingDiv(false);
-    //   } else {
-    //     setSiteDb(siteData);
-    //     setLoadingDiv(false);
-    //   }
-    // };
     checkSite()
     
     if (siteExists) {
@@ -88,10 +78,6 @@ const Register = () => {
         setIsLoading(false);
       }
     }
-
-    useEffect(() => {
-      console.log("l'url", window.location.protocol, window.location.host)
-    })
 
   return (
     <div className="w-full h-screen bg-secondary">

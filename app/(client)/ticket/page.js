@@ -33,7 +33,6 @@ const getCompanyCgu = async (id) => {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/company/${id}`);
     cguData = response.data.cgu;
-    console.log("cgu data", cguData)
   } catch (error) {
     console.error('Error fetching company data:', error);
   }
@@ -86,11 +85,6 @@ const TicketShow = () => {
     }
   }, [ticketId, companyId])
 
-  useEffect(() => {
-    console.log("coucou", companyCgu)
-  })
-
-
   return (
     <div className={`bg-secondary w-full ${collapse ? "h-full" : "h-screen"}`}>
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
@@ -115,7 +109,7 @@ const TicketShow = () => {
             <div className='justify-between flex py-5 items-center'>
               <div className=''>
                 <svg width="25" height="50" viewBox="0 0 25 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 50C13.8071 50 25 38.8071 25 25C25 11.1929 13.8071 0 0 0V50Z" fill="#E7E7E7"/>
+                <path fillRule="evenodd" clipRule="evenodd" d="M0 50C13.8071 50 25 38.8071 25 25C25 11.1929 13.8071 0 0 0V50Z" fill="#E7E7E7"/>
                 </svg>
               </div>
               {collapse && (
@@ -124,14 +118,14 @@ const TicketShow = () => {
               )}
               <div className=''>
                 <svg width="25" height="50" viewBox="0 0 25 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M25 0C11.1929 0 0 11.1929 0 25C0 38.8071 11.1929 50 25 50L25 0Z" fill="#E7E7E7"/>
+                <path fillRule="evenodd" clipRule="evenodd" d="M25 0C11.1929 0 0 11.1929 0 25C0 38.8071 11.1929 50 25 50L25 0Z" fill="#E7E7E7"/>
                 </svg>
               </div>
             </div>
             <div className='mx-auto w-full text-center'>
               <button onClick={() => setCollapse(!collapse)}>
                 <p className='text-center pb-1'>{!collapse ? "Voir les conditions générales" : ""}</p>
-                <ChevronDownIcon class={`${collapse ? "transform rotate-180" : ""} h-6 w-6 text-white mx-auto transition-all`} />
+                <ChevronDownIcon className={`${collapse ? "transform rotate-180" : ""} h-6 w-6 text-white mx-auto transition-all`} />
               </button>
             </div>
             <span className={`long-text ${collapse ? "expanded" : ""} px-8 max-w-1/2`}>

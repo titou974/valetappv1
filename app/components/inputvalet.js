@@ -10,7 +10,6 @@ const Input = ({placeholder, input, setInput, setPhoneAlert}) => {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInput(value);
-    console.log
     // If the placeholder indicates this is the phone input, validate the phone number
     if (placeholder === "Numéro de Téléphone") {
       if (!validatePhoneNumber(value)) {

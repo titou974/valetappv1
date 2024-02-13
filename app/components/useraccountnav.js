@@ -15,7 +15,6 @@ const UserAccountNav = ({sessionId, sessionStarted}) => {
         const response = await axios.patch(`/api/session/${sessionId}`, {
           endAt: new Date(),
         });
-        console.log("voilà la réponse du patch", response);
       } catch(error) {
         console.log('patch session failed')
       } finally {
@@ -29,7 +28,7 @@ const UserAccountNav = ({sessionId, sessionStarted}) => {
 
   return (
     <>
-      <button onClick={handleSignOut} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-all bottom-28">
+      <button onClick={handleSignOut} className="pointer-events-auto bg-primary w-full py-3 rounded-full flex items-center justify-center gap-3 hover:bg-white transition-all bottom-28 h-fit">
         <p className="text-black font-semibold text-[32px]">J&apos;ai Terminé</p>
         <div className="w-[26px] text-black">
           <svg width="38" height="39" viewBox="0 0 38 39" fill="none" xmlns="http://www.w3.org/2000/svg">

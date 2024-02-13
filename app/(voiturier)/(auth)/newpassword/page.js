@@ -12,7 +12,6 @@ const getSession = async () => {
   let siteData = {};
   try {
     const response = await axios.get(`/api/session`);
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log("Error Session:", error.message)
@@ -25,7 +24,6 @@ const getSite = async (id) => {
   try {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log('Error fetching user:', error.message);
@@ -38,7 +36,6 @@ const checkToken = async (token) => {
   try {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/forget/${token}`)
-    console.log("la verif du token", response)
     tokenData = response.data
   } catch (error) {
     console.log("le token n'a pas pu être check")
@@ -51,8 +48,6 @@ const ResetPassword = () => {
   const searchParams = useSearchParams();
   const site = searchParams.get("site");
   const resetToken = searchParams.get("t")
-  console.log("siteToken", site);
-  console.log("token", resetToken);
 
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [siteExists, setSiteExists] = useState(false);
@@ -103,7 +98,6 @@ const ResetPassword = () => {
     const handleCheck = async () => {
       const tokenData = await checkToken(resetToken);
       if (tokenData === true) {
-        console.log("le token existe");
         setTokenExist(true);
         return;
       } else {
@@ -148,7 +142,6 @@ const ResetPassword = () => {
         console.log("hugo a une grosse bite")
         return null;
       } else {
-        console.log(userData)
         router.push(`/sign-in${site ? `?site=${site}` : ""}`)
         setLoading(false);
         return null;

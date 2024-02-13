@@ -19,7 +19,6 @@ const getSite = async (id) => {
   try {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/site/${id}`)
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log('Error fetching user:', error.message);
@@ -32,7 +31,6 @@ const getSites = async () => {
   try {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/site`)
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log('Error fetching user:', error.message);
@@ -44,7 +42,6 @@ const getSession = async () => {
   let siteData = {};
   try {
     const response = await axios.get(`/api/session`);
-    console.log(response);
     siteData = response.data;
   } catch (error) {
     console.log("Error Session:", error.message)
@@ -57,7 +54,6 @@ const getCompanies = async () => {
   try {
     const apiUrl = `${window.location.protocol}//${window.location.host}`;
     const response = await axios.get(`${apiUrl}/api/company`);
-    console.log("this is the companies", response);
     companyData = response.data;
   } catch (error) {
     console.log('Error fetching companies', error.message)
@@ -88,19 +84,6 @@ const LogIn = () => {
 
   useEffect(() => {
 
-    // const getSitesName = async () => {
-    //   setLoadingDiv(true);
-    //   const siteData = await getSites();
-    //   if (!siteData || Object.keys(siteData).length === 0 || siteData.error ) {
-    //     console.log("aucun sites trouver")
-    //     setLoadingDiv(false);
-    //   } else {
-    //     const filteredSites = siteData.filter(site => site.companyId === companySelected?.id);
-    //     setSiteDb(filteredSites);
-    //     setLoadingDiv(false);
-    //   }
-    // };
-
     const checkSite = async () => {
       setLoadingDiv(true);
       const siteData = await getSite(site);
@@ -112,19 +95,6 @@ const LogIn = () => {
         setSiteData(siteData);
       }
     };
-
-    // const getCompaniesName = async () => {
-    //   setLoadingDiv(true);
-    //   const companyData = await getCompanies();
-
-    //   if (!companyData || Object.keys(companyData).length === 0) {
-    //     setLoadingDiv(false);
-    //     console.log("pas d'entreprise trouvé, erreur")
-    //   } else {
-    //     setCompaniesDb(companyData);
-    //     setLoadingDiv(false);
-    //   }
-    // }
 
     site ? checkSite() : setSiteExists(false)
 
@@ -138,7 +108,6 @@ const LogIn = () => {
     const getSessionData = async () => {
       const sessionData = await getSession();
       if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
-        console.log("pas de session");
         setAuthenticated(false);
       } else {
         setAuthenticated(true);
@@ -155,7 +124,7 @@ const LogIn = () => {
     setWrongPassword(false);
     setFillTextAlert(false);
     setLoading(true);
-    // Basic client-side validation
+
     if(!phoneNumber || !password || !siteData) {
       setFillTextAlert(true);
       setLoading(false);
@@ -166,9 +135,8 @@ const LogIn = () => {
       phoneNumber,
       password,
       site: siteData.id,
-      redirect: false,  // Avoids automatic redirect
+      redirect: false, 
     });
-    console.log(data)
 
     if (!data?.ok) {
       console.log("Sign-in API call failed:", data.error);

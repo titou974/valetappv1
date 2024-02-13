@@ -1,73 +1,65 @@
-// schema.prisma
-
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
-}
-
-enum UserRole {
-  VALET
-  CLIENT
-  ADMIN
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String        @id @default(cuid())
-  role          UserRole
-  name          String?
-  phoneNumber   String?   @unique
-  password      String?
-  email         String?
-  resetToken    String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-  tickets       Ticket[]
-  sessions      Session[]
-  companyId     String?
-  company       Company?  @relation(fields: [companyId], references: [id])
+  id          String    @id @default(cuid())
+  role        UserRole
+  name        String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  phoneNumber String?   @unique
+  password    String?
+  email       String?
+  resetToken  String?   @unique
+  companyId   String?
+  sessions    Session[]
+  tickets     Ticket[]
+  company     Company?  @relation(fields: [companyId], references: [id])
 }
 
 model Ticket {
-  id            String       @id @default(cuid())
-  ticketNumber  Int          @default(autoincrement())
-  userId        String
-  restaurantId  String
-  sessionId     String?
-  scannedAt     DateTime
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  session       Session?  @relation(fields: [sessionId], references: [id])
-  user          User      @relation(fields: [userId], references: [id])
-  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  id              String     @id @default(cuid())
+  userId          String
+  restaurantId    String
+  scannedAt       DateTime
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  ticketNumber    Int        @default(autoincrement())
+  sessionId       String?
+  immatriculation String?
+  restaurant      Restaurant @relation(fields: [restaurantId], references: [id])
+  session         Session?   @relation(fields: [sessionId], references: [id])
+  user            User       @relation(fields: [userId], references: [id])
 }
 
 model Restaurant {
-  id         String      @id @default(cuid())
-  name       String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  tickets    Ticket[]
-  sessions   Session[]
-  companyId  String?
-  company    Company?     @relation(fields: [companyId], references: [id])
+  id          String    @id @default(cuid())
+  name        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   ticketPrice String?
+  companyId   String?
+  company     Company?  @relation(fields: [companyId], references: [id])
+  sessions    Session[]
+  tickets     Ticket[]
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String     @id @default(cuid())
   userId       String
+  endAt        DateTime?
   restaurantId String
   createdAt    DateTime   @default(now())
   startedAt    DateTime?
-  endAt        DateTime?
-  tickets      Ticket[]
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tickets      Ticket[]
 }
 
 model Company {
@@ -75,7 +67,13 @@ model Company {
   name        String
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  cgu         Json?
   restaurants Restaurant[]
   users       User[]
-  cgu         Json?   
+}
+
+enum UserRole {
+  VALET
+  CLIENT
+  ADMIN
 }

@@ -8,7 +8,6 @@ export async function GET(req, {params}) {
     const site = await prisma.restaurant.findUnique({
       where: { id: id },
     });
-    console.log(site);
     return NextResponse.json(site);
   } catch (error) {
     return NextResponse.json({ error: 'Error fetching site...' });
