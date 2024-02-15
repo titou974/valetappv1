@@ -3,54 +3,30 @@
 import styles from "@/app/components/style";
 import Link from "next/link";
 import Input from "@/app/components/inputvalet";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
-import SelectInput from "@/app/components/selectinput";
 import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
 import { useQuery } from '@tanstack/react-query'
+import useSessionRedirection from "@/app/stores/session";
+import useSite from "@/app/stores/site";
+
 
 const LogIn = () => {
-
-  const searchParams = useSearchParams();
-  const site = searchParams.get("site");
-
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneAlert, setPhoneAlert] = useState(false);
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [password, setPassword] = useState("");
-  const [siteExists, setSiteExists] = useState(false);
-  const [siteDb, setSiteDb] = useState(null);
   const [wrongPassword, setWrongPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
-
-  const [companySelected, setCompanySelected] = useState(null);
-  const [companiesDb, setCompaniesDb] = useState(null);
   const router = useRouter();
   
 
-  const {data, isLoading, isError} = useQuery({
-    queryKey: ['site'],
-    queryFn: async () => {
-      const {data} = await axios.get(`/api/site/${site}`)
-      return data
-    }
-  })
+  const {data, isLoading, isError} = useSite()
 
-  const {data: session, isSessionLoading, isSessionError} = useQuery({
-    queryKey: ['session'],
-    queryFn: async () => {
-      const {data} = await axios.get('/api/session')
-      if (data?.authenticated) {
-        router.push('/dashboard')
-      }
-      return data
-    }
-  })
+  useSessionRedirection()
 
   const handleLogIn = async e => {
     e.preventDefault();
@@ -134,10 +110,13 @@ const LogIn = () => {
           {isLoading ? (
             <>
               <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+                <p className="text-[20px] py-3 px-5 invisible">Lorem ipsum dolor</p>
               </div>
               <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+                <p className="text-[20px] py-3 px-5 invisible">Lorem ipsum dolor</p>
+              </div>
+              <div className="transition-all animate-pulse bg-gray-400/50 rounded-md w-fit">
+                <p className="invisible">Mot de passe oublié ?</p>
               </div>
             </>
           ) : (
@@ -146,7 +125,7 @@ const LogIn = () => {
                 <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
                 <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
                 <div>
-                  <Link href={`forget${data === null ? "" : `?site=${data?.id}`}`} className="text-primary hover:text-white transition-all ps-[20px]">
+                  <Link href={`forget${data === null ? "" : `?site=${data?.id}`}`} className="text-primary hover:text-white transition-all">
                     <p>Mot de passe oublié ?</p>
                   </Link>
                 </div>
