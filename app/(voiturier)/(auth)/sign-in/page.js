@@ -73,7 +73,7 @@ const LogIn = () => {
         )
         : (
           <>
-            {data ? (
+            {data && !data.error ? (
               !phoneAlert && !fillTextAlert && !wrongPassword ? (
                   <div>
                     <h3 className={styles.subText}>Vous êtes au</h3>
