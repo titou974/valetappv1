@@ -11,6 +11,8 @@ import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
 import useSessionRedirection from "@/app/stores/session";
 import useSite from "@/app/stores/site";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -43,21 +45,45 @@ const Register = () => {
       });
       const responseData = await response.data;
       if (responseData.userId === null && responseData.message ===  "Un voiturier avec ce numéro existe déjà.") {
-        setPhoneNumberExist(true);
-        setLoading(false)
-      } else if (responseData.userId === null && responseData.message ===  "Invalid responseData received.") {
-        setFillTextAlert(true);
-        setLoading(false)
+        toast.error("Un voiturier avec ce numéro existe déjà.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
+      } else if (responseData.userId === null && responseData.message ===  "Invalid data received.") {
+        toast.error("Remplissez tout les champs.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
       } else if (responseData.userId === null && responseData.message ===  "Invalid phone number received.") {
-        setLoading(false);
+        toast.error("Le numéro de téléphone donné n'est pas valide", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
       } else if (responseData.userId) {
         const signInData = await signIn('credentials', {
           phoneNumber,
           password,
           site: data.id,
           redirect: false,
-        });
-        console.log('signIn', signInData);
+        })
         if (!signInData?.ok) {
           console.log("Sign-in API call failed:", signInData.error);
           router.push("/sign-in");
@@ -66,13 +92,36 @@ const Register = () => {
         }
       }
     } catch(error) {
+        toast.error("Oups... Une erreur à eu lieu. Réessayez dans quelques instants et si l'erreur persiste contactez le support.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
       console.log("creation of Voiturier failed", error.message);
+    } finally {
       setLoading(false);
     }
   }
 
   return (
     <div className="w-full h-screen bg-black">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
         <div>
           <h3 className={styles.subText}>Remplissez</h3>
@@ -94,23 +143,8 @@ const Register = () => {
             ) : (data && data.id ? (
               <>
                 <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
-                <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
+                <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} />
                 <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
-                {!fillTextAlert && phoneAlert && (
-                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-                    <p>Le numéro de téléphone n&apos;est pas valide</p>
-                  </div>
-                )}
-                {phoneNumberExist && (
-                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-                    <p>Un voiturier possède déjà ce numéro de téléphone.</p>
-                  </div>
-                )}
-                {fillTextAlert && (
-                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-                    <p>Remplissez tous les champs.</p>
-                  </div>
-                )}
               </>
             ) : (
               <>

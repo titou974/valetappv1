@@ -4,14 +4,14 @@ import styles from "@/app/components/style";
 import Link from "next/link";
 import Input from "@/app/components/inputvalet";
 import { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { signIn } from 'next-auth/react';
 import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
-import { useQuery } from '@tanstack/react-query'
 import useSessionRedirection from "@/app/stores/session";
 import useSite from "@/app/stores/site";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const LogIn = () => {
@@ -34,10 +34,19 @@ const LogIn = () => {
     setWrongPassword(false);
     setFillTextAlert(false);
     setLoading(true);
-    // Basic client-side validation
+
     if(!phoneNumber || !password || !data) {
-      setFillTextAlert(true);
       setLoading(false);
+      toast.error("Remplissez tout les champs.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       return;
     }
 
@@ -47,11 +56,18 @@ const LogIn = () => {
       site: data.id,
       redirect: false,  // Avoids automatic redirect
     });
-    console.log(session)
 
     if (!session?.ok) {
-      console.log("Sign-in API call failed:", session.error);
-      setWrongPassword(true);
+      toast.error("Le mot de passe n'est pas correct.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       setLoading(false);
     } else {
       router.push("/dashboard")
@@ -60,6 +76,18 @@ const LogIn = () => {
 
   return (
     <div className="w-full h-screen bg-black">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
         {isLoading ? (
           <div>
