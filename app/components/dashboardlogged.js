@@ -14,13 +14,11 @@ import UserAccountNav from "./useraccountnav";
 import axios from "axios";
 import TicketDashboard from "./ticketdashboard";
 import { slideIn, textVariant } from "@/lib/motion";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import useTicketsOfSession from "../stores/ticketsofsession";
 
-const DashboardLogged = ({ siteName, sessionId, userName }) => {
-  const [startedHour, setStartedHour] = useState(null);
+const DashboardLogged = ({ siteName, siteId, sessionId, startedAt, userName }) => {
   const [sessionStarted, setSessionStarted] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [restaurantId, setRestaurantId] = useState(null);
   const [tickets, setTickets] = useState([]);
   const [isFooterVisible, setIsFooterVisible] = useState(true);
   const [ticketsWithoutImmat, setTicketsWithoutImmat] = useState(null);
@@ -31,7 +29,6 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
 
   const startSession = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setStartedHour(new Date());
     setSessionStarted(true);
     try {
@@ -42,88 +39,32 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
       setRestaurantId(response.data.restaurantId);
     } catch (error) {
       console.log("patch session failed", error.message);
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
-    }
+    } 
   };
 
-  const getTicketsOfSession = async () => {
-    try {
-      const apiUrl = `${window.location.protocol}//${window.location.host}`;
-      const response = await axios.get(`${apiUrl}/api/ticketsforvalet`,
-        { params: { restaurantId: restaurantId, startDate: startedHour } }
-      );
-      setTickets(response.data.tickets);
-    } catch (error) {
-      console.log("Error fetching tickets:", error.message);
-    }
-  };
-
-
+  const { data: ticketsData, isLoading: isTicketsLoading, isError, refetch } = useTicketsOfSession({ siteId, startedAt })
+  
   useEffect(() => {
-    setTicketsWithoutImmat(tickets.filter(ticket => !ticket.immatriculation).length);
-  }, [tickets])
-
-
-  const refreshTickets = async () => {
-    setLoading(true);
-    await getTicketsOfSession();
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  };
-
-  useEffect(() => {
-    const getSessionData = async () => {
-      setLoading(true);
-      let sessionData = {};
-      try {
-        const apiUrl = `${window.location.protocol}//${window.location.host}`;
-        const response = await axios.get(`${apiUrl}/api/session/${sessionId}`)
-        sessionData = response.data;
-      } catch (error) {
-        console.log("Error fetching user:", error.message);
-      }
-      if (sessionData && sessionData.startedAt) {
-        setSessionStarted(true);
-        setStartedHour(sessionData.startedAt);
-        setRestaurantId(sessionData.restaurantId);
-      }
-    };
-    getSessionData();
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
-
-  useEffect(() => {
-    if (sessionStarted) {
-      getTicketsOfSession();
-    }
-  }, [sessionStarted]);
+    setTicketsWithoutImmat(ticketsData?.tickets.filter(ticket => !ticket.immatriculation).length);
+  }, [ticketsData?.tickets])
 
   useEffect(() => {
     const ref = footerRef.current
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        // Set footer visibility based on intersection
         setIsFooterVisible(!entry.isIntersecting);
       },
       {
-        root: null, // viewport as the root
-        threshold: 1.0, // fully intersecting the target
+        root: null, 
+        threshold: 1.0, 
       }
     );
 
-    // Start observing the tickets section
     if (footerRef.current) {
       observer.observe(footerRef.current);
     }
 
-    // Clean up the observer
     return () => {
       if (ref) {
         observer.unobserve(ref);
@@ -177,13 +118,13 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
         {showNavbarTickets && (
           <motion.div initial='hidden' animate='show' exit='hidden' variants={textVariant(0.25)}>
             <h2 className={`${styles.subText}`} initial='hidden' animate='show' exit='hidden' variants={textVariant(0.5)} >Vous avez</h2>
-            <h2 className={`${styles.headText}`}>{tickets.length} ticket{tickets.length > 1 && 's'}</h2>
+            <h2 className={`${styles.headText}`}>{ticketsData?.tickets.length} ticket{ticketsData?.tickets.length > 1 && 's'}</h2>
           </motion.div>
         )}
       </div>
       <div className={`flex flex-col ${styles.paddingX} justify-center h-full`}>
         <div className={`flex flex-col justify-center h-screen items-center gap-4`}>
-          {loading ? (
+          {!startedAt ? (
             <div
               className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto h-fit mb-5"
               style={{
@@ -193,43 +134,26 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
             >
               <h3 className="invisible text-[40px] text-center font-semibold">
                 <TimeCounter
-                  startingHour={startedHour}
-                  sessionStarted={sessionStarted}
-                  setLoading={(e) => setLoading(e)}
+                  startingHour={startedAt}
+                  sessionStarted={!!startedAt}
                 />
               </h3>
             </div>
           ) : (
             <h3 className="text-[40px] text-center font-semibold">
               <TimeCounter
-                startingHour={startedHour}
-                sessionStarted={sessionStarted}
-                setLoading={(e) => setLoading(e)}
+                startingHour={startedAt}
+                sessionStarted={!!startedAt}
               />
             </h3>
           )}
-          {loading ? (
-            <div
-              className="animate-pulse bg-gray-400/50 rounded-md w-fit mx-auto"
-              style={{
-                animationDelay: `${2 * 0.05}s`,
-                animationDuration: "1s",
-              }}
-            >
-              <div className="invisible">
-                <StartingHour startingHour={startedHour}/>
-                <p className="invisible">
-                  Vous êtes au <span className="italic">Gourmets Palace</span>
-                </p>
-              </div>
+          {startedAt ? (
+            <div>
+              <StartingHour startingHour={startedAt} />
+              <p className="text-center py-2">
+                Vous êtes au <span className="italic">{siteName}</span>
+              </p>
             </div>
-          ) : sessionStarted ? (
-              <div>
-                <StartingHour startingHour={startedHour} />
-                <p className="text-center py-2">
-                  Vous êtes au <span className="italic">{siteName}</span>
-                </p>
-              </div>
           ) : (
             <button
               onClick={(e) => startSession(e)}
@@ -239,8 +163,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               <PlayCircleIcon />
             </button>
           )}
-          {loading ? (
-
+          {!startedAt ? (
             <button
               className="mt-2 w-12 h-12 linearBackground rounded-full flex items-center justify-center animate-pulse bg-gray-400/50"
               style={{
@@ -250,7 +173,6 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
             >
               <ChevronDoubleDownIcon className="w-6 h-6 text-white invisible" />
             </button>
-            
           ) : (
             <button
               className="mt-2 w-12 h-12 linearBackground rounded-full animate-bounce flex items-center justify-center"
@@ -258,9 +180,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
             >
               <ChevronDoubleDownIcon className="w-6 h-6 text-white" />
             </button>
-
           )}
-
         </div>
           <div className="flex flex-col gap-8 h-full min-h-screen" ref={ticketsRef}>
             {ticketsWithoutImmat > 0 ? (
@@ -270,14 +190,14 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
             )}
             <button
               className="rounded-full bg-green-500 text-white p-2 min-h-fit w-1/2 hover:bg-white hover:text-green-500 flex justify-center items-center gap-2 transition-all"
-              onClick={(e) => refreshTickets()}
+              onClick={() => {refetch()}}
             >
               Rafraîchir
-              <ArrowPathIcon className={`h-6 w-6 ${loading && 'animate-spin'}`} />
+              <ArrowPathIcon className={`h-6 w-6 ${isTicketsLoading && 'animate-spin'}`} />
             </button>
             <div className="text-white min-h-fit grid grid-cols-1 gap-4">
-              {tickets &&
-                tickets
+              {ticketsData &&
+                ticketsData.tickets
                   .slice()
                   .sort((a, b) => new Date(b.scannedAt) - new Date(a.scannedAt))
                   .map((ticket, index) => {
@@ -285,11 +205,10 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
                       <motion.div key={index} initial="hidden" variants={slideIn('left', 'tween', index * 0.25, 0.5)} whileInView="show" viewport={{ once: true }} >
                         <TicketDashboard
                           ticketData={ticket}
-                          refreshTickets={refreshTickets}
-                          loading={loading}
-                          setLoading={(e) => setLoading(e)}
+                          refreshTickets={refetch}
+                          loading={isTicketsLoading}
                           index={index}
-                          tickets={tickets}
+                          tickets={ticketsData.tickets}
                           setTickets={(e) => setTickets(e)}
                         />
                       </motion.div>
@@ -303,7 +222,7 @@ const DashboardLogged = ({ siteName, sessionId, userName }) => {
               initial={{ opacity: 0}}
               animate={{ opacity: 1}}
             >
-              <UserAccountNav sessionId={sessionId} startedHour={startedHour} />
+              <UserAccountNav sessionId={sessionId} startedHour={startedAt} />
             </motion.div>
           )}
       </div>

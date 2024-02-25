@@ -15,17 +15,12 @@ import DashboardNotLogged from '@/app/components/dashboardnotlogged';
 const Dashboard = async () => {
 
   const session = await getServerSession(authOptions);
-
-  const startSession = (e) => {
-    e.preventDefault();
-    return null
-  }
-
+  console.log('session', session)
 
   if (!session) {
     return <DashboardNotLogged />
   } else {
-    return <DashboardLogged siteName={session.user.siteName} sessionId={session.user.sessionId} userName={session.user.name} />
+    return <DashboardLogged siteName={session.user.siteName} siteId={session.user.siteId} sessionId={session.user.sessionId} startedAt={session.user.startingHourSession} userName={session.user.name} />
   }
 }
 

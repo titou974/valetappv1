@@ -3,48 +3,43 @@ import { useEffect, useState } from "react";
 import formatHour from "@/lib/formathour";
 import axios from "axios";
 
-const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index, tickets, setTickets}) => {
+const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
     const [immatriculation, setImmatriculation] = useState('');
     const [editImmat, setEditImmat] = useState(false);
+    const [loadingTickets, setLoadingTickets] = useState(false);
+    console.log('refreshTickets', refreshTickets)
 
     const updateTicketImmatriculation = async (ticketId, immatriculation) => {
-        setLoading(true);
+        setLoadingTickets(true);
         try {
-            const response = await axios.patch(`/api/ticket/${ticketId}`, {
+            await axios.patch(`/api/ticket/${ticketId}`, {
                 immatriculation: immatriculation,
             });
+            setImmatriculation(immatriculation);
         } catch (error) {
-            console.log("patch ticket failed", error.message);
+            console.error("patch ticket failed", error.message);
+        } finally {
+            refreshTickets(); 
+            setLoadingTickets(false);
         }
-        setLoading(false);
     };
-
-    const updateTicketsArray = (ticketIndex, newImmat) => {
-        const newTickets = [...tickets].slice().sort((a, b) => new Date(b.scannedAt) - new Date(a.scannedAt));
-        newTickets[ticketIndex] = {
-        ...newTickets[ticketIndex],
-        immatriculation: newImmat
-        };
-        setTickets(newTickets);
-        setImmatriculation(newImmat);
-    }
 
     const handleImmatriculationBlur = (e) => {
         if (immatriculation) {
             updateTicketImmatriculation(ticketData.id, immatriculation);
             setEditImmat(false);  
         }
-    };
+    }
 
     useEffect(() => {
-        if (!ticketData.immatriculation || ticketData.immatriculation === "") {
-            setEditImmat(true)
-        }
+        setImmatriculation(ticketData.immatriculation || '');
+        setEditImmat(!ticketData.immatriculation);
+        setLoadingTickets(false);
     }, [ticketData.immatriculation])
 
     return (
         <>  
-            {loading ? (
+            {loadingTickets || loading ? (
                 <div className="ticketDashboardBackground p-4 rounded-md flex flex-col justify-between min-h-[150px] max-h-40 animate-pulse" style={{ animationDelay: `${index * 0.1}s`, animationDuration: "1s"}}>
                     <div className="flex justify-between items-center invisible">
                         <div className="relative w-fit">
@@ -67,7 +62,7 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
                         <div className="relative w-fit">
                             {!editImmat && (
                                 <div className="relative">
-                                    <p>{ticketData.immatriculation}</p>
+                                    <p>{immatriculation.toUpperCase()}</p>
                                     <button onClick={(e) => setEditImmat(true)} className="absolute top-[-10px] right-[-50px] bg-primary text-black rounded-full p-2 hover:bg-white transition-all"><PencilSquareIcon className="w-4 h-4"/></button>
                                 </div>
                             )}  
@@ -75,11 +70,12 @@ const TicketDashboard = ({ticketData, refreshTickets, loading, setLoading, index
                             <>
                                 <input 
                                     type="text" 
-                                    value={ticketData.immatriculation || ''}
-                                    onChange={(e) => updateTicketsArray(index, e.target.value.toUpperCase())}
+                                    value={immatriculation}
+                                    onChange={(e) => setImmatriculation(e.target.value)}
                                     onBlur={handleImmatriculationBlur}
                                     className="rounded-md p-2 text-black uppercase w-fit text-[14px]" 
                                     placeholder="Immatriculation"
+                                    maxLength={11}
                                 />
                                 <div className="rounded-md absolute top-[-20px] right-[-10px] px-2 py-1 bg-[#272727] text-base shadow-lg flex justify-center gap-2 items-center">
                                     <p>À compléter</p>

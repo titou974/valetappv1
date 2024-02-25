@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from 'next-auth/react';
 import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
-import useSessionRedirection from "@/app/stores/session";
+import useSessionRedirection from "@/app/stores/sessionredirection";
 import useSite from "@/app/stores/site";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

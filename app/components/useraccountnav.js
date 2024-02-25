@@ -7,14 +7,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UserAccountNav = ({sessionId, sessionStarted}) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
     const handleSignOut = async e => {
-      e.preventDefault();
-      setLoading(true);
+      e.preventDefault()
+      setLoading(true)
       try {
         const response = await axios.patch(`/api/session/${sessionId}`, {
           endAt: new Date(),
-        });
+        })
       } catch(error) {
         console.log('patch session failed')
       } finally {
@@ -23,7 +23,7 @@ const UserAccountNav = ({sessionId, sessionStarted}) => {
           callbackUrl: `${window.location.origin}/done?session=${sessionId}`
         })
       }
-    };
+    }
 
 
   return (
