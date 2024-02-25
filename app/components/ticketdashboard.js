@@ -2,31 +2,20 @@ import { ClockIcon, PencilSquareIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import formatHour from "@/lib/formathour";
 import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { patchTicket } from "../stores/patchticket";
 
 const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
     const [immatriculation, setImmatriculation] = useState('');
     const [editImmat, setEditImmat] = useState(false);
-    const [loadingTickets, setLoadingTickets] = useState(false);
-    console.log('refreshTickets', refreshTickets)
 
-    const updateTicketImmatriculation = async (ticketId, immatriculation) => {
-        setLoadingTickets(true);
-        try {
-            await axios.patch(`/api/ticket/${ticketId}`, {
-                immatriculation: immatriculation,
-            });
-            setImmatriculation(immatriculation);
-        } catch (error) {
-            console.error("patch ticket failed", error.message);
-        } finally {
-            refreshTickets(); 
-            setLoadingTickets(false);
-        }
-    };
+    const { mutate, isLoading: loadingTickets } = useMutation({ mutationFn: patchTicket, onSuccess: () => {
+        refreshTickets();
+    }, });
 
     const handleImmatriculationBlur = (e) => {
         if (immatriculation) {
-            updateTicketImmatriculation(ticketData.id, immatriculation);
+            mutate({ ticketId: ticketData.id, immatriculation });
             setEditImmat(false);  
         }
     }
@@ -34,7 +23,6 @@ const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
     useEffect(() => {
         setImmatriculation(ticketData.immatriculation || '');
         setEditImmat(!ticketData.immatriculation);
-        setLoadingTickets(false);
     }, [ticketData.immatriculation])
 
     return (
