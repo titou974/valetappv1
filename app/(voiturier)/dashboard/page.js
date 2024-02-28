@@ -1,13 +1,5 @@
 import { authOptions } from '@/lib/auth';
-import axios from 'axios';
 import { getServerSession } from 'next-auth';
-import Link from 'next/link';
-import styles from '@/app/components/style';
-import UserAccountNav from '@/app/components/useraccountnav';
-import TimeCounter from '@/app/components/timecounter';
-import StartingHour from '@/app/components/startinghour';
-import { PlayCircleIcon } from '@heroicons/react/20/solid';
-import style from "../../startbutton.module.css";
 import DashboardLogged from '@/app/components/dashboardlogged';
 import DashboardNotLogged from '@/app/components/dashboardnotlogged';
 

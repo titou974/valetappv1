@@ -16,10 +16,11 @@ import TicketDashboard from "./ticketdashboard";
 import { slideIn, textVariant } from "@/lib/motion";
 import { motion } from "framer-motion";
 import useTicketsOfSession from "../stores/ticketsofsession";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DashboardLogged = ({ siteName, siteId, sessionId, startedAt, userName }) => {
   const [sessionStarted, setSessionStarted] = useState(false);
-  const [tickets, setTickets] = useState([]);
   const [isFooterVisible, setIsFooterVisible] = useState(true);
   const [ticketsWithoutImmat, setTicketsWithoutImmat] = useState(null);
   const [showNavbarTickets, setShowNavbarTickets] = useState(false);
@@ -29,24 +30,26 @@ const DashboardLogged = ({ siteName, siteId, sessionId, startedAt, userName }) =
 
   const startSession = async (e) => {
     e.preventDefault();
-    setStartedHour(new Date());
-    setSessionStarted(true);
     try {
       const response = await axios.patch(`/api/session/${sessionId}`, {
         startedAt: new Date(),
       });
-      setStartedHour(response.data.startedAt);
-      setRestaurantId(response.data.restaurantId);
+
     } catch (error) {
       console.log("patch session failed", error.message);
     } 
   };
 
-  const { data: ticketsData, isLoading: isTicketsLoading, isError, refetch } = useTicketsOfSession({ siteId, startedAt })
+  const { data: ticketsData, isFetching: isTicketsLoading, isError, isSuccess, refetch } = useTicketsOfSession({ siteId, startedAt })
   
-  useEffect(() => {
-    setTicketsWithoutImmat(ticketsData?.tickets.filter(ticket => !ticket.immatriculation).length);
-  }, [ticketsData?.tickets])
+  const refreshTickets = () => {
+    refetch()
+    if (isSuccess) {
+      toast.success('Tickets rafraîchis')
+    } else {
+      toast.error('Erreur lors du rafraîchissement des tickets. Si le problème persiste, contactez le support')
+    }
+  } 
 
   useEffect(() => {
     const ref = footerRef.current
@@ -83,7 +86,7 @@ const DashboardLogged = ({ siteName, siteId, sessionId, startedAt, userName }) =
       },
       {
         root: null,
-        threshold: 0.5, // Adjust threshold as needed
+        threshold: 0.5, 
       }
     );
 
@@ -108,6 +111,18 @@ const DashboardLogged = ({ siteName, siteId, sessionId, startedAt, userName }) =
 
   return (
     <div className="bg-black h-full w-full text-white">
+      <ToastContainer
+        position="top-center"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={`fixed top-0 gradientTop w-full ${styles.padding} z-50`}>
         {!showNavbarTickets && (
           <motion.div initial='hidden' animate='show' exit='hidden' variants={textVariant(0.25)}>
@@ -190,7 +205,7 @@ const DashboardLogged = ({ siteName, siteId, sessionId, startedAt, userName }) =
             )}
             <button
               className="rounded-full bg-green-500 text-white p-2 min-h-fit w-1/2 hover:bg-white hover:text-green-500 flex justify-center items-center gap-2 transition-all"
-              onClick={() => {refetch()}}
+              onClick={() => {refreshTickets()}}
             >
               Rafraîchir
               <ArrowPathIcon className={`h-6 w-6 ${isTicketsLoading && 'animate-spin'}`} />
@@ -208,8 +223,6 @@ const DashboardLogged = ({ siteName, siteId, sessionId, startedAt, userName }) =
                           refreshTickets={refetch}
                           loading={isTicketsLoading}
                           index={index}
-                          tickets={ticketsData.tickets}
-                          setTickets={(e) => setTickets(e)}
                         />
                       </motion.div>
                     );

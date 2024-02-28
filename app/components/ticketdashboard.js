@@ -13,7 +13,7 @@ const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
         refreshTickets();
     }, });
 
-    const handleImmatriculationBlur = (e) => {
+    const handleImmatriculationBlur = () => {
         if (immatriculation) {
             mutate({ ticketId: ticketData.id, immatriculation });
             setEditImmat(false);  
@@ -49,7 +49,7 @@ const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
                     <div className="flex justify-between items-center">
                         <div className="relative w-fit">
                             {!editImmat && (
-                                <div className="relative">
+                                <div className="relative font-bold">
                                     <p>{immatriculation.toUpperCase()}</p>
                                     <button onClick={(e) => setEditImmat(true)} className="absolute top-[-10px] right-[-50px] bg-primary text-black rounded-full p-2 hover:bg-white transition-all"><PencilSquareIcon className="w-4 h-4"/></button>
                                 </div>

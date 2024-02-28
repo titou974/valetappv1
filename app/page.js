@@ -11,41 +11,15 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from "next/navigation";
-
+import useSessionRedirection from "@/app/stores/sessionredirection";
 
 const roboto_mono = Roboto_Mono({ subsets: ['latin'] })
 
-const getSession = async () => {
-  let siteData = {};
-  try {
-    const response = await axios.get(`/api/session`);
-    siteData = response.data;
-  } catch (error) {
-    console.log("Error Session:", error.message)
-  }
-  return siteData;
-}
-
 const Home = () => {
 
-  const [authenticated, setAuthenticated] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    const getSessionData = async () => {
-      const sessionData = await getSession();
-      if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
-        setAuthenticated(false);
-      } else {
-        setAuthenticated(true);
-        router.push("/dashboard");
-      }
-    }
-    getSessionData();
-  }, [])
-
+  useSessionRedirection();
   const introductionTexts = ["Bonjour, je suis Nestor, votre assistant voiturier.", "Scannez le QR code proposé par votre voiturier pour créer votre ticket."]
-  const typewriterRef = useRef(null);
+
   return (
     <main className="w-full bg-tertiary h-screen relative">
       <div className={`${styles.padding} flex flex-col justify-center h-full gap-8`}>
@@ -88,11 +62,6 @@ const Home = () => {
           <Image src="/nestor.png" width={400} height={400} alt="Nestor during his job" />
         </div>
         <div href="/" className="w-full flex flex-col items-center gap-20 text-white">
-          {/* <div className='flex flex-col items-center gap-5'>
-            <p className='text-[20px]'>Scanner le QR Code</p>
-            <QrCode />
-          </div>
-          <p className='text-[20px]'>Ou</p> */}
           <div className='w-full flex flex-col gap-5'>
             <div className='text-center mx-auto w-full flex justify-center items-center'>
               <p className={`text-center font-bold mr-4 text-[26px]`}>Scanner le QR Code</p>
