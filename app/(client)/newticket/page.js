@@ -2,20 +2,18 @@
 
 import styles from "@/app/components/style";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
 import useTicket from "@/app/stores/ticket";
+import { useSearchParams } from "next/navigation";
+
 
 const Register = () => {
-
   const searchParams = useSearchParams();
-  const site = searchParams.get("site");
+  const siteId = searchParams.get("site");
+
   const router = useRouter();
-
-  const { data, isLoading } = useTicket({ site, router })
-
-  console.log("error", !data)
+  const { data, isLoading } = useTicket({ siteId, router })
 
   return (
     <div className="w-full h-screen bg-secondary">

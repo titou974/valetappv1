@@ -23,10 +23,6 @@ const Home = () => {
   return (
     <main className="w-full bg-tertiary h-screen relative">
       <div className={`${styles.padding} flex flex-col justify-center h-full gap-8`}>
-        {/* <div>
-          <h3 className={styles.subText}>Je suis votre assistant,</h3>
-          <h2 className={styles.headText}>Nestor</h2>
-        </div> */}
         <div className={`mx-auto relative ${roboto_mono.className}`}>
           <div className='absolute top-1 right-5'>
             <div className='relative bg-[#1b2e35] py-5 px-5 rounded-full w-[330px] min-w-[330px] h-[120px] shadow-xl border-white border-[2px] text-white'>
