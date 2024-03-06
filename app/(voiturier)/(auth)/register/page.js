@@ -3,39 +3,16 @@
 import styles from "@/app/components/style";
 import Link from "next/link";
 import Input from "@/app/components/inputvalet";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
-import SelectInput from "@/app/components/selectinput";
 import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
-
-
-
-const getSite = async (id) => {
-  let siteData = {};
-  try {
-    const apiUrl = `${window.location.protocol}//${window.location.host}`;
-    const response = await axios.get(`${apiUrl}/api/site/${id}`)
-    siteData = response.data;
-  } catch (error) {
-    console.log('Error fetching user:', error.message);
-  }
-  return siteData;
-}
-
-const getSession = async () => {
-  let siteData = {};
-  try {
-    const response = await axios.get(`/api/session`);
-    siteData = response.data;
-  } catch (error) {
-    console.log("Error Session:", error.message)
-  }
-  return siteData;
-};
+import useSessionRedirection from "@/app/stores/sessionredirection";
+import useSite from "@/app/stores/site";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -45,58 +22,17 @@ const Register = () => {
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [loadingDiv, setLoadingDiv] = useState(true);
-
-  const [siteExists, setSiteExists] = useState(false);
-  const [siteData, setSiteData] = useState(null);
-  const [siteDb, setSiteDb] = useState(null);
-
-  const [companySelected, setCompanySelected] = useState(null);
-  const [companiesDb, setCompaniesDb] = useState(null);
-  const searchParams = useSearchParams();
-  const site = searchParams.get("site");
+  const {data, isLoading, isError} = useSite();
   const router = useRouter();
-  const [authenticated, setAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const checkSite = async () => {
-      const siteData = await getSite(site);
-
-      if (!siteData || Object.keys(siteData).length === 0) {
-        setSiteExists(false);
-      } else {
-        setSiteExists(true);
-        setSiteData(siteData);
-        setCompanySelected({id: siteData.companyId})
-      }
-    };
-
-    site ? checkSite() : setSiteExists(false);
-      setTimeout(() => {
-        setLoadingDiv(false);
-      }, 1000);
-  }, [site, siteExists, companySelected?.id])
-
-
-  useEffect(() => {
-    const getSessionData = async () => {
-      const sessionData = await getSession();
-      if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
-        setAuthenticated(false);
-      } else {
-        setAuthenticated(true);
-        router.push("/dashboard");
-      }
-    }
-    getSessionData();
-  }, [])
+  useSessionRedirection()
 
   const handleRegister = async e => {
     e.preventDefault();
     setLoading(true);
     setFillTextAlert(false);
     setPhoneNumberExist(false);
-    if (!companySelected.id && !siteData.id) {
+    if (!data || !data.id) {
       return null;
     }
     try {
@@ -104,48 +40,95 @@ const Register = () => {
         name: name,
         phoneNumber: phoneNumber,
         password: password,
-        companyId: companySelected.id
+        companyId: data.companyId,
 
       });
-      const data = await response.data;
-      if (data.userId === null && data.message ===  "Un voiturier avec ce numéro existe déjà.") {
-        setPhoneNumberExist(true);
-        setLoading(false)
-      } else if (data.userId === null && data.message ===  "Invalid data received.") {
-        setFillTextAlert(true);
-        setLoading(false)
-      } else if (data.userId === null && data.message ===  "Invalid phone number received.") {
-        setLoading(false);
-        return null;
-      } else if (data.userId) {
-          const data = await signIn('credentials', {
-            phoneNumber,
-            password,
-            site: siteData.id,
-            redirect: false,
-          });
-          if (!data?.ok) {
-            console.log("Sign-in API call failed:", data.error);
-            router.push("/sign-in");
-          } else {
-            router.push("/dashboard");
-          }
+      const responseData = await response.data;
+      if (responseData.userId === null && responseData.message ===  "Un voiturier avec ce numéro existe déjà.") {
+        toast.error("Un voiturier avec ce numéro existe déjà.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
+      } else if (responseData.userId === null && responseData.message ===  "Invalid data received.") {
+        toast.error("Remplissez tout les champs.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
+      } else if (responseData.userId === null && responseData.message ===  "Invalid phone number received.") {
+        toast.error("Le numéro de téléphone donné n'est pas valide", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          })
+      } else if (responseData.userId) {
+        const signInData = await signIn('credentials', {
+          phoneNumber,
+          password,
+          site: data.id,
+          redirect: false,
+        })
+        if (!signInData?.ok) {
+          console.log("Sign-in API call failed:", signInData.error);
+          router.push("/sign-in");
+        } else {
+          router.push("/dashboard");
+        }
       }
     } catch(error) {
+        toast.error("Oups... Une erreur à eu lieu. Réessayez dans quelques instants et si l'erreur persiste contactez le support.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
       console.log("creation of Voiturier failed", error.message);
+    } finally {
       setLoading(false);
     }
   }
 
   return (
     <div className="w-full h-screen bg-black">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
         <div>
           <h3 className={styles.subText}>Remplissez</h3>
           <h2 className={styles.headText}>vos Informations</h2>
         </div>
         <div className="w-full relative flex flex-col justify-center gap-10">
-          {loadingDiv ? (
+          {isLoading ? (
             <>
               <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
                 <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
@@ -157,26 +140,11 @@ const Register = () => {
                 <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
               </div>
             </>
-            ) : (siteExists ? (
+            ) : (data && data.id ? (
               <>
                 <Input placeholder="Prénom" input={name} setInput={(e) => setName(e)} />
-                <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
+                <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} />
                 <Input placeholder="Password" input={password} setInput={(e) => setPassword(e)} />
-                {!fillTextAlert && phoneAlert && (
-                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-                    <p>Le numéro de téléphone n&apos;est pas valide</p>
-                  </div>
-                )}
-                {phoneNumberExist && (
-                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-                    <p>Un voiturier possède déjà ce numéro de téléphone.</p>
-                  </div>
-                )}
-                {fillTextAlert && (
-                  <div className="w-full bg-amber-600 text-white font-semibold px-[20px] py-2 rounded-md absolute top-[-90px]">
-                    <p>Remplissez tous les champs.</p>
-                  </div>
-                )}
               </>
             ) : (
               <>
@@ -192,7 +160,7 @@ const Register = () => {
               </>
             ))}
         </div> 
-        {loadingDiv ? (
+        {isLoading ? (
           <div className={`flex flex-col justify-between gap-5`}>
             <button onClick={handleRegister} style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}} className="animate-pulse bg-gray-400/50 rounded-full w-full py-3 flex items-center justify-center gap-2">
               <p className="text-black font-semibold text-[26px] invisible">Créer votre compte</p>
@@ -212,7 +180,7 @@ const Register = () => {
             </div>
           </div>
           ) : (
-            <div className={`flex flex-col justify-between gap-5 ${!siteExists && "invisible"}`}>
+            <div className={`flex flex-col justify-between gap-5 ${!data && "invisible"}`}>
               <button onClick={handleRegister} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors">
                 <p className="text-black font-semibold text-[26px]">Créer votre compte</p>
                 <div className="w-[26px]">
@@ -221,7 +189,7 @@ const Register = () => {
                   </svg>
                 </div>
               </button>
-              <Link href={`sign-in${siteData === null ? "" : `?site=${siteData?.id}`}`} className="mx-auto w-2/3 py-[12px] rounded-full font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 text-primary hover:text-black">
+              <Link href={`sign-in${data === null ? "" : `?site=${data?.id}`}`} className="mx-auto w-2/3 py-[12px] rounded-full font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 text-primary hover:text-black">
                 <p>Se Connecter</p>
                 <div className="w-[20px]">
                   <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

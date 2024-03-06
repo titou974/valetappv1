@@ -3,120 +3,30 @@
 import styles from "@/app/components/style";
 import Link from "next/link";
 import Input from "@/app/components/inputvalet";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
-import SelectInput from "@/app/components/selectinput";
 import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
+import useSessionRedirection from "@/app/stores/sessionredirection";
+import useSite from "@/app/stores/site";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-
-
-const getSite = async (id) => {
-  let siteData = {};
-  try {
-    const apiUrl = `${window.location.protocol}//${window.location.host}`;
-    const response = await axios.get(`${apiUrl}/api/site/${id}`)
-    siteData = response.data;
-  } catch (error) {
-    console.log('Error fetching user:', error.message);
-  }
-  return siteData;
-}
-
-const getSites = async () => {
-  let siteData = {};
-  try {
-    const apiUrl = `${window.location.protocol}//${window.location.host}`;
-    const response = await axios.get(`${apiUrl}/api/site`)
-    siteData = response.data;
-  } catch (error) {
-    console.log('Error fetching user:', error.message);
-  }
-  return siteData;
-}
-
-const getSession = async () => {
-  let siteData = {};
-  try {
-    const response = await axios.get(`/api/session`);
-    siteData = response.data;
-  } catch (error) {
-    console.log("Error Session:", error.message)
-  }
-  return siteData;
-}
-
-const getCompanies = async () => {
-  let companyData = {};
-  try {
-    const apiUrl = `${window.location.protocol}//${window.location.host}`;
-    const response = await axios.get(`${apiUrl}/api/company`);
-    companyData = response.data;
-  } catch (error) {
-    console.log('Error fetching companies', error.message)
-  }
-  return companyData;
-}
 
 const LogIn = () => {
-
-  const searchParams = useSearchParams();
-  const site = searchParams.get("site");
-
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneAlert, setPhoneAlert] = useState(false);
   const [fillTextAlert, setFillTextAlert] = useState(false);
   const [password, setPassword] = useState("");
-  const [siteExists, setSiteExists] = useState(false);
-  const [siteData, setSiteData] = useState(null);
-  const [siteDb, setSiteDb] = useState(null);
   const [wrongPassword, setWrongPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [loadingDiv, setLoadingDiv] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
-
-  const [companySelected, setCompanySelected] = useState(null);
-  const [companiesDb, setCompaniesDb] = useState(null);
   const router = useRouter();
+  
 
-  useEffect(() => {
+  const {data, isLoading, isError} = useSite()
 
-    const checkSite = async () => {
-      setLoadingDiv(true);
-      const siteData = await getSite(site);
-
-      if (!siteData || Object.keys(siteData).length === 0) {
-        setSiteExists(false);
-      } else {
-        setSiteExists(true);
-        setSiteData(siteData);
-      }
-    };
-
-    site ? checkSite() : setSiteExists(false)
-
-    setTimeout(() => {
-        setLoadingDiv(false);
-      }, 1500);
-
-  }, [site, siteExists, companySelected?.id])
-
-  useEffect(() => {
-    const getSessionData = async () => {
-      const sessionData = await getSession();
-      if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
-        setAuthenticated(false);
-      } else {
-        setAuthenticated(true);
-        router.push("/dashboard");
-      }
-    }
-    getSessionData();
-  }, [])
-
+  useSessionRedirection()
 
   const handleLogIn = async e => {
     e.preventDefault();
@@ -125,22 +35,39 @@ const LogIn = () => {
     setFillTextAlert(false);
     setLoading(true);
 
-    if(!phoneNumber || !password || !siteData) {
-      setFillTextAlert(true);
+    if(!phoneNumber || !password || !data) {
       setLoading(false);
+      toast.error("Remplissez tout les champs.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       return;
     }
 
-    const data = await signIn('credentials', {
+    const session = await signIn('credentials', {
       phoneNumber,
       password,
-      site: siteData.id,
-      redirect: false, 
+      site: data.id,
+      redirect: false,  // Avoids automatic redirect
     });
 
-    if (!data?.ok) {
-      console.log("Sign-in API call failed:", data.error);
-      setWrongPassword(true);
+    if (!session?.ok) {
+      toast.error("Le mot de passe n'est pas correct.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
       setLoading(false);
     } else {
       router.push("/dashboard")
@@ -149,8 +76,20 @@ const LogIn = () => {
 
   return (
     <div className="w-full h-screen bg-black">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
-        {loadingDiv ? (
+        {isLoading ? (
           <div>
             <div className="animate-pulse bg-gray-400/50 rounded-md mb-3" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
               <h3 className={`${styles.subText} invisible`}>Bonjour</h3>
@@ -162,11 +101,11 @@ const LogIn = () => {
         )
         : (
           <>
-            {siteExists ? (
+            {data && !data.error ? (
               !phoneAlert && !fillTextAlert && !wrongPassword ? (
                   <div>
                     <h3 className={styles.subText}>Vous êtes au</h3>
-                    <h2 className={styles.headText}>{siteData.name}</h2>
+                    <h2 className={styles.headText}>{data.name}</h2>
                   </div>
                 ) : (
                   <div>
@@ -196,22 +135,25 @@ const LogIn = () => {
           </>
         )}
         <div className="w-full flex flex-col justify-center gap-10">
-          {loadingDiv ? (
+          {isLoading ? (
             <>
               <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+                <p className="text-[20px] py-3 px-5 invisible">Lorem ipsum dolor</p>
               </div>
               <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+                <p className="text-[20px] py-3 px-5 invisible">Lorem ipsum dolor</p>
+              </div>
+              <div className="transition-all animate-pulse bg-gray-400/50 rounded-md w-fit">
+                <p className="invisible">Mot de passe oublié ?</p>
               </div>
             </>
           ) : (
-            siteExists ? (
+            data ? (
               <>
                 <Input placeholder="Numéro de Téléphone" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} setPhoneAlert={(e) => setPhoneAlert(e)} />
                 <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
                 <div>
-                  <Link href={`forget${siteData === null ? "" : `?site=${siteData?.id}`}`} className="text-primary hover:text-white transition-all ps-[20px]">
+                  <Link href={`forget${data === null ? "" : `?site=${data?.id}`}`} className="text-primary hover:text-white transition-all">
                     <p>Mot de passe oublié ?</p>
                   </Link>
                 </div>
@@ -230,7 +172,7 @@ const LogIn = () => {
             </>
           ))}
         </div>
-        {loadingDiv ? (
+        {isLoading ? (
           <div className="flex flex-col justify-between gap-5">
             <button onClick={handleLogIn} className="w-full py-3 flex items-center justify-center gap-2 animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${5 * 0.05}s`, animationDuration: "1s"}}>
               <p className="text-black font-semibold text-[32px] invisible">Se Connecter</p>
@@ -240,7 +182,7 @@ const LogIn = () => {
                 </svg>
               </div>
             </button>
-            <Link href={`register${siteData === null ? "" : `?site=${siteData?.id}`}`} className="animate-pulse bg-gray-400/50 mx-auto w-2/3 py-[12px] rounded-full font-bold transition-colors flex justify-center items-center gap-2 text-primary hover:text-black" style={{ animationDelay: `${6 * 0.05}s`, animationDuration: "1s"}}>
+            <Link href={`register${data === null ? "" : `?site=${data?.id}`}`} className="animate-pulse bg-gray-400/50 mx-auto w-2/3 py-[12px] rounded-full font-bold transition-colors flex justify-center items-center gap-2 text-primary hover:text-black" style={{ animationDelay: `${6 * 0.05}s`, animationDuration: "1s"}}>
               <p className="invisible">Créer mon compte</p>
               <div className="w-[20px] invisible">
                 <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -250,7 +192,7 @@ const LogIn = () => {
             </Link>
           </div>
         ) : (
-            <div className={`flex flex-col justify-between gap-5 ${!siteExists && 'invisible'}`}>
+            <div className={`flex flex-col justify-between gap-5 ${!data && 'invisible'}`}>
               <button onClick={handleLogIn} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 transition-colors hover:bg-white">
                 <p className="text-black font-semibold text-[32px]">Se Connecter</p>
                 <div className="w-[26px]">
@@ -259,7 +201,7 @@ const LogIn = () => {
                   </svg>
                 </div>
               </button>
-              <Link href={`register${siteData === null ? "" : `?site=${siteData?.id}`}`} className="mx-auto w-2/3 py-[12px] rounded-full font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 text-primary hover:text-black">
+              <Link href={`register${data === null ? "" : `?site=${data?.id}`}`} className="mx-auto w-2/3 py-[12px] rounded-full font-bold hover:bg-primary transition-colors flex justify-center items-center gap-2 text-primary hover:text-black">
                 <p>Créer mon compte</p>
                 <div className="w-[20px]">
                   <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

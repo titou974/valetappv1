@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 export async function GET(req, { params }) {
     const restaurantId = req.nextUrl.searchParams.get('restaurantId')
     const startDate = new Date(req.nextUrl.searchParams.get('startDate'))
-    
 
     try {
         const tickets = await prisma.restaurant.findUnique({
