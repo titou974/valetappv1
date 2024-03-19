@@ -23,7 +23,7 @@ const TicketShow = () => {
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
         <div className="">
           <p className={styles.subTextBlack}>Bienvenue au</p>
-          <p className={styles.headTextBlack}>{isTicketLoading ?  <span className="animate-pulse bg-gray-400/50 rounded-md h-[50px]" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">Gourmet Galaxy</span></span> : ticketData?.restaurant.name}</p>
+          <p className={styles.headTextBlack}>{isTicketLoading ? <span className="animate-pulse bg-gray-400/50 rounded-md h-[50px]" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">Gourmet Galaxy</span></span> : ticketData?.restaurant.name}</p>
         </div>
         <Ticket isTicketLoading={isTicketLoading} ticketData={ticketData} companyData={companyData} />
         <div>

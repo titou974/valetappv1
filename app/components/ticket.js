@@ -1,7 +1,7 @@
 import {Accordion, AccordionItem} from "@nextui-org/react";
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import formatDateToFrench from '@/lib/formatdate';
-import style from "../ticket.module.css";
+import style from "../styles/ticket.module.css";
 import { cguContent } from '@/constants';
 
 const Ticket = ({ isTicketLoading, ticketData, companyData }) => { 

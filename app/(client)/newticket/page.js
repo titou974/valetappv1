@@ -6,7 +6,7 @@ import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
 import useTicket from "@/app/stores/ticket";
 import { useSearchParams } from "next/navigation";
-
+import ClientLayout from "@/app/layout/clientlayout";
 
 const Register = () => {
   const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ const Register = () => {
   const { data, isLoading } = useTicket({ siteId, router })
 
   return (
-    <div className="w-full h-screen bg-secondary">
+    <ClientLayout>
       <div className={`${styles.padding} flex flex-col justify-between h-full`}>
         {isLoading? (
           <div>
@@ -69,30 +69,30 @@ const Register = () => {
             }
           </>
         )}
-      <div href="/" className="mb-20">
-        {isLoading? (
-          <div className="w-full animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}}>
-            <p className="font-semibold text-[26px] invisible">Créer votre ticket</p>
-            <div className="w-[26px] invisible">
-              <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
+        <div className="mb-20">
+          {isLoading? (
+            <div className="w-full animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}}>
+              <p className="font-semibold text-[26px] invisible">Créer votre ticket</p>
+              <div className="w-[26px] invisible">
+                <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </div>
             </div>
-          </div>
-        ) : (
-          <button className={`bg-tertiary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors text-white hover:text-tertiary shadow-lg ${!data?.name && 'hidden'}`}>
-            <p className="font-semibold text-[26px]">Créer votre ticket</p>
-            <div className="w-[26px]">
-              <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </div>
-          </button>
-        )}
+          ) : (
+            <button className={`bg-tertiary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors text-white hover:text-tertiary shadow-lg ${!data?.name && 'hidden'}`}>
+              <p className="font-semibold text-[26px]">Créer votre ticket</p>
+              <div className="w-[26px]">
+                <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </div>
+            </button>
+          )}
         </div>
       </div>
       <LoadingModal isOpen={isLoading} setIsOpen={(e) => setIsLoading(e)} title="Création de votre ticket" />
-    </div>
+    </ClientLayout>
   )
 }
 

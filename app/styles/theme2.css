@@ -1,0 +1,7 @@
+html[data-theme="client"] {
+    --color-primary: #24A0ED;
+    --color-primary-content: white; 
+    --color-secondary: rgb(15, 76, 162); 
+    --color-base-content: black;  
+    --color-base-100: #E7E7E7;
+  }
