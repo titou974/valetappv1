@@ -10,17 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { signIn } from 'next-auth/react';
 import SelectInput from "@/app/components/selectinput";
 import LoadingModal from "@/app/components/loadingmodal";
-
-const getSession = async () => {
-  let siteData = {};
-  try {
-    const response = await axios.get(`/api/session`);
-    siteData = response.data;
-  } catch (error) {
-    console.log("Error Session:", error.message)
-  }
-  return siteData;
-};
+import useSessionRedirection from "@/app/stores/sessionredirection";
 
 const getSite = async (id) => {
   let siteData = {};
@@ -51,19 +41,7 @@ const ForgetPassword = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    const getSessionData = async () => {
-      const sessionData = await getSession();
-      if (!sessionData.authenticated || Object.keys(sessionData.authenticated).length === 0) {
-        console.log("pas de session");
-        setAuthenticated(false);
-      } else {
-        setAuthenticated(true);
-        router.push("/dashboard");
-      }
-    }
-    getSessionData();
-  }, [])
+  useSessionRedirection()
 
   useEffect(() => {
     const checkSite = async () => {
