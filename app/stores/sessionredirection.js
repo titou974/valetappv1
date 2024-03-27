@@ -11,7 +11,8 @@ export async function redirectToDashboardIfLogged({ queryKey }) {
   return data
 }
 
-export default function useSessionRedirection({ router }) {
+export default function useSessionRedirection() {
+  const router = useRouter()
   return useQuery({
     queryKey: ['session', router],
     queryFn: redirectToDashboardIfLogged,

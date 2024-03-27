@@ -1,16 +1,16 @@
 "use client"
 
-import styles from "@/app/components/style";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from 'next-auth/react';
 import { QrCodeIcon, ArrowRightIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/20/solid";
 import useSessionRedirection from "@/app/stores/sessionredirection";
 import useSite from "@/app/stores/site";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import VoiturierLayout from "@/app/layout/voiturierlayout";
 import { Button, Input, Link, Skeleton } from "@nextui-org/react";
+import Navbar from "@/app/components/navbar";
 
 
 const LogIn = () => {
@@ -70,31 +70,10 @@ const LogIn = () => {
 
   return (
     <VoiturierLayout>
-        {isLoading ? (
-          <div className='space-y-2'>
-            <Skeleton className="rounded-lg">
-              <div className='w-1/2 h-8 bg-gray-400/50 rounded-lg'></div>
-            </Skeleton>
-            <Skeleton className="rounded-lg">
-              <div className='w-1/2 h-10 bg-gray-400/50 rounded-lg'></div>
-            </Skeleton>
-          </div>
-        )
-        : (
-          <>
-            {data && !data.error ? (
-              <div>
-                <h3 className={styles.subText}>Vous êtes au</h3>
-                <h2 className={styles.headText}>{data.name}</h2>
-              </div>
-            ) : (
-              <div>
-                <h3 className={styles.subText}>Bonjour</h3>
-                <h2 className={styles.headText}>Prêt, à travailler ?</h2>
-              </div>
-            )
-            }
-          </>
+        {data && !data.error ? (
+          <Navbar subtitle='Vous êtes au' title={data.name} isLoading={isLoading} />
+        ) : (
+          <Navbar subtitle='Bonjour' title='Prêt, à travailler ?' isLoading={isLoading} />
         )}
         <div className="w-full flex flex-col justify-center gap-10">
           {isLoading ? (
@@ -152,9 +131,6 @@ const LogIn = () => {
           <Button onClick={() => router.push(`register${data && `?site=${data?.id}`}`)} color="primary" variant="light" radius='full' endContent={< ArrowRightIcon width={20}/>} isDisabled={!data}>
             Créer mon compte
           </Button>
-        </div>
-        <div className="text-center text-base text-foreground">
-          <p>Nestor App 🇫🇷</p>
         </div>
     </VoiturierLayout>
   )

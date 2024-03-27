@@ -36,11 +36,11 @@ const SessionDone = () => {
       } else {
         setSessionExist(true);
         setSessionData(session);
-        setSessionTime(formatTimeDifference(session.startedAt, session.endAt));
+        setSessionTime(formatTimeDifference(session.createdAt, session.endAt));
         setLoadingDiv(false);
       }
+      console.log(session.startedAt, session.endAt)
     }
-
     if (sessionId) {
       getSessionData();
     } else {

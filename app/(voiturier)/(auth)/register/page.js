@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import VoiturierLayout from "@/app/layout/voiturierlayout";
 import { Button, Input, Link, Skeleton } from "@nextui-org/react";
+import Navbar from "@/app/components/navbar";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -105,54 +106,48 @@ const Register = () => {
 
   return (
     <VoiturierLayout>
-        <div>
-          <h3 className={styles.subText}>Remplissez</h3>
-          <h2 className={styles.headText}>vos Informations</h2>
-        </div>
-        <div className="w-full relative flex flex-col justify-center gap-10">
-          {isLoading ? (
+      <Navbar subtitle='Remplissez' title='vos Informations' isLoading={isLoading} />
+      <div className="w-full relative flex flex-col justify-center gap-10">
+        {isLoading ? (
+          <>
+              <Skeleton className="rounded-lg">
+                <div className='w-full h-14 bg-gray-400/50 rounded-lg'></div>
+              </Skeleton>
+              <Skeleton className="rounded-lg">
+                <div className='w-full h-14 bg-gray-400/50 rounded-lg'></div>
+              </Skeleton>
+              <Skeleton className="rounded-lg">
+                <div className='w-full h-14 bg-gray-400/50 rounded-lg'></div>
+              </Skeleton>
+          </>
+          ) : (data && data.id ? (
             <>
-              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+              <Input label="Prénom" input={name} setInput={(e) => setName(e)} />
+              <Input label="Numéro de Téléphone" type="tel" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} />
+              <Input label="Mot de passe" input={password} setInput={(e) => setPassword(e)} />
+            </>
+          ) : (
+            <>
+              <div className='text-center text-foreground mx-auto w-full flex justify-center items-center'>
+                <p className={`text-center font-bold mr-4 text-[26px]`}>Scanner le QR Code</p>
+                <div className='text-primary w-[40px]'>
+                  <QrCodeIcon  />
+                </div>
               </div>
-              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
-              </div>
-              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[20px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
+              <div className="text-foreground text-base text-center">
+                <p>pour vous créer un compte</p>
               </div>
             </>
-            ) : (data && data.id ? (
-              <>
-                <Input label="Prénom" input={name} setInput={(e) => setName(e)} />
-                <Input label="Numéro de Téléphone" type="tel" input={phoneNumber} setInput={(e) => setPhoneNumber(e)} />
-                <Input label="Mot de passe" input={password} setInput={(e) => setPassword(e)} />
-              </>
-            ) : (
-              <>
-                <div className='text-center text-foreground mx-auto w-full flex justify-center items-center'>
-                  <p className={`text-center font-bold mr-4 text-[26px]`}>Scanner le QR Code</p>
-                  <div className='text-primary w-[40px]'>
-                    <QrCodeIcon  />
-                  </div>
-                </div>
-                <div className="text-foreground text-base text-center">
-                  <p>pour vous créer un compte</p>
-                </div>
-              </>
-            ))}
-        </div>
-        <div className={`flex flex-col justify-between gap-5`}>
-          <Button onClick={handleRegister} className='fill-primary-foreground' size="lg" color="primary" variant="solid" radius='full' endContent={< ArrowRightIcon width={20}/>} isLoading={loading} isDisabled={!data}>
-            Créer votre compte
-          </Button>
-          <Button onClick={() => router.push(`sign-in${data && `?site=${data?.id}`}`)} color="primary" variant="light" radius='full' endContent={< ArrowRightIcon width={20}/>} isDisabled={!data}>
-            Se connecter
-          </Button>
-        </div>
-        <div className="text-center">
-          <p className="text-foreground">Nestor App 🇫🇷</p>
-        </div>
+          ))}
+      </div>
+      <div className={`flex flex-col justify-between gap-5`}>
+        <Button onClick={handleRegister} className='fill-primary-foreground' size="lg" color="primary" variant="solid" radius='full' endContent={< ArrowRightIcon width={20}/>} isLoading={loading} isDisabled={!data}>
+          Créer votre compte
+        </Button>
+        <Button onClick={() => router.push(`sign-in${data && `?site=${data?.id}`}`)} color="primary" variant="light" radius='full' endContent={< ArrowRightIcon width={20}/>} isDisabled={!data}>
+          Se connecter
+        </Button>
+      </div>
     </VoiturierLayout>
   )
 }

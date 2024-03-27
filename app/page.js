@@ -13,12 +13,12 @@ const roboto_mono = Roboto_Mono({ subsets: ['latin'] })
 const Home = () => {
   const router = useRouter()
 
-  useSessionRedirection(router);
+  useSessionRedirection();
   const introductionTexts = ["Bonjour, je suis Nestor, votre assistant voiturier.", "Scannez le QR code proposé par votre voiturier pour créer votre ticket."]
 
   return (
     <main className="w-full bg-primary text-primary-foreground h-screen relative">
-      <div className={`${styles.padding} flex flex-col justify-center h-full gap-8`}>
+      <div className={`${styles.padding} flex flex-col justify-center h-full gap-8 max-w-screen-sm mx-auto`}>
         <div className={`mx-auto relative ${roboto_mono.className}`}>
           <div className='absolute top-1 right-5'>  
             <div className='relative bg-[#1b2e35] py-5 px-5 rounded-full w-[330px] min-w-[330px] h-[120px] shadow-xl border-white border-[2px]'>

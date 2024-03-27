@@ -4,12 +4,14 @@ import formatHour from "@/lib/formathour";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { patchTicket } from "../stores/patchticket";
+import { Input, Chip } from "@nextui-org/react";
+import { toast } from "react-toastify";
 
 const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
     const [immatriculation, setImmatriculation] = useState('');
     const [editImmat, setEditImmat] = useState(false);
 
-    const { mutate, isLoading: loadingTickets } = useMutation({ mutationFn: patchTicket, onSuccess: () => {
+    const { mutate, isLoading: loadingTickets, isSuccess, isError } = useMutation({ mutationFn: patchTicket, onSuccess: () => {
         refreshTickets();
     }, });
 
@@ -24,6 +26,14 @@ const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
         setImmatriculation(ticketData.immatriculation || '');
         setEditImmat(!ticketData.immatriculation);
     }, [ticketData.immatriculation])
+
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success('Immatriculation modifiée')
+        } else if (isError) {
+            toast.error('Erreur lors de la modification de l\'immatriculation')
+        }
+    }, [isSuccess, isError])
 
     return (
         <>  
@@ -55,21 +65,10 @@ const TicketDashboard = ({loading, ticketData, index, refreshTickets}) => {
                                 </div>
                             )}  
                             {editImmat && (
-                            <>
-                                <input 
-                                    type="text" 
-                                    value={immatriculation}
-                                    onChange={(e) => setImmatriculation(e.target.value)}
-                                    onBlur={handleImmatriculationBlur}
-                                    className="rounded-md p-2 text-black uppercase w-fit text-[14px]" 
-                                    placeholder="Immatriculation"
-                                    maxLength={11}
-                                />
-                                <div className="rounded-md absolute top-[-20px] right-[-10px] px-2 py-1 bg-[#272727] text-base shadow-lg flex justify-center gap-2 items-center">
-                                    <p>À compléter</p>
-                                    <span className="animate-ping h-2 w-2 rounded-full bg-orange-400 opacity-75"></span>
-                                </div>
-                            </>
+                            <div className="relative">
+                                <Input label="Immatriculation" size="sm" value={immatriculation} maxLength={11} onChange={(e) => setImmatriculation(e.target.value)} onBlur={handleImmatriculationBlur} className="max-w-[200px] uppercase" placeholder="AA-001-AA" />
+                                <Chip className="absolute top-[-20px] right-[-10px] bg-background" color="warning" variant="dot">à Compléter</Chip>
+                            </div>
                             )}
                         </div>
                         <div className="border-2 border-white border-solid rounded-md p-2 bg-[#272727] shadow-xl">
