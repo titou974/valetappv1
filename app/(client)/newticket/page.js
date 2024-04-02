@@ -6,7 +6,7 @@ import LoadingModal from "@/app/components/loadingmodal";
 import { QrCodeIcon } from "@heroicons/react/20/solid";
 import useTicket from "@/app/stores/ticket";
 import { useSearchParams } from "next/navigation";
-import ClientLayout from "@/app/layout/clientlayout";
+import ClientLayout from "@/app/layouts/clientlayout";
 
 const Register = () => {
   const searchParams = useSearchParams();

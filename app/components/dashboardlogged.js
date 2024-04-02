@@ -1,17 +1,18 @@
 "use client";
 
-import styles from "./style";
-import { useState, useEffect, useRef } from "react";
-import UserAccountNav from "./useraccountnav";
-import TicketDashboard from "./ticketdashboard";
-import { slideIn } from "@/lib/motion";
-import { motion } from "framer-motion";
+import styles from "./style"
+import { useState, useEffect, useRef } from "react"
+import UserAccountNav from "./useraccountnav"
+import TicketDashboard from "./ticketdashboard"
+import { slideIn } from "@/lib/motion"
+import { motion } from "framer-motion"
 import useTicketsOfSession from "../stores/ticketsofsession";
 import { toast } from 'react-toastify';
 import Navbar from "./navbar";
 import 'react-toastify/dist/ReactToastify.css';
 import { Button } from "@nextui-org/react";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
+import FooterBarLayout from "@/app/layouts/footerbarlayout";
 
 
 const DashboardLogged = ({ siteId, sessionId, startedAt }) => {
@@ -96,15 +97,9 @@ const DashboardLogged = ({ siteId, sessionId, startedAt }) => {
             })}
           </div>
         </div>
-        {isFooterVisible && (
-          <motion.div
-            className={`mx-auto max-w-screen-sm fixed ${styles.padding} bottom-0 w-full left-1 right-1 z-50 flex justify-center items-center`}
-            initial={{ opacity: 0}}
-            animate={{ opacity: 1}}
-          >
-            <UserAccountNav sessionId={sessionId} startedHour={startedAt} />
-          </motion.div>
-        )}
+        <FooterBarLayout isVisible={isFooterVisible}>
+          <UserAccountNav sessionId={sessionId} startedHour={startedAt} />
+        </FooterBarLayout>
       </div>
       <div ref={footerRef}/>
     </>

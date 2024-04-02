@@ -8,7 +8,7 @@ import useSessionRedirection from "@/app/stores/sessionredirection";
 import useSite from "@/app/stores/site";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import VoiturierLayout from "@/app/layout/voiturierlayout";
+import VoiturierLayout from "@/app/layouts/voiturierlayout";
 import { Button, Input, Link, Skeleton } from "@nextui-org/react";
 import Navbar from "@/app/components/navbar";
 
