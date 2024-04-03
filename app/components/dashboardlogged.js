@@ -1,8 +1,6 @@
 "use client";
 
-import styles from "./style"
 import { useState, useEffect, useRef } from "react"
-import UserAccountNav from "./useraccountnav"
 import TicketDashboard from "./ticketdashboard"
 import { slideIn } from "@/lib/motion"
 import { motion } from "framer-motion"
@@ -13,11 +11,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from "@nextui-org/react";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import FooterBarLayout from "@/app/layouts/footerbarlayout";
+import { signOut } from "next-auth/react";
+import axios from "axios";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const DashboardLogged = ({ siteId, sessionId, startedAt }) => {
   const [isFooterVisible, setIsFooterVisible] = useState(true);
   const [ticketsWithoutImmat, setTicketsWithoutImmat] = useState(null);
+  const [loading, setLoading] = useState(false);
   const footerRef = useRef(null);
 
   const { data: ticketsData, isFetching: isTicketsLoading, isSuccess, refetch } = useTicketsOfSession({ siteId, startedAt })
@@ -54,6 +56,24 @@ const DashboardLogged = ({ siteId, sessionId, startedAt }) => {
       }
     };
 }, [footerRef]);
+
+const handleSignOut = async e => {
+  e.preventDefault()
+  setLoading(true)
+  try {
+    await axios.patch(`/api/session/${sessionId}`, {
+      endAt: new Date(),
+    })
+  } catch(error) {
+    console.log('patch session failed')
+  } finally {
+    signOut({
+      redirect: true,
+      callbackUrl: `${window.location.origin}/done?session=${sessionId}`
+    })
+  }
+}
+
 
   return (
     <>
@@ -98,7 +118,9 @@ const DashboardLogged = ({ siteId, sessionId, startedAt }) => {
           </div>
         </div>
         <FooterBarLayout isVisible={isFooterVisible}>
-          <UserAccountNav sessionId={sessionId} startedHour={startedAt} />
+          <Button onClick={handleSignOut} className='fill-primary-foreground' size="lg" color="primary" variant="solid" radius='full' fullWidth={true} isLoading={loading}>
+            J'ai terminé 
+          </Button>
         </FooterBarLayout>
       </div>
       <div ref={footerRef}/>

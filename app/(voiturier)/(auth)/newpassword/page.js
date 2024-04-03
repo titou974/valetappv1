@@ -1,12 +1,16 @@
 "use client"
 
 import styles from "@/app/components/style";
-import Input from "@/app/components/inputvalet";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import LoadingModal from "@/app/components/loadingmodal";
+import VoiturierLayout from "@/app/layouts/voiturierlayout";
+import { Button, Skeleton, Input } from "@nextui-org/react";
+import Navbar from "@/app/components/navbar";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
+import FooterBarLayout from "@/app/layouts/footerbarlayout";
 
 const getSession = async () => {
   let siteData = {};
@@ -139,7 +143,6 @@ const ResetPassword = () => {
       userData = response.data
       if (!userData) {
         setLoading(false);
-        console.log("hugo a une grosse bite")
         return null;
       } else {
         router.push(`/sign-in${site ? `?site=${site}` : ""}`)
@@ -153,75 +156,32 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="w-full h-screen bg-black">
-      <div className={`${styles.padding} flex flex-col justify-between h-full`}>
+    <VoiturierLayout>
+      <Navbar subtitle="Réintialiser votre" title="Mot de passe" isLoading={loadingDiv} />
+      <div className="w-full flex flex-col justify-center gap-10">
         {loadingDiv ? (
-          <div>
-            <div className="animate-pulse bg-gray-400/50 rounded-md mb-3" style={{ animationDelay: `${1 * 0.05}s`, animationDuration: "1s"}}>
-              <h3 className={`${styles.subText} invisible`}>Réinitialiser votre</h3>
-            </div>
-            <div className="animate-pulse bg-gray-400/50 rounded-md" cc>
-              <h2 className={`${styles.headText} invisible `}>Mot de passe</h2>
-            </div>
-          </div>
-        )
-        : (
           <>
-            {!fillTextAlert && !passwordAlert ? (
-              <div>
-                <h3 className={styles.subText}>Réinitialiser votre</h3>
-                <h2 className={styles.headText}>Mot de passe</h2>
-              </div>
-
-            ) : (
-              <div>
-                {fillTextAlert && (
-                  <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
-                    <p>Remplissez tous les champs.</p>
-                  </div>
-                )}
-                {passwordAlert && (
-                  <div className="w-full text-center bg-amber-600 text-white font-semibold px-[20px] py-4 rounded-md">
-                    <p>Les deux mots de passe sont différents.</p>
-                  </div>
-                )}
-              </div>
-            )}
+            <Skeleton className="rounded-lg">
+              <div className='w-full h-14 bg-gray-400/50 rounded-lg'></div>
+            </Skeleton>
+            <Skeleton className="rounded-lg">
+              <div className='w-full h-14 bg-gray-400/50 rounded-lg'></div>
+            </Skeleton>
+          </>
+        ) : (
+          <>
+            <Input label="Mot de Passe" onChange={(e) => setPassword(e.target.value)} />
+            <Input label="Confirmer votre mot de passe" onChange={(e) => setNewPassword(e.target.value)} />
           </>
         )}
-        <div className="w-full flex flex-col justify-center gap-10">
-          {loadingDiv ? (
-            <>
-              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[16px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
-              </div>
-              <div className="animate-pulse bg-gray-400/50 rounded-full" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}>
-                <p className="text-[16px] px-[12px] py-[20px] invisible">Lorem ipsum dolor</p>
-              </div>
-            </>
-          ) : (
-            <>
-              <Input placeholder="Mot de Passe" input={password} setInput={(e) => setPassword(e)} />
-              <Input placeholder="Confirmer votre mot de passe" input={newPassword} setInput={(e) => setNewPassword(e)} />
-            </>
-          )}
-        </div>
-        <div className="flex flex-col justify-between gap-5">
-          <button onClick={resetPassword} className="bg-primary w-full py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors">
-            <p className="text-black font-semibold text-[32px]">Confirmer</p>
-            <div className="w-[26px]">
-              <svg fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </div>
-          </button>
-        </div>
-        <div className="text-center">
-          <p className="text-white">Nestor App 🇫🇷</p>
-        </div>
       </div>
+      <FooterBarLayout fixed={false}>
+        <Button onClick={resetPassword} className='fill-primary-foreground' size="lg" color="primary" variant="solid" radius='full' fullWidth={true} endContent={< ArrowRightIcon width={20}/>} isLoading={loading}>
+          Confirmer
+        </Button>
+      </FooterBarLayout>
       <LoadingModal isOpen={loading} setIsOpen={(e) => setLoading(e)} title="Réinitialisation de votre mot de passe" />
-    </div>
+    </VoiturierLayout>
   )
 }
 
