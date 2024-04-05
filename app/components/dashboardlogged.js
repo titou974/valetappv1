@@ -119,7 +119,7 @@ const handleSignOut = async e => {
         </div>
         <FooterBarLayout isVisible={isFooterVisible}>
           <Button onClick={handleSignOut} className='fill-primary-foreground' size="lg" color="primary" variant="solid" radius='full' fullWidth={true} isLoading={loading}>
-            J'ai terminé 
+            {`J'ai terminé`}
           </Button>
         </FooterBarLayout>
       </div>

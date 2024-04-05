@@ -128,7 +128,6 @@ const ForgetPassword = () => {
   return (
     <VoiturierLayout>
       <Navbar subtitle="Réintialiser votre" title="Mot de passe" isLoading={loadingDiv} />
-      <div className="w-full flex flex-col justify-center gap-10">
         {loadingDiv ? (
           <>
             <Skeleton className="rounded-lg">
@@ -140,7 +139,6 @@ const ForgetPassword = () => {
             <Input label="Numéro de Téléphone" type="tel" onChange={(e) => setPhoneNumber(e.target.value)} />
           </>
         )}
-      </div>
       <FooterBarLayout fixed={false}>
         <Button onClick={resetPassword} className='fill-primary-foreground' size="lg" color="primary" variant="solid" radius='full' fullWidth={true} endContent={< ArrowRightIcon width={20}/>} isLoading={loading}>
           Réinitialiser
