@@ -8,9 +8,7 @@ export async function handleCheckToken({ queryKey }) {
     return data
 }
 
-export default function useCheckToken() {
-    const searchParams = useSearchParams();
-    const resetToken = searchParams.get("t")
+export default function useCheckToken({ resetToken }) {
     return useQuery({
         queryKey: ['resetToken', resetToken],
         queryFn: handleCheckToken,

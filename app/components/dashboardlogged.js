@@ -7,13 +7,11 @@ import { motion } from "framer-motion"
 import useTicketsOfSession from "../stores/ticketsofsession";
 import { toast } from 'react-toastify';
 import Navbar from "./navbar";
-import 'react-toastify/dist/ReactToastify.css';
 import { Button } from "@nextui-org/react";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import FooterBarLayout from "@/app/layouts/footerbarlayout";
 import { signOut } from "next-auth/react";
 import axios from "axios";
-import 'react-toastify/dist/ReactToastify.css';
 
 
 const DashboardLogged = ({ siteId, sessionId, startedAt }) => {

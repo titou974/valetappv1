@@ -13,47 +13,47 @@ import FooterBarLayout from "@/app/layouts/footerbarlayout";
 import useSite from "@/app/stores/site";
 import useSessionRedirection from "@/app/stores/sessionredirection";
 import useCheckToken from "@/app/stores/checktoken";
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 const ResetPassword = () => {
- 
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const resetToken = searchParams.get("t")
 
   useSessionRedirection()
-
   const { data: siteData, loading: isSiteLoading} = useSite()
-  const { data: tokenData, loading: isTokenLoading } = useCheckToken()
+  const { data: tokenData, loading: isTokenLoading } = useCheckToken({ resetToken })
 
   const resetPassword = async e => {
     e.preventDefault();
     setLoading(true);
-
+    console.log('data', siteData, tokenData)
     if (!tokenData || !siteData) {
+      toast.error('Token invalide')
       setLoading(false);
       return;
     } else if (!password || !newPassword) {
-      toast.success("Veuillez remplir tous les champs")
+      toast.error('Veuillez remplir tous les champs')
       setLoading(false);
       return;
     } else if (password !== newPassword) {
-      toast.success("Les mots de passe ne correspondent pas")
+      toast.error('Les mots de passe ne correspondent pas')
       setLoading(false);
       return;
     }
     try {
-      let userData;
-      const response = await axios.patch(`/api/forget/${resetToken}`, {
+      const { data } = await axios.patch(`/api/forget/${resetToken}`, {
         password: password
-      });
-      userData = response.data
-      if (!userData) {
+      })
+      if (!data) {
         setLoading(false);
+        toast.error('Une erreur est survenue. Veuillez réessayer')
         return null;
       } else {
-        router.push(`/sign-in${site ? `?site=${site}` : ""}`)
+        router.push(`/sign-in?site=${siteData.id}`)
         setLoading(false);
         return null;
       }

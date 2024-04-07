@@ -1,5 +1,6 @@
 import styles from "@/app/components/style";
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from "../components/footer";
 
 export default function VoiturierLayout({ children }) {
