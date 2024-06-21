@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from "../components/footer";
 
-export default function VoiturierLayout({ children }) {
+export default function VoiturierLayout({ children, justify = 'between'}) {
     return (
         <div className="dark bg-background text-foreground min-h-screen">
             <ToastContainer
@@ -18,7 +18,7 @@ export default function VoiturierLayout({ children }) {
                 pauseOnHover
                 theme="light"
             />
-            <div className={`${styles.padding} flex flex-col justify-between min-h-screen max-w-screen-sm mx-auto relative`}>
+            <div className={`${styles.padding} flex flex-col justify-${justify} min-h-screen max-w-screen-sm mx-auto relative`}>
                 {children}
             </div>
             <Footer />

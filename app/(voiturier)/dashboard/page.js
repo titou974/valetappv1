@@ -10,17 +10,9 @@ const Dashboard = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return (
-      <VoiturierLayout>
-        <DashboardNotLogged />
-      </VoiturierLayout>
-    )
+    return <DashboardNotLogged />
   } else {
-    return (
-      <VoiturierLayout>
-        <DashboardLogged siteName={session.user.siteName} siteId={session.user.siteId} sessionId={session.user.sessionId} startedAt={session.user.startingHourSession} />
-      </VoiturierLayout>
-    )
+    return <DashboardLogged siteName={session.user.siteName} siteId={session.user.siteId} sessionId={session.user.sessionId} startedAt={session.user.startingHourSession} />
   }
 }
 

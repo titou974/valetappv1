@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  @import "./styles/theme1.css";
-  @import "./styles/theme2.css";
-  }
 
 body {
   font-family: 'Montserrat', sans-serif;

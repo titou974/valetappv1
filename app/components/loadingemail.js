@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { Button } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 
 const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticketNumber, userId}) => {
 
@@ -37,14 +37,14 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
       return null;
     } else {
       try {
-        const response = await axios.patch(`/api/user/${userId}`, {
+        await axios.patch(`/api/user/${userId}`, {
           email: email,
         });
       } catch (error) {
         console.log("sauvegarde de l'email fail", error)
       }
       try {
-        const response = await axios.post("/api/sendticket", {
+        await axios.post("/api/sendticket", {
           email: email,
           siteName: siteName,
           scannedAt: scannedAt,
@@ -80,10 +80,10 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
     }
   }
 
-
-
   function closeModal() {
-    setIsOpen(false)
+    if (!loadingEmail) {
+      setIsOpen(false)
+    }
   }
 
   return (
@@ -101,7 +101,7 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
         theme="light"
         />
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -111,7 +111,7 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-opacity/25" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -125,21 +125,25 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-neutral p-6 text-center text-base align-middle shadow-xl transition-all space-y-8">
                   <Dialog.Title
                     as="h3"
-                    className="text-[20px] font-medium leading-6 text-gray-900"
+                    className="font-medium leading-6 text-foreground"
                   >
                     Rentrer votre Email
                   </Dialog.Title>
-                  <div className="mt-10">
-                    <InputTicket input={email} setInput={(e) => setEmail(e)} />
-                  </div>
-                  <div className='mt-10 transition-all'>
-                    <Button radius="full" variant="bordered" color="success" onClick={(e) => handleSubmit(e)} isLoading={loadingEmail}>
-                      Recevoir par e-mail
+                    <Input
+                      value={email}
+                      onValueChange={setEmail}
+                      
+                      variant="flat"
+                      type="email"
+                      label="Email"
+                      placeholder="nestor@gmail.com"
+                    />
+                    <Button radius="full"  color="primary" onClick={(e) => handleSubmit(e)} isLoading={loadingEmail}>
+                      Envoyer le ticket
                     </Button>
-                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

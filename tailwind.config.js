@@ -43,7 +43,10 @@ module.exports = {
             },
             secondary: '#ffffff',
             background: '#E7E7E7',
-            foreground: '#000000'
+            neutral: '#ffffff',
+            neutral_content: '#6B7280',
+            foreground: '#000000',
+            opacity: '#000000'
           }
         },
         dark: {
@@ -64,7 +67,10 @@ module.exports = {
             },
             secondary: '#ffffff',
             background: '#000000',
-            foreground: '#ffffff'
+            neutral: '#414141',
+            neutral_content: '#D1D5DB',
+            foreground: '#ffffff',
+            opacity: '#000000'
           }
         },
       },

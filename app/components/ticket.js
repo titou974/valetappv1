@@ -1,8 +1,10 @@
-import {Accordion, AccordionItem} from "@nextui-org/react";
+import {Accordion, AccordionItem, Skeleton } from "@nextui-org/react";
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import formatDateToFrench from '@/lib/formatdate';
 import style from "../styles/ticket.module.css";
 import { cguContent } from '@/constants';
+import { Chip } from "@nextui-org/react";
+import { HashtagIcon } from '@heroicons/react/20/solid';
 
 const Ticket = ({ isTicketLoading, ticketData, companyData }) => { 
     const itemClasses = {
@@ -24,27 +26,56 @@ const Ticket = ({ isTicketLoading, ticketData, companyData }) => {
                 key="1"
                 aria-label="Votre Ticket"
                 subtitle={
-                    <div className='text-base text-white space-y-2'>
-                        <p>{isTicketLoading ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${4 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">crée à 01h35 le 26/10/2023</span></span> : formatDateToFrench(ticketData?.scannedAt)}</p>
-                        <p><span className='italic font-semibold'>{isTicketLoading ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${3 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">au Gourmet Galaxy</span></span> : `au ${ticketData?.restaurant.name}`}</span></p>
-                    </div>
-                }
+                            isTicketLoading ? (
+                                <div className='text-base text-primary-foreground space-y-2'>
+                                    <Skeleton className="rounded-lg w-fit">
+                                        crée à 01h35 le 26/10/2023
+                                    </Skeleton>
+                                    <Skeleton className="rounded-lg w-fit">
+                                        au Gourmet Palace
+                                    </Skeleton>
+                                </div>
+                            ) : (
+                                <div className="text-base text-primary-foreground space-y-2">
+                                    { formatDateToFrench(ticketData?.scannedAt) }
+                                    <p className="italic font-semibold">
+                                        au {ticketData?.restaurant.name}
+                                    </p>
+                                </div>
+                            )
+                        }
                 title={
                     <div>
-                        <div className='flex flex-col gap-2 rounded-md text-white'>
+                        <div className='flex flex-col gap-2 rounded-md text-primary-foreground'>
                             <div className='flex items-center gap-4'>
-                                <p className={`text-xl font-bold pb-2`}>Votre Ticket</p>
-                                <div className='border-2 px-1 mb-[10px] rounded-md'>
-                                    <p className='font-semibold text-base'>{isTicketLoading ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">#16</span></span>  : `#${ticketData?.ticketNumber}`}</p>
-                                </div>
+                                <p className='font-bold text-xl'>Votre Ticket</p>
+                                        {
+                                            isTicketLoading ? (
+                                                <Skeleton className="rounded-lg w-fit">
+                                                    <Chip startContent={<HashtagIcon width={16} />} size="sm" color="primary" radius="sm" className="font-bold">1000</Chip>
+                                                </Skeleton>  
+                                            ) : (
+                                                <Chip startContent={<HashtagIcon width={14} />} size="sm" color="secondary" variant="bordered" radius="sm" className="font-bold">{ticketData?.ticketNumber}</Chip>
+                                            )
+                                        }
                             </div>
-                            <p className='font-semibold text-xl'>{isTicketLoading ? <span className="animate-pulse bg-gray-400/70 rounded-md h-[50px]" style={{ animationDelay: `${2 * 0.05}s`, animationDuration: "1s"}}><span className="invisible">16 €</span></span>  : `${ticketData?.restaurant.ticketPrice} €`}</p>
+                                {
+                                    isTicketLoading ? (
+                                        <Skeleton className="rounded-lg w-fit">
+                                            10 €
+                                        </Skeleton>
+                                    ) : (
+                                        <p className='font-semibold text-xl'>
+                                            {ticketData?.restaurant?.ticketPrice} €
+                                        </p>
+                                    )
+                                }
                             <div className='border w-full mb-4'>
                             </div>
                         </div>
                     </div>
                 }
-                indicator={({ isOpen }) => (isOpen ? <ChevronUpIcon className="h-6 w-6 text-white mx-auto transition-all rotate-90" /> : <ChevronDownIcon className="h-6 w-6 text-white mx-auto transition-all" />)}
+                indicator={({ isOpen }) => (isOpen ? <ChevronUpIcon className="h-6 w-6 text-primary-foreground mx-auto transition-all rotate-90" /> : <ChevronDownIcon className="h-6 w-6 text-primary-foreground mx-auto transition-all" />)}
             >
                 <p className='pb-5'>CONDITIONS GÉNÉRALES D&rsquo;UTILISATION DE NESTOR APP</p>
                 {companyData?.cgu ? (companyData?.cgu.map((part, index) => (
