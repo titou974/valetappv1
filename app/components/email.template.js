@@ -1,8 +1,6 @@
 import { Container } from "@react-email/container";
-import style from "../ticket.module.css";
 import formatDateToFrench from "@/lib/formatdate";
 import { cguContent } from "@/constants";
-import styles from "./style";
 
 const EmailTemplate = ({ siteName, scannedAt, ticketPrice, ticketNumber }) => {
   return (

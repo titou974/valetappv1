@@ -10,10 +10,16 @@ export async function getTicketsOfSession({ queryKey }) {
 }
 
 export default function useTicketsOfSession({ siteId, startedAt }) {
-    return useQuery({
+    const queryResult = useQuery({
         queryKey: ['tickets', siteId, startedAt],
         queryFn: getTicketsOfSession,
-        enabled: !!startedAt && !!siteId,
-        manual: true
-    })
+        enabled: !!startedAt && !!siteId
+    });
+
+    const numberOfTickets = queryResult?.data?.tickets?.filter(ticket => !ticket.immatriculation).length
+
+    return {
+        ...queryResult,
+        numberOfTickets
+    };
 }

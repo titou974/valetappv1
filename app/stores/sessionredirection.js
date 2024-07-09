@@ -4,7 +4,7 @@ import axios from "axios";
 
 export async function redirectToDashboardIfLogged({ queryKey }) {
   const [_, router] = queryKey
-  const {data} = await axios.get('/api/session')
+  const { data } = await axios.get('/api/session')
   if (data?.authenticated) {
     router.push('/dashboard')
   }

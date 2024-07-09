@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
   font-family: 'Montserrat', sans-serif;
   scroll-behavior: smooth;
@@ -45,16 +46,6 @@ body {
   pointer-events: none;
   height: 20vh;
 
-}
-
-.linearBackground {
-  background: rgb(64,64,64);
-  background: linear-gradient(180deg, rgba(64,64,64,1) 0%, rgba(54,54,54,0.7203256302521008) 100%);
-}
-
-.gradientTop {
-  background: rgb(0,0,0);
-  background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 95%);
 }
 
 .ticketDashboardBackground {

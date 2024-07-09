@@ -1,4 +1,4 @@
-import style from "../input.module.css"
+import style from "../styles/input.module.css"
 
 const Input = ({placeholder, input, setInput}) => {
 
