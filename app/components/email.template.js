@@ -2,7 +2,7 @@ import { Container } from "@react-email/container";
 import formatDateToFrench from "@/lib/formatdate";
 import { cguContent } from "@/constants";
 
-const EmailTemplate = ({ siteName, scannedAt, ticketPrice, ticketNumber }) => {
+const EmailTemplate = ({ siteName, scannedAt, ticketPrice, ticketNumber, companyCgu }) => {
   return (
 
         <Container>
@@ -30,12 +30,21 @@ const EmailTemplate = ({ siteName, scannedAt, ticketPrice, ticketNumber }) => {
           </div>
           <span style={{ paddingLeft: '32px', paddingRight: '32px', color: 'black' }}>
             <p style={{ paddingBottom: '20px' }}>CONDITIONS GÉNÉRALES D’UTILISATION DE NESTOR APP</p>
-            {cguContent.map((part, index) => (
+            {
+            
+            companyCgu ? companyCgu.map((part, index) => (
               <div key={index} style={{ paddingBottom: '20px' }}>
                 <h3 style={{ fontWeight: '600' }}>{part.subtitle}</h3>
                 <p>{part.text}</p>
               </div>
-            ))}
+            ))
+            : cguContent.map((part, index) => (
+              <div key={index} style={{ paddingBottom: '20px' }}>
+                <h3 style={{ fontWeight: '600' }}>{part.subtitle}</h3>
+                <p>{part.text}</p>
+              </div>
+            ))
+            }
           </span>
         </Container>
 
