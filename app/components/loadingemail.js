@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { Button, Input } from '@nextui-org/react';
 
-const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticketNumber, userId}) => {
+const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticketNumber, userId, companyCgu}) => {
 
   const [email, setEmail] = useState("");
   const [loadingEmail, setLoadingEmail ] = useState(false);
@@ -50,6 +50,7 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
           scannedAt: scannedAt,
           ticketNumber: ticketNumber,
           ticketPrice: ticketPrice,
+          companyCgu: companyCgu
         });
         toast.success("Votre ticket est arrivé dans votre boite mail !", {
           position: "top-center",

@@ -36,7 +36,7 @@ const TicketShow = () => {
         </FooterBarLayout>
         <div>
         </div>
-      <EmailModal isOpen={emailModal} setIsOpen={(e) => setEmailModal(e)} siteName={ticketData?.restaurant.name} scannedAt={ticketData?.scannedAt} ticketPrice={ticketData?.restaurant.ticketPrice} ticketNumber={ticketData?.ticketNumber} userId={ticketData?.user.id} />
+      <EmailModal companyCgu={companyData?.cgu} isOpen={emailModal} setIsOpen={(e) => setEmailModal(e)} siteName={ticketData?.restaurant.name} scannedAt={ticketData?.scannedAt} ticketPrice={ticketData?.restaurant.ticketPrice} ticketNumber={ticketData?.ticketNumber} userId={ticketData?.user.id} />
     </ClientLayout>
   )
 }
