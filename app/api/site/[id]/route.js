@@ -1,9 +1,8 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
-
-export async function GET(req, {params}) {
-  const id  = params.id
+export async function GET(req, { params }) {
+  const id = params.id;
   try {
     const site = await prisma.restaurant.findUnique({
       where: { id: id },

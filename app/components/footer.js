@@ -1,7 +1,7 @@
 export default function Footer() {
-    return (
-        <div className="text-center text-base text-foreground py-4">
-          <p>Nestor App 🇫🇷</p>
-        </div>
-    )
+  return (
+    <div className='py-4 text-center text-base text-foreground'>
+      <p>Nestor App 🇫🇷</p>
+    </div>
+  );
 }

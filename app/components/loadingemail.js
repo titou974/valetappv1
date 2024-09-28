@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
@@ -9,31 +9,38 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { Button, Input } from '@nextui-org/react';
 
-const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticketNumber, userId, companyCgu}) => {
-
-  const [email, setEmail] = useState("");
-  const [loadingEmail, setLoadingEmail ] = useState(false);
+const EmailModal = ({
+  isOpen,
+  setIsOpen,
+  siteName,
+  scannedAt,
+  ticketPrice,
+  ticketNumber,
+  userId,
+  companyCgu,
+}) => {
+  const [email, setEmail] = useState('');
+  const [loadingEmail, setLoadingEmail] = useState(false);
 
   const validateEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/  ;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
-
 
   const handleSubmit = async (e) => {
     setLoadingEmail(true);
     if (!validateEmail(email)) {
       toast.error('Email Invalide', {
-        position: "top-center",
+        position: 'top-center',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
-        });
-        setLoadingEmail(false);
+        theme: 'light',
+      });
+      setLoadingEmail(false);
       return null;
     } else {
       try {
@@ -41,56 +48,56 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
           email: email,
         });
       } catch (error) {
-        console.log("sauvegarde de l'email fail", error)
+        console.log("sauvegarde de l'email fail", error);
       }
       try {
-        await axios.post("/api/sendticket", {
+        await axios.post('/api/sendticket', {
           email: email,
           siteName: siteName,
           scannedAt: scannedAt,
           ticketNumber: ticketNumber,
           ticketPrice: ticketPrice,
-          companyCgu: companyCgu
+          companyCgu: companyCgu,
         });
-        toast.success("Votre ticket est arrivé dans votre boite mail !", {
-          position: "top-center",
+        toast.success('Votre ticket est arrivé dans votre boite mail !', {
+          position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
-          });
-          closeModal();
+          theme: 'light',
+        });
+        closeModal();
         setLoadingEmail(false);
       } catch (error) {
-        console.log("erreur de mail", error.message);
+        console.log('erreur de mail', error.message);
         toast.error("Un bug à eu lieu lors de l'envoi de votre ticket...", {
-          position: "top-center",
+          position: 'top-center',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
-          });
+          theme: 'light',
+        });
         setLoadingEmail(false);
       }
     }
-  }
+  };
 
   function closeModal() {
     if (!loadingEmail) {
-      setIsOpen(false)
+      setIsOpen(false);
     }
   }
 
   return (
     <>
       <ToastContainer
-        position="top-center"
+        position='top-center'
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -99,52 +106,56 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
-        />
+        theme='light'
+      />
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={closeModal}>
+        <Dialog as='div' className='relative z-50' onClose={closeModal}>
           <Transition.Child
             as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+            enter='ease-out duration-300'
+            enterFrom='opacity-0'
+            enterTo='opacity-100'
+            leave='ease-in duration-200'
+            leaveFrom='opacity-100'
+            leaveTo='opacity-0'
           >
-            <div className="fixed inset-0 bg-opacity/25" />
+            <div className='fixed inset-0 bg-opacity/25' />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className='fixed inset-0 overflow-y-auto'>
+            <div className='flex min-h-full items-center justify-center p-4 text-center'>
               <Transition.Child
                 as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
+                enter='ease-out duration-300'
+                enterFrom='opacity-0 scale-95'
+                enterTo='opacity-100 scale-100'
+                leave='ease-in duration-200'
+                leaveFrom='opacity-100 scale-100'
+                leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-neutral p-6 text-center text-base align-middle shadow-xl transition-all space-y-8">
+                <Dialog.Panel className='w-full max-w-md transform space-y-8 overflow-hidden rounded-2xl bg-neutral p-6 text-center align-middle text-base shadow-xl transition-all'>
                   <Dialog.Title
-                    as="h3"
-                    className="font-medium leading-6 text-foreground"
+                    as='h3'
+                    className='font-medium leading-6 text-foreground'
                   >
                     Rentrer votre Email
                   </Dialog.Title>
-                    <Input
-                      value={email}
-                      onValueChange={setEmail}
-                      
-                      variant="flat"
-                      type="email"
-                      label="Email"
-                      placeholder="nestor@gmail.com"
-                    />
-                    <Button radius="full"  color="primary" onClick={(e) => handleSubmit(e)} isLoading={loadingEmail}>
-                      Envoyer le ticket
-                    </Button>
+                  <Input
+                    value={email}
+                    onValueChange={setEmail}
+                    variant='flat'
+                    type='email'
+                    label='Email'
+                    placeholder='nestor@gmail.com'
+                  />
+                  <Button
+                    radius='full'
+                    color='primary'
+                    onClick={(e) => handleSubmit(e)}
+                    isLoading={loadingEmail}
+                  >
+                    Envoyer le ticket
+                  </Button>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -152,7 +163,7 @@ const EmailModal = ({isOpen, setIsOpen, siteName, scannedAt, ticketPrice, ticket
         </Dialog>
       </Transition>
     </>
-  )
+  );
 };
 
 export default EmailModal;

@@ -1,16 +1,15 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import sanitizePhoneNumber from "@/app/components/sanitizephoneNumber";
-import jwt from "jsonwebtoken";
-
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import sanitizePhoneNumber from '@/app/components/sanitizephoneNumber';
+import jwt from 'jsonwebtoken';
 
 export async function POST(req) {
   try {
     const { phoneNumber } = await req.json();
 
     if (!phoneNumber) {
-      console.log("Invalid data received.");
-      return NextResponse.json({ message: "Invalid data received." });
+      console.log('Invalid data received.');
+      return NextResponse.json({ message: 'Invalid data received.' });
     }
 
     const validatePhoneNumber = (number) => {
@@ -21,8 +20,8 @@ export async function POST(req) {
     const validNumber = validatePhoneNumber(phoneNumber);
 
     if (!validNumber) {
-      console.log("Invalid phone number received.");
-      return NextResponse.json({ message: "Invalid phone number received." });
+      console.log('Invalid phone number received.');
+      return NextResponse.json({ message: 'Invalid phone number received.' });
     }
 
     const sanitizedPhoneNumber = sanitizePhoneNumber(phoneNumber);
@@ -33,22 +32,34 @@ export async function POST(req) {
 
     if (!existingUserByPhoneNumber) {
       console.log("User doesn't exists with this phone number.");
-      return NextResponse.json({ message: "User doesn't exists with this phone number." });
+      return NextResponse.json({
+        message: "User doesn't exists with this phone number.",
+      });
     } else {
-      const token = jwt.sign({ _id: existingUserByPhoneNumber.id }, process.env.JWT_SECRET, {
-        expiresIn: '1h'
-      })
+      const token = jwt.sign(
+        { _id: existingUserByPhoneNumber.id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: '1h',
+        }
+      );
       const saveToken = await prisma.user.update({
         where: {
-          id: existingUserByPhoneNumber.id
+          id: existingUserByPhoneNumber.id,
         },
-        data: {resetToken: token}
-      })
-      return NextResponse.json({ token: saveToken.resetToken, message: "Token de réinitialisation généré" });
+        data: { resetToken: token },
+      });
+      return NextResponse.json({
+        token: saveToken.resetToken,
+        message: 'Token de réinitialisation généré',
+      });
     }
-
   } catch (error) {
-    console.log("Error during user registration:", error.message);
-    return NextResponse.json({ userId: null, message: "Registration failed for voiturier", error: error.message });
+    console.log('Error during user registration:', error.message);
+    return NextResponse.json({
+      userId: null,
+      message: 'Registration failed for voiturier',
+      error: error.message,
+    });
   }
 }

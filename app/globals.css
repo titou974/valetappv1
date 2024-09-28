@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   font-family: 'Montserrat', sans-serif;
   scroll-behavior: smooth;
@@ -16,39 +15,58 @@ body {
   transition: max-height 1s ease-in-out;
 }
 
-
 .expanded {
   max-height: 100%;
   transition: max-height 1s ease-in-out;
 }
 
 .gradientDashboardBottom {
-  background: rgb(0,0,0);
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(3,0,0,0.7551020408163265) 6%, rgba(6,1,1,1) 100%);
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(3, 0, 0, 0.7551020408163265) 6%,
+    rgba(6, 1, 1, 1) 100%
+  );
   pointer-events: none;
   height: 30vh;
-
 }
 
 .linearBackground {
-  background: rgb(64,64,64);
-  background: linear-gradient(180deg, rgba(64,64,64,1) 0%, rgba(54,54,54,0.7203256302521008) 100%);
+  background: rgb(64, 64, 64);
+  background: linear-gradient(
+    180deg,
+    rgba(64, 64, 64, 1) 0%,
+    rgba(54, 54, 54, 0.7203256302521008) 100%
+  );
 }
 
 .gradientTop {
-  background: rgb(0,0,0);
-  background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 95%);
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.8) 95%
+  );
 }
 
 .gradientDashboardBottom {
-  background: rgb(0,0,0);
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(3,0,0,0.7551020408163265) 6%, rgba(6,1,1,1) 100%);
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(3, 0, 0, 0.7551020408163265) 6%,
+    rgba(6, 1, 1, 1) 100%
+  );
   pointer-events: none;
   height: 20vh;
-
 }
 
 .ticketDashboardBackground {
-  background: rgb(65,65,65);
-  background: linear-gradient(135deg, rgba(65,65,65,1) 0%, rgba(54,54,54,0.72) 95%);
+  background: rgb(65, 65, 65);
+  background: linear-gradient(
+    135deg,
+    rgba(65, 65, 65, 1) 0%,
+    rgba(54, 54, 54, 0.72) 95%
+  );
 }

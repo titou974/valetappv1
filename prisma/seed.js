@@ -10,20 +10,20 @@ const users = [
   { role: 'VALET', name: 'Paul Brown', phoneNumber: '111-111-1117' },
   { role: 'CLIENT', name: 'Lisa Miller', phoneNumber: '111-111-1118' },
   { role: 'VALET', name: 'Michael Taylor', phoneNumber: '111-111-1119' },
-  { role: 'CLIENT', name: 'Linda Wilson', phoneNumber: '111-111-1120' }
+  { role: 'CLIENT', name: 'Linda Wilson', phoneNumber: '111-111-1120' },
 ];
 
 const restaurants = [
-  { name: 'The Tasty Spoon', ticketPrice: "16" },
-  { name: 'Spicy Dreams', ticketPrice: "10" },
-  { name: 'Ocean Bites', ticketPrice: "17" },
-  { name: 'Gourmet Galaxy', ticketPrice: "12" },
-  { name: 'Urban Flavors', ticketPrice: "25" },
-  { name: 'Hearty Homestyle', ticketPrice: "34" },
-  { name: 'Savory Symphony', ticketPrice: "14" },
-  { name: 'Mystical Morsels', ticketPrice: "18" },
-  { name: 'Rustic Radiance', ticketPrice: "20.5" },
-  { name: 'Epicurean Echoes', ticketPrice: "17.4" }
+  { name: 'The Tasty Spoon', ticketPrice: '16' },
+  { name: 'Spicy Dreams', ticketPrice: '10' },
+  { name: 'Ocean Bites', ticketPrice: '17' },
+  { name: 'Gourmet Galaxy', ticketPrice: '12' },
+  { name: 'Urban Flavors', ticketPrice: '25' },
+  { name: 'Hearty Homestyle', ticketPrice: '34' },
+  { name: 'Savory Symphony', ticketPrice: '14' },
+  { name: 'Mystical Morsels', ticketPrice: '18' },
+  { name: 'Rustic Radiance', ticketPrice: '20.5' },
+  { name: 'Epicurean Echoes', ticketPrice: '17.4' },
 ];
 
 const tickets = [
@@ -62,7 +62,12 @@ async function main() {
     const newUser = await prisma.user.create({
       data: {
         ...user,
-        companyId: user.role === 'VALET' ? (index % 2 === 0 ? companyA.id : companyB.id) : null,
+        companyId:
+          user.role === 'VALET'
+            ? index % 2 === 0
+              ? companyA.id
+              : companyB.id
+            : null,
       },
     });
     usersCreate.push(newUser);
@@ -83,7 +88,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error("Error seeding:", e);
+    console.error('Error seeding:', e);
     process.exit(1);
   })
   .finally(async () => {

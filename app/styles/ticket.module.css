@@ -1,6 +1,10 @@
 .digitalTicket {
-  background: rgb(36,160,237);
-  background: linear-gradient(138deg, rgba(36,160,237,1) 0%, rgba(69,218,255,1) 96%);
+  background: rgb(36, 160, 237);
+  background: linear-gradient(
+    138deg,
+    rgba(36, 160, 237, 1) 0%,
+    rgba(69, 218, 255, 1) 96%
+  );
   color: white;
   padding: 2em;
   border-radius: 1rem;
@@ -11,7 +15,9 @@
   flex-direction: column;
   gap: 1em;
   transition: all 0.3s ease;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .digitalTicket:hover {
@@ -19,4 +25,3 @@
   content: attr(data-hover);
   box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
-
