@@ -2,6 +2,8 @@ import { cguContent } from "@/constants";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import EmailTemplate from "@/app/components/email.template";
+import { render } from "@react-email/render";
+
 
 const resend = new Resend(process.env.RESEND_KEY);
 
@@ -14,7 +16,7 @@ export async function POST(req) {
       from: "Nestor APP <nestorapp@cheapcheap.site>",
       to: [email],
       subject: "Votre ticket",
-      react: EmailTemplate({ siteName, scannedAt, ticketPrice, ticketNumber, companyCgu})
+      react: EmailTemplate({ siteName, scannedAt, ticketPrice, ticketNumber, companyCgu, email }),
     });
       return NextResponse.json(data)
   } catch (error) {

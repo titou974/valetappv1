@@ -1,3 +1,4 @@
+"use client"
 import EmailTemplate from "@/app/components/email.template";
 
 const EmailTest = () => {
