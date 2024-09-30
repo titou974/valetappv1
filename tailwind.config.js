@@ -1,4 +1,4 @@
-import {nextui} from "@nextui-org/react";
+import { nextui } from '@nextui-org/react';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
@@ -17,13 +17,12 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       screens: {
-        xs: "450px",
+        xs: '450px',
       },
-
     },
   },
-  plugins: [nextui(
-    {
+  plugins: [
+    nextui({
       themes: {
         light: {
           colors: {
@@ -39,15 +38,15 @@ module.exports = {
               800: '#0a4f82',
               900: '#0e426c',
               DEFAULT: '#0675c3',
-              foreground: '#ffffff'
+              foreground: '#ffffff',
             },
             secondary: '#ffffff',
             background: '#E7E7E7',
             neutral: '#ffffff',
             neutral_content: '#6B7280',
             foreground: '#000000',
-            opacity: '#000000'
-          }
+            opacity: '#000000',
+          },
         },
         dark: {
           colors: {
@@ -63,17 +62,17 @@ module.exports = {
               800: '#166534',
               900: '#052e14',
               DEFAULT: '#e7fe55',
-              foreground: '#000000'
+              foreground: '#000000',
             },
             secondary: '#ffffff',
             background: '#000000',
             neutral: '#414141',
             neutral_content: '#D1D5DB',
             foreground: '#ffffff',
-            opacity: '#000000'
-          }
+            opacity: '#000000',
+          },
         },
       },
-    }
-  )],
-}
+    }),
+  ],
+};

@@ -1,10 +1,9 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { hash } from "bcrypt";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { hash } from 'bcrypt';
 
-
-export async function GET(req, {params}) {
-  const id  = params.id
+export async function GET(req, { params }) {
+  const id = params.id;
   try {
     const tokenData = await prisma.user.findUnique({
       where: { resetToken: id },
@@ -19,26 +18,31 @@ export async function GET(req, {params}) {
   }
 }
 
-export async function PATCH(req, {params}) {
-  const id = params.id
+export async function PATCH(req, { params }) {
+  const id = params.id;
   const { password } = await req.json();
   try {
-    const hashedPassword = await hash(password, 10)
+    const hashedPassword = await hash(password, 10);
     const user = await prisma.user.update({
       where: {
-        resetToken: id
+        resetToken: id,
       },
       data: {
         password: hashedPassword,
-      }
+      },
     });
     if (user) {
       return NextResponse.json(user);
     } else {
-      return NextResponse.json({message: "failed finding user with this token"})
+      return NextResponse.json({
+        message: 'failed finding user with this token',
+      });
     }
-
   } catch (error) {
-    return NextResponse.json({message: "failure patching password"}, error.message, { status: 500 })
+    return NextResponse.json(
+      { message: 'failure patching password' },
+      error.message,
+      { status: 500 }
+    );
   }
 }
