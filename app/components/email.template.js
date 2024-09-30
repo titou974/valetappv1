@@ -68,7 +68,7 @@ const EmailTemplate = ({
             <Row>
               <Column>
                 <Img
-                  src={`${baseUrl}/nestor.png`}
+                  src={`${baseUrl}/nestortransparent.png`}
                   width='100'
                   height='100'
                   alt='Nestor Logo'
@@ -150,7 +150,7 @@ const EmailTemplate = ({
                 <Text style={productTitle}>Service de voiturier</Text>
                 <Text style={productDescription}>{siteName}</Text>
                 <Link
-                  href={`mailto:titouanhirsch@gmail.com?subject=Problème avec le ticket #${ticketNumber} sur ${siteName}`}
+                  href={`mailto:nestorapp.app@gmail.com?subject=Problème avec le ticket #${ticketNumber} sur ${siteName}`}
                   style={productLink}
                 >
                   Un problème ? Contactez-nous ici
@@ -196,7 +196,7 @@ const EmailTemplate = ({
             <Row>
               <Column align='center' style={footerIcon}>
                 <Img
-                  src={`${baseUrl}/nestor.png`}
+                  src={`${baseUrl}/nestoricon.png`}
                   width='26'
                   height='26'
                   alt='Nestor Icon'
