@@ -1,9 +1,8 @@
 'use client';
 
-import styles from '@/app/components/style';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import EmailModal from '@/app/components/loadingemail';
+import EmailModal from '@/app/components/emailmodal';
 import useCompany from '@/app/stores/company';
 import useTicketClient from '@/app/stores/ticketclient';
 import Ticket from '@/app/components/ticket';

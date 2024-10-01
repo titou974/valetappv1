@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { render } from '@react-email/render';
 import EmailTemplate from '@/app/components/email.template';
 
 const resend = new Resend(process.env.RESEND_KEY);
@@ -10,17 +11,22 @@ export async function POST(req) {
     json;
   try {
     const data = await resend.emails.send({
-      from: 'Nestor APP <nestorapp@cheapcheap.site>',
+      from: `Nestor APP <${process.env.RESEND_MAIL}>`,
       to: [email],
       subject: 'Votre ticket',
-      react: EmailTemplate({
-        siteName,
-        scannedAt,
-        ticketPrice,
-        ticketNumber,
-        companyCgu,
-        email,
-      }),
+      html: await render(
+        EmailTemplate({
+          siteName,
+          scannedAt,
+          ticketPrice,
+          ticketNumber,
+          companyCgu,
+          email,
+        }),
+        {
+          pretty: true,
+        }
+      ),
     });
     return NextResponse.json(data);
   } catch (error) {

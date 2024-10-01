@@ -1,11 +1,10 @@
 import styles from '@/app/components/style';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Footer from '../components/footer';
 
 export default function ClientLayout({ children }) {
   return (
-    <div className='min-h-screen bg-background text-foreground'>
+    <div className='min-h-screen w-full bg-background text-foreground'>
       <ToastContainer
         position='top-center'
         autoClose={5000}

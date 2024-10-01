@@ -82,11 +82,8 @@ const EmailTemplate = ({
           </Section>
           <Section>
             <Text style={cupomText}>
-              Merci d&#39;avoir utilisé Nestor
-              <sup style={supStyle}>*</sup>{' '}
-              <Link href={baseUrl}>
-                l&#39;application française des voituriers 🇫🇷
-              </Link>
+              Merci d&rsquo;avoir utilisé Nestor. L&rsquo;application française
+              des voituriers 🇫🇷
             </Text>
           </Section>
           <Section style={informationTable}>
@@ -122,7 +119,7 @@ const EmailTemplate = ({
                   <Row>
                     <Column style={informationTableColumn}>
                       <Text style={informationTableLabel}>TICKET ID</Text>
-                      <Link
+                      <Text
                         style={{
                           ...informationTableValue,
                           color: '#15c',
@@ -130,7 +127,7 @@ const EmailTemplate = ({
                         }}
                       >
                         #{ticketNumber}
-                      </Link>
+                      </Text>
                     </Column>
                   </Row>
                 </Section>
@@ -147,7 +144,9 @@ const EmailTemplate = ({
           <Section>
             <Row>
               <Column style={{ paddingLeft: '22px' }}>
-                <Text style={productTitle}>Service de voiturier</Text>
+                <Text style={productTitle}>
+                  Service de voiturier<sup style={supStyle}>*</sup>
+                </Text>
                 <Text style={productDescription}>{siteName}</Text>
                 <Link
                   href={`mailto:nestorapp.app@gmail.com?subject=Problème avec le ticket #${ticketNumber} sur ${siteName}`}
@@ -175,9 +174,8 @@ const EmailTemplate = ({
             </Row>
           </Section>
           <Hr style={productPriceLineBottom} />
-
           <Text style={topFooterText}>
-            *Voir les conditions générales d&#39;utilisation ci-contre:
+            *Voir les conditions générales d&rsquo;utilisation ci-contre:
           </Text>
           {companyCgu
             ? companyCgu.map((part, index) => (
