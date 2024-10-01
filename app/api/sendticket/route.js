@@ -11,7 +11,7 @@ export async function POST(req) {
     json;
   try {
     const data = await resend.emails.send({
-      from: `Nestor APP <${process.env.RESEND_MAIL}>`,
+      from: `Nestor App <${process.env.RESEND_MAIL}>`,
       to: [email],
       subject: 'Votre ticket',
       html: await render(
