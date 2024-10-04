@@ -51,6 +51,7 @@ const EmailTemplate = ({
   ticketPrice,
   ticketNumber,
   companyCgu,
+  siret,
   email,
 }) => {
   const baseUrl = process.env.NEXT_PUBLIC_URL
@@ -104,7 +105,6 @@ const EmailTemplate = ({
                       </Link>
                     </Column>
                   </Row>
-
                   <Row>
                     <Column style={informationTableColumn}>
                       <Text style={informationTableLabel}>
@@ -115,7 +115,6 @@ const EmailTemplate = ({
                       </Text>
                     </Column>
                   </Row>
-
                   <Row>
                     <Column style={informationTableColumn}>
                       <Text style={informationTableLabel}>TICKET ID</Text>
@@ -130,12 +129,29 @@ const EmailTemplate = ({
                       </Text>
                     </Column>
                   </Row>
+                  {siret && (
+                    <Row>
+                      <Column style={informationTableColumn}>
+                        <Text style={informationTableLabel}>Lieu</Text>
+                        <Text style={informationTableValue}>{siteName}</Text>
+                      </Column>
+                    </Row>
+                  )}
                 </Section>
               </Column>
-              <Column style={informationTableColumn} colSpan={2}>
-                <Text style={informationTableLabel}>Lieu</Text>
-                <Text style={informationTableValue}>{siteName}</Text>
-              </Column>
+              {siret ? (
+                <Column style={informationTableColumn} colSpan={2}>
+                  <Text style={informationTableLabel}>
+                    Siret du service de voiturier
+                  </Text>
+                  <Text style={informationTableValue}>{siret}</Text>
+                </Column>
+              ) : (
+                <Column style={informationTableColumn} colSpan={2}>
+                  <Text style={informationTableLabel}>Lieu</Text>
+                  <Text style={informationTableValue}>{siteName}</Text>
+                </Column>
+              )}
             </Row>
           </Section>
           <Section style={productTitleTable}>
@@ -190,7 +206,11 @@ const EmailTemplate = ({
                   <Text style={footerText}>{part.text}</Text>
                 </div>
               ))}
-          <Section>
+          <Section align='center'>
+            <Text style={topFooterText}>
+              Ce document électronique est émis conformément à la législation
+              fiscale française et vaut facture.
+            </Text>
             <Row>
               <Column align='center' style={footerIcon}>
                 <Img
@@ -201,11 +221,11 @@ const EmailTemplate = ({
                 />
               </Column>
             </Row>
+            <Text style={footerCopyright}>
+              Copyright © 2024 Nestor App. <br />{' '}
+              <Link>Tous droits réservés</Link>
+            </Text>
           </Section>
-          <Text style={footerCopyright}>
-            Copyright © 2024 Nestor App. <br />{' '}
-            <Link>Tous droits réservés</Link>
-          </Text>
         </Container>
       </Body>
     </Html>

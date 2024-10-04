@@ -7,8 +7,15 @@ const resend = new Resend(process.env.RESEND_KEY);
 
 export async function POST(req) {
   const json = await req.json();
-  const { email, siteName, scannedAt, ticketPrice, ticketNumber, companyCgu } =
-    json;
+  const {
+    email,
+    siteName,
+    scannedAt,
+    ticketPrice,
+    ticketNumber,
+    companyCgu,
+    siret,
+  } = json;
   try {
     const data = await resend.emails.send({
       from: `Nestor APP <${process.env.RESEND_MAIL}>`,
@@ -22,6 +29,7 @@ export async function POST(req) {
           ticketNumber,
           companyCgu,
           email,
+          siret,
         }),
         {
           pretty: true,

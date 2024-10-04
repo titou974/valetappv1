@@ -8,6 +8,7 @@ const EmailTest = () => {
       scannedAt='2023-10-26T12:18:30.883Z'
       ticketPrice='12'
       ticketNumber={55}
+      siret={'123 456 789 00010'}
     />
   );
 };

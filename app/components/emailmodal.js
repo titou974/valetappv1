@@ -17,6 +17,7 @@ const EmailModal = ({
   ticketNumber,
   userId,
   companyCgu,
+  siret,
 }) => {
   const [email, setEmail] = useState('');
   const [loadingEmail, setLoadingEmail] = useState(false);
@@ -57,6 +58,7 @@ const EmailModal = ({
           ticketNumber: ticketNumber,
           ticketPrice: ticketPrice,
           companyCgu: companyCgu,
+          siret: siret,
         });
         toast.success('Ticket envoyé ! Pensez à vérifier vos spams', {
           position: 'top-center',

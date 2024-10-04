@@ -61,6 +61,7 @@ const TicketShow = () => {
         ticketPrice={ticketData?.restaurant.ticketPrice}
         ticketNumber={ticketData?.ticketNumber}
         userId={ticketData?.user.id}
+        siret={companyData?.siret}
       />
     </ClientLayout>
   );
