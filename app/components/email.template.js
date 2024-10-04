@@ -148,12 +148,6 @@ const EmailTemplate = ({
                   Service de voiturier<sup style={supStyle}>*</sup>
                 </Text>
                 <Text style={productDescription}>{siteName}</Text>
-                <Link
-                  href={`mailto:nestorapp.app@gmail.com?subject=Problème avec le ticket #${ticketNumber} sur ${siteName}`}
-                  style={productLink}
-                >
-                  Un problème ? Contactez-nous ici
-                </Link>
               </Column>
 
               <Column style={productPriceWrapper} align='right'>
