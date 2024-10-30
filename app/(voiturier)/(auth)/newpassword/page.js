@@ -32,7 +32,6 @@ const ResetPassword = () => {
   const resetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log('data', siteData, tokenData);
     if (!tokenData || !siteData) {
       toast.error('Token invalide');
       setLoading(false);

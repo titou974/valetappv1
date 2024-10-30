@@ -8,7 +8,6 @@ export async function POST(req) {
     const { phoneNumber } = await req.json();
 
     if (!phoneNumber) {
-      console.log('Invalid data received.');
       return NextResponse.json({ message: 'Invalid data received.' });
     }
 
@@ -20,7 +19,6 @@ export async function POST(req) {
     const validNumber = validatePhoneNumber(phoneNumber);
 
     if (!validNumber) {
-      console.log('Invalid phone number received.');
       return NextResponse.json({ message: 'Invalid phone number received.' });
     }
 
@@ -31,7 +29,6 @@ export async function POST(req) {
     });
 
     if (!existingUserByPhoneNumber) {
-      console.log("User doesn't exists with this phone number.");
       return NextResponse.json({
         message: "User doesn't exists with this phone number.",
       });

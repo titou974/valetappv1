@@ -47,7 +47,6 @@ const SessionDone = () => {
         setSessionTime(formatTimeDifference(session.createdAt, session.endAt));
         setLoadingDiv(false);
       }
-      console.log(session.startedAt, session.endAt);
     };
     if (sessionId) {
       getSessionData();

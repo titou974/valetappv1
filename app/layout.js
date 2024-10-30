@@ -9,6 +9,13 @@ export const metadata = {
   description: "L'assistant pour les voituriers",
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang='fr' data-theme='light'>
