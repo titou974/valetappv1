@@ -11,6 +11,7 @@ import Navbar from '@/app/components/navbar';
 import { Button } from '@nextui-org/react';
 import FooterBarLayout from '@/app/layouts/footerbarlayout';
 import { EnvelopeIcon } from '@heroicons/react/20/solid';
+import Link from 'next/link';
 
 const TicketShow = () => {
   const [emailModal, setEmailModal] = useState(false);
@@ -27,7 +28,7 @@ const TicketShow = () => {
   return (
     <ClientLayout>
       <Navbar
-        subtitle='Bienvenue au'
+        subtitle='Bienvenu au'
         title={ticketData?.restaurant.name}
         isLoading={isTicketLoading}
         position='static'
@@ -51,7 +52,13 @@ const TicketShow = () => {
           Recevoir par email
         </Button>
       </FooterBarLayout>
-      <div></div>
+      <Link
+        href='https://tally.so/r/3qKl18'
+        target='_blank'
+        className='text-center text-sm text-primary transition-all hover:font-bold hover:underline'
+      >
+        Un problème ? Contactez-nous ici
+      </Link>
       <EmailModal
         companyCgu={companyData?.cgu}
         isOpen={emailModal}

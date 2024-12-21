@@ -148,6 +148,9 @@ const EmailTemplate = ({
                   Service de voiturier<sup style={supStyle}>*</sup>
                 </Text>
                 <Text style={productDescription}>{siteName}</Text>
+                <Link href='https://tally.so/r/3qKl18' style={productLink}>
+                  Un problème ? Cliquez-ici
+                </Link>
               </Column>
 
               <Column style={productPriceWrapper} align='right'>

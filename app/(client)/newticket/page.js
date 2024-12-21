@@ -21,7 +21,7 @@ const Register = () => {
       <>
         {data?.name ? (
           <Navbar
-            subtitle='Bienvenue au'
+            subtitle='Bienvenu au'
             title={data?.name}
             isLoading={isLoading}
             transparent

@@ -142,17 +142,17 @@ const Register = () => {
           </>
         ) : data && data.id ? (
           <>
-            <Input label='Prénom' input={name} setInput={(e) => setName(e)} />
+            <Input label='Prénom' value={name} onValueChange={setName} />
             <Input
               label='Numéro de Téléphone'
               type='tel'
-              input={phoneNumber}
-              setInput={(e) => setPhoneNumber(e)}
+              value={phoneNumber}
+              onValueChange={setPhoneNumber}
             />
             <Input
               label='Mot de passe'
-              input={password}
-              setInput={(e) => setPassword(e)}
+              value={password}
+              onValueChange={setPassword}
             />
           </>
         ) : (

@@ -30,7 +30,6 @@ const LogIn = () => {
 
   const handleLogIn = async (e) => {
     e.preventDefault();
-    console.log('phoneNumber', phoneNumber);
     setLoading(true);
 
     if (!phoneNumber || !password || !data) {

@@ -8,7 +8,6 @@ export async function POST(req) {
     const { name, phoneNumber, password, companyId } = await req.json();
 
     if (!name || !phoneNumber || !password || !companyId) {
-      console.log('Invalid data received.');
       return NextResponse.json({
         userId: null,
         message: 'Invalid data received.',
@@ -23,7 +22,6 @@ export async function POST(req) {
     const validNumber = validatePhoneNumber(phoneNumber);
 
     if (!validNumber) {
-      console.log('Invalid phone number received.');
       return NextResponse.json({
         userId: null,
         message: 'Invalid phone number received.',
@@ -37,7 +35,6 @@ export async function POST(req) {
     });
 
     if (existingUserByPhoneNumber) {
-      console.log('User exists with this phone number.');
       return NextResponse.json({
         userId: null,
         message: 'Un voiturier avec ce numéro existe déjà.',
