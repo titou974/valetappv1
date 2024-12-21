@@ -53,10 +53,12 @@ const Ticket = ({ isTicketLoading, ticketData, companyData }) => {
                   <Skeleton className='w-fit rounded-lg'>
                     <Chip
                       startContent={<HashtagIcon width={16} />}
-                      size='sm'
+                      size='md'
                       color='primary'
                       radius='sm'
-                      className='font-bold'
+                      classNames={{
+                        content: 'font-bold text-base pt-px',
+                      }}
                     >
                       1000
                     </Chip>
@@ -64,11 +66,13 @@ const Ticket = ({ isTicketLoading, ticketData, companyData }) => {
                 ) : (
                   <Chip
                     startContent={<HashtagIcon width={14} />}
-                    size='sm'
+                    size='md'
                     color='secondary'
                     variant='bordered'
                     radius='sm'
-                    className='font-bold'
+                    classNames={{
+                      content: 'font-bold text-base pt-px',
+                    }}
                   >
                     {ticketData?.ticketNumber}
                   </Chip>
