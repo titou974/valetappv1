@@ -38,7 +38,15 @@ const TicketShow = () => {
         ticketData={ticketData}
         companyData={companyData}
       />
+      <div></div>
       <FooterBarLayout>
+        <Link
+          href='https://tally.so/r/3qKl18'
+          target='_blank'
+          className='text-center text-sm text-primary transition-all hover:font-bold hover:underline'
+        >
+          Un problème ? Contactez-nous ici
+        </Link>
         <Button
           onClick={(e) => setEmailModal(true)}
           className='fill-primary-foreground'
@@ -52,13 +60,6 @@ const TicketShow = () => {
           Recevoir par email
         </Button>
       </FooterBarLayout>
-      <Link
-        href='https://tally.so/r/3qKl18'
-        target='_blank'
-        className='text-center text-sm text-primary transition-all hover:font-bold hover:underline'
-      >
-        Un problème ? Contactez-nous ici
-      </Link>
       <EmailModal
         companyCgu={companyData?.cgu}
         isOpen={emailModal}
