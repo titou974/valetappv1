@@ -64,7 +64,6 @@ const SessionDone = () => {
       />
       <div>
         <p className={`py-2 text-center text-foreground`}>
-          Vous avez travaillé pendant{' '}
           {loadingDiv ? (
             <span
               className='h-[50px] animate-pulse rounded-md bg-gray-400/50'
@@ -73,27 +72,13 @@ const SessionDone = () => {
                 animationDuration: '1s',
               }}
             >
-              <span className='invisible'>50 minutes</span>
+              <span className='invisible'>Votre session est terminée</span>
             </span>
           ) : (
-            <span className='font-bold'>{sessionTime}</span>
-          )}
-        </p>
-        <p className={`py-2 text-center text-foreground`}>
-          au{' '}
-          {loadingDiv ? (
-            <span
-              className='h-[50px] animate-pulse rounded-md bg-gray-400/50'
-              style={{
-                animationDelay: `${2 * 0.05}s`,
-                animationDuration: '1s',
-              }}
-            >
-              <span className='invisible'>Nylsa Café</span>
-            </span>
-          ) : (
-            <span className='font-bold italic'>
-              {sessionData?.restaurant.name}
+            <span className='font-bold'>
+              Votre session de travail au{' '}
+              <span className='italic'>{sessionData?.restaurant.name}</span> est
+              terminée 👏
             </span>
           )}
         </p>
