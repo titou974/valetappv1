@@ -72,13 +72,15 @@ const SessionDone = () => {
                 animationDuration: '1s',
               }}
             >
-              <span className='invisible'>Votre session est terminée</span>
+              <span className='invisible'>
+                Votre service au Palace est terminé
+              </span>
             </span>
           ) : (
             <span className='font-bold'>
-              Votre session de travail au{' '}
+              Votre service au{' '}
               <span className='italic'>{sessionData?.restaurant.name}</span> est
-              terminée 👏
+              terminé 👏
             </span>
           )}
         </p>
